@@ -94,6 +94,74 @@ async function runTemplateUploadAnalysis(methodId, configOverrides = {}) {
   return { method, config, parsed, analysis };
 }
 
+function nextGeneratedId(prefix, used, startAt = 1) {
+  let index = Math.max(1, startAt);
+  while (used.has(`${prefix}${index}`)) index += 1;
+  return { id: `${prefix}${index}`, index };
+}
+
+function normalizeUniqueIds(prefix, items, label) {
+  const used = new Set();
+  let nextIndex = 1;
+  return items.map((item) => {
+    const proposed = String(item.id ?? '').trim();
+    if (proposed && !used.has(proposed)) {
+      used.add(proposed);
+      const match = proposed.match(new RegExp(`^${prefix}(\d+)$`, 'i'));
+      if (match) nextIndex = Math.max(nextIndex, Number(match[1]) + 1);
+      return { ...item, id: proposed };
+    }
+    const next = nextGeneratedId(prefix, used, nextIndex);
+    used.add(next.id);
+    nextIndex = next.index + 1;
+    return { ...item, id: next.id, name: item.name?.trim() ? item.name : `${label} ${next.index}` };
+  });
+}
+
+function nextUnusedId(prefix, items) {
+  const used = new Set(items.map((item) => String(item.id ?? '').trim()).filter(Boolean));
+  const numericMax = [...used].reduce((max, id) => {
+    const match = id.match(new RegExp(`^${prefix}(\d+)$`, 'i'));
+    return match ? Math.max(max, Number(match[1])) : max;
+  }, 0);
+  return nextGeneratedId(prefix, used, numericMax + 1);
+}
+
+function resizeValuesForStructureSmoke(rows, columns, source, isDematel) {
+  return Array.from({ length: rows }, (_, rowIndex) =>
+    Array.from({ length: columns }, (_, columnIndex) => source[rowIndex]?.[columnIndex] ?? (isDematel && rowIndex === columnIndex ? 0 : 1)),
+  );
+}
+
+function simulateStructureEdit(method, config, input) {
+  const isDematel = method.id === 'dematel';
+  let criteria = config.criteria.slice(0, Math.max(1, config.criteria.length - 2));
+  const firstNew = nextUnusedId('C', criteria);
+  criteria = [...criteria, { id: firstNew.id, name: isDematel ? `Factor ${firstNew.index}` : `Criterion ${firstNew.index}`, direction: 'benefit', weight: 0 }];
+  const secondNew = nextUnusedId('C', criteria);
+  criteria = [...criteria, { id: secondNew.id, name: isDematel ? `Factor ${secondNew.index}` : `Criterion ${secondNew.index}`, direction: 'benefit', weight: 0 }];
+  const normalizedCriteria = normalizeUniqueIds('C', criteria, isDematel ? 'Factor' : 'Criterion');
+  const alternatives = isDematel ? normalizedCriteria.map((criterion) => ({ id: criterion.id, name: criterion.name })) : normalizeUniqueIds('A', config.alternatives, 'Alternative');
+  const values = resizeValuesForStructureSmoke(isDematel ? normalizedCriteria.length : alternatives.length, normalizedCriteria.length, input.values, isDematel);
+  const editedConfig = { ...config, alternatives, criteria: normalizedCriteria };
+  const editedInput = { ...input, alternatives, criteria: normalizedCriteria, values };
+  return { config: editedConfig, input: editedInput };
+}
+
+function assertStructureEditsStayCanonical(workflowResults) {
+  const failures = [];
+  for (const { method, config, parsed } of workflowResults) {
+    const edited = simulateStructureEdit(method, parsed.config ?? config, parsed.input);
+    const ids = edited.input.criteria.map((criterion) => criterion.id);
+    const unique = new Set(ids);
+    const validation = method.validateWorkbook(edited.input, edited.config);
+    const duplicateMessages = validation.issues.filter((issue) => /Duplicate criterion ID/i.test(issue.message));
+    if (unique.size !== ids.length || duplicateMessages.length) {
+      failures.push(`${method.name}: ids=${ids.join(', ')}; duplicateMessages=${duplicateMessages.map((issue) => issue.message).join(' | ')}`);
+    }
+  }
+  if (failures.length) throw new Error(`Structure edit canonicalization failed: ${failures.join('; ')}`);
+}
 async function assertMissingSheetRejected(methodId, sheetName, configOverrides = {}) {
   const method = getMethod(methodId);
   const config = {
@@ -735,6 +803,7 @@ const workflowResults = [];
 for (const method of methodRegistry) {
   workflowResults.push(await runTemplateUploadAnalysis(method.id, workflowOverrides(method)));
 }
+assertStructureEditsStayCanonical(workflowResults);
 await assertMissingSheetRejected('ahp', 'Criteria Pairwise Matrix', workflowOverrides(getMethod('ahp')));
 await assertMissingSheetRejected('vikor', 'VIKOR Parameters', workflowOverrides(getMethod('vikor')));
 await assertWrongMethodTemplateRejected('vikor', 'topsis', workflowOverrides(getMethod('vikor')));
@@ -1111,4 +1180,4 @@ if (!existsSync(expectedPdf)) {
   throw new Error('PDF publication report was not written.');
 }
 
-console.log(`Workflow smoke OK: ${workflowResults.length}/${methodRegistry.length} method templates parsed and analyzed; wrong-method templates, malformed project imports, corrupted metadata/AHP/VIKOR/SRF uploads, invalid method settings, and invalid matrix cells rejected; automatic weights ignore edited workbook weight cells; Pugh uploaded-score templates round-trip and rescale correctly; multiple-respondent workbook sheets aggregate and report correctly; DEMATEL expert workbook sheets aggregate and report correctly; DEMATEL fuzzy calculation convention round-trips and records reproducibility metadata; TOPSIS normalization settings are covered; AHP group pairwise workbook aggregation/settings are covered; PROMETHEE and COMET settings are covered; fuzzy workbook tuples reach native and defuzzified paths; uploaded method, MAUT/SMARTER utility-input modes, editable method settings sheets, sheet-shaped reference modes/vectors, and SRF parameters round-tripped; ${workflowResults.length}/${methodRegistry.length} Excel packages written; validation evidence is included in Excel/DOCX/PDF paths; ${analysis.methodName} DOCX/PDF export paths and project JSON package download completed.`);
+console.log(`Workflow smoke OK: ${workflowResults.length}/${methodRegistry.length} method templates parsed and analyzed; criteria/factor structure edits stay canonical across all methods; wrong-method templates, malformed project imports, corrupted metadata/AHP/VIKOR/SRF uploads, invalid method settings, and invalid matrix cells rejected; automatic weights ignore edited workbook weight cells; Pugh uploaded-score templates round-trip and rescale correctly; multiple-respondent workbook sheets aggregate and report correctly; DEMATEL expert workbook sheets aggregate and report correctly; DEMATEL fuzzy calculation convention round-trips and records reproducibility metadata; TOPSIS normalization settings are covered; AHP group pairwise workbook aggregation/settings are covered; PROMETHEE and COMET settings are covered; fuzzy workbook tuples reach native and defuzzified paths; uploaded method, MAUT/SMARTER utility-input modes, editable method settings sheets, sheet-shaped reference modes/vectors, and SRF parameters round-tripped; ${workflowResults.length}/${methodRegistry.length} Excel packages written; validation evidence is included in Excel/DOCX/PDF paths; ${analysis.methodName} DOCX/PDF export paths and project JSON package download completed.`);
