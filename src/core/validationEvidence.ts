@@ -23,7 +23,7 @@ export const validationEvidence = {
     status: 'In progress',
     count: 48 as number,
     candidateRecords: 5,
-    scope: 'TOPSIS, AHP, DEMATEL, VIKOR, COPRAS, WASPAS, SAW/WSM, SRP, FUCA, WPM, MOORA, MOOSRA, MULTIMOORA, MABAC, CODAS, CoCoSo, ARAS, EDAS, PROMETHEE II, ELECTRE I, ORESTE, REGIME, SMART, MAUT, SMARTER, Pugh Matrix, OCRA, ROV, GRA, MARCOS, MAIRCA, PSI, PIV, WISP, RAM, PROBID, SPROBID, LMAW, RIM, RAFSI, SPOTIS, B-SPOTIS, MARA, TODIM, LoPM, AROMAN, COMET, and ERVD external-example fixtures are registered; TOPSIS, CRADIS, fuzzy DEMATEL, and the richer B-SPOTIS used-car published-example candidate are tracked separately; paper-by-paper comparisons for every crisp, fuzzy, and group-decision variant are not yet complete.',
+    scope: 'TOPSIS, AHP, DEMATEL, VIKOR, COPRAS, WASPAS, SAW/WSM, SRP, FUCA, WPM, MOORA, MOOSRA, MULTIMOORA, MABAC, CODAS, CoCoSo, ARAS, EDAS, PROMETHEE II, ELECTRE I, ORESTE, REGIME, SMART, MAUT, SMARTER, Pugh Matrix, OCRA, ROV, GRA, MARCOS, MAIRCA, PSI, PIV, WISP, RAM, PROBID, SPROBID, LMAW, RIM, RAFSI, SPOTIS, B-SPOTIS, MARA, TODIM, LoPM, AROMAN, COMET, and ERVD external-example fixtures are registered; TOPSIS, CRADIS, and fuzzy DEMATEL discrepancy fixture records are tracked separately; SECA optimizer-backed reference behavior and the richer B-SPOTIS used-car published-example candidate are registry-only validation candidates; paper-by-paper comparisons for every crisp, fuzzy, and group-decision variant are not yet complete.',
   },
 } as const;
 
@@ -446,6 +446,14 @@ export const externalValidationCandidates = [
     sourceUrl: 'https://www.engineeringscience.rs/articles/applying-mcdm-methods-for-electric-vehicle-selection-a-comparative-study-between-cradis-and-piv-methods',
     doi: '10.5937/jaes0-56793',
     scope: 'Published CRADIS combined-weight ranking is reproduced, but score magnitudes differ from the visible S0+/S0- utility equations and need score-convention reconciliation.',
+  },
+  {
+    methodId: 'seca',
+    variant: 'crisp-rmcda-optimization-weights-example',
+    source: 'RMCDA 2025 optimizer-backed SECA source implementation example',
+    sourceUrl: 'https://rdrr.io/cran/RMCDA/src/R/SECA.R',
+    doi: '10.1016/j.simpa.2025.100762',
+    scope: 'RMCDA apply.SECA solves a constrained nonlinear optimization and returns criterion weights; the app currently uses a deterministic reference-balance approximation with alternative ranking, so this needs an optimizer-backed SECA variant or matching published output before promotion.',
   },
   {
     methodId: 'dematel',

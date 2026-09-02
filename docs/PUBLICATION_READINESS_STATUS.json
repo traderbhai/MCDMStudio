@@ -3,11 +3,11 @@
   "methodsTracked": 65,
   "passingExternalFixtures": 48,
   "validationCandidateMethods": [
+    "SECA",
     "CRADIS"
   ],
   "candidateRecordsNeedingReconciliation": 5,
   "internalOnlyMethods": [
-    "SECA",
     "DEAR",
     "EAMR",
     "RAWEC",

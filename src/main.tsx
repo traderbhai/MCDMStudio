@@ -94,7 +94,7 @@ function normalizeUniqueIds<T extends { id: string; name: string }>(
     const proposed = String(item.id ?? '').trim();
     if (proposed && !used.has(proposed)) {
       used.add(proposed);
-      const match = proposed.match(new RegExp(`^${prefix}(\d+)$`, 'i'));
+      const match = proposed.match(new RegExp(`^${prefix}(\\d+)$`, 'i'));
       if (match) nextIndex = Math.max(nextIndex, Number(match[1]) + 1);
       return { ...item, id: proposed };
     }
@@ -848,7 +848,7 @@ function ConfigureStep({ config, input, method, onChange, onNext }: { config: St
   const nextUnusedId = (prefix: string, items: Array<{ id: string }>) => {
     const used = new Set(items.map((item) => String(item.id ?? '').trim()).filter(Boolean));
     const numericMax = [...used].reduce((max, id) => {
-      const match = id.match(new RegExp(`^${prefix}(\d+)$`, 'i'));
+      const match = id.match(new RegExp(`^${prefix}(\\d+)$`, 'i'));
       return match ? Math.max(max, Number(match[1])) : max;
     }, 0);
     return nextGeneratedId(prefix, used, numericMax + 1);

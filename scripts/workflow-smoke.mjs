@@ -107,7 +107,7 @@ function normalizeUniqueIds(prefix, items, label) {
     const proposed = String(item.id ?? '').trim();
     if (proposed && !used.has(proposed)) {
       used.add(proposed);
-      const match = proposed.match(new RegExp(`^${prefix}(\d+)$`, 'i'));
+      const match = proposed.match(new RegExp(`^${prefix}(\\d+)$`, 'i'));
       if (match) nextIndex = Math.max(nextIndex, Number(match[1]) + 1);
       return { ...item, id: proposed };
     }
@@ -121,7 +121,7 @@ function normalizeUniqueIds(prefix, items, label) {
 function nextUnusedId(prefix, items) {
   const used = new Set(items.map((item) => String(item.id ?? '').trim()).filter(Boolean));
   const numericMax = [...used].reduce((max, id) => {
-    const match = id.match(new RegExp(`^${prefix}(\d+)$`, 'i'));
+    const match = id.match(new RegExp(`^${prefix}(\\d+)$`, 'i'));
     return match ? Math.max(max, Number(match[1])) : max;
   }, 0);
   return nextGeneratedId(prefix, used, numericMax + 1);
@@ -148,6 +148,31 @@ function simulateStructureEdit(method, config, input) {
   return { config: editedConfig, input: editedInput };
 }
 
+function simulateMiddleCriteriaDeleteThenAdd(method, config, input) {
+  const isDematel = method.id === 'dematel';
+  const deletedIndexes = new Set(config.criteria.length >= 4 ? [1, 2] : [config.criteria.length - 1]);
+  let criteria = config.criteria.filter((_, index) => !deletedIndexes.has(index));
+  const firstNew = nextUnusedId('C', criteria);
+  criteria = [...criteria, { id: firstNew.id, name: isDematel ? `Factor ${firstNew.index}` : `Criterion ${firstNew.index}`, direction: 'benefit', weight: 0 }];
+  const secondNew = nextUnusedId('C', criteria);
+  criteria = [...criteria, { id: secondNew.id, name: isDematel ? `Factor ${secondNew.index}` : `Criterion ${secondNew.index}`, direction: 'benefit', weight: 0 }];
+  const normalizedCriteria = normalizeUniqueIds('C', criteria, isDematel ? 'Factor' : 'Criterion');
+  const alternatives = isDematel ? normalizedCriteria.map((criterion) => ({ id: criterion.id, name: criterion.name })) : normalizeUniqueIds('A', config.alternatives, 'Alternative');
+  const values = resizeValuesForStructureSmoke(isDematel ? normalizedCriteria.length : alternatives.length, normalizedCriteria.length, input.values, isDematel);
+  const editedConfig = {
+    ...config,
+    methodParams: {
+      ...config.methodParams,
+      dataInputMode: 'Multiple respondents',
+      respondentCount: 2,
+    },
+    alternatives,
+    criteria: normalizedCriteria,
+  };
+  const editedInput = { ...input, alternatives, criteria: normalizedCriteria, values };
+  return { config: editedConfig, input: editedInput };
+}
+
 function assertStructureEditsStayCanonical(workflowResults) {
   const failures = [];
   for (const { method, config, parsed } of workflowResults) {
@@ -161,6 +186,19 @@ function assertStructureEditsStayCanonical(workflowResults) {
     }
   }
   if (failures.length) throw new Error(`Structure edit canonicalization failed: ${failures.join('; ')}`);
+
+  const promethee = workflowResults.find((result) => result.method.id === 'promethee');
+  if (!promethee) throw new Error('PROMETHEE II workflow result is missing from structure edit coverage.');
+  const editedPromethee = simulateMiddleCriteriaDeleteThenAdd(promethee.method, promethee.parsed.config ?? promethee.config, promethee.parsed.input);
+  const prometheeIds = editedPromethee.input.criteria.map((criterion) => criterion.id);
+  const expectedAddedIds = ['C8', 'C9'];
+  const prometheeUnique = new Set(prometheeIds);
+  const validation = promethee.method.validateWorkbook(editedPromethee.input, editedPromethee.config);
+  const duplicateMessages = validation.issues.filter((issue) => /Duplicate criterion ID/i.test(issue.message));
+  const addedIdsMissing = expectedAddedIds.some((id) => !prometheeIds.includes(id));
+  if (prometheeUnique.size !== prometheeIds.length || duplicateMessages.length || addedIdsMissing) {
+    throw new Error(`PROMETHEE II multiple-respondent middle-delete/add criteria IDs are not canonical: ids=${prometheeIds.join(', ')}; expected new IDs C8,C9; duplicateMessages=${duplicateMessages.map((issue) => issue.message).join(' | ')}`);
+  }
 }
 async function assertMissingSheetRejected(methodId, sheetName, configOverrides = {}) {
   const method = getMethod(methodId);

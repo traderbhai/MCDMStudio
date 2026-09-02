@@ -28,9 +28,13 @@ Internal smoke tests prove software behavior. External fixtures prove agreement 
 ## External Validation Status
 
 - Passing external fixtures: 48 methods/variants.
-- Validation candidate methods: 1.
+- Validation candidate methods: 2.
 - Candidate records needing reconciliation: 5.
-- Internal coverage only: 16 methods.
+- Internal coverage only: 15 methods.
+
+## Candidate / Discrepancy Fixtures
+
+- SECA registry-only candidate: RMCDA `apply.SECA` uses constrained nonlinear optimization and returns optimized criterion weights; the current app uses a deterministic reference-balance approximation plus ranking. It needs an optimizer-backed SECA mode or matching published output before promotion.
 
 ## Internal-Only Methods Still Blocking Full Publication Certification
 
