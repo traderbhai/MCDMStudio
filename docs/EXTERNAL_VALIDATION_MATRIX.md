@@ -17,7 +17,7 @@ Status meanings:
 | COPRAS | Ratio/proportional | Passing external fixture | Sustainability 2022 fixture checks normalized matrix, beneficial/non-beneficial sums, relative significance, utility degree, and ranking. |
 | SAW/WSM | Utility/additive | Passing external fixture | Sage Open 2021 WSM component fixture checks normalization, weighted matrix, additive score, and ranking. |
 | SRP | Newer ranking | Passing external fixture | Scientific Reports 2023 fixture checks criterion-wise dense ranks, VIMM-derived weights, weighted rank matrix, final preference scores, and material-selection ranking. |
-| FUCA | Newer ranking | Internal coverage only | Needs published-example fixture. |
+| FUCA | Newer ranking | Passing external fixture | mcdabench 2026 FUCA manual example validates criterion-wise average ranks, weighted rank scores, and lower-is-better final ranking. |
 | SECA | Newer ranking | Internal coverage only | Needs published-example fixture. |
 | DEAR | Newer ranking | Internal coverage only | Needs published-example fixture. |
 | EAMR | Newer ranking | Internal coverage only | Needs published-example fixture. |
@@ -78,8 +78,8 @@ Status meanings:
 
 Current count:
 
-- Passing external fixtures: 47 methods/variants
+- Passing external fixtures: 48 methods/variants
 - Validation candidates: 1 methods, 6 candidate records
-- Internal coverage only: 17 methods
+- Internal coverage only: 16 methods
 
 This matrix should be updated only when `scripts/external-validation-smoke.mjs` and `npm run verify` pass.

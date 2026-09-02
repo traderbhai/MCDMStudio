@@ -1,13 +1,12 @@
 {
   "generatedFrom": "docs/EXTERNAL_VALIDATION_MATRIX.md and docs/external-fixtures/*.json",
   "methodsTracked": 65,
-  "passingExternalFixtures": 47,
+  "passingExternalFixtures": 48,
   "validationCandidateMethods": [
     "CRADIS"
   ],
   "candidateRecordsNeedingReconciliation": 5,
   "internalOnlyMethods": [
-    "FUCA",
     "SECA",
     "DEAR",
     "EAMR",

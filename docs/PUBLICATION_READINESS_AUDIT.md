@@ -27,14 +27,13 @@ Internal smoke tests prove software behavior. External fixtures prove agreement 
 
 ## External Validation Status
 
-- Passing external fixtures: 47 methods/variants.
+- Passing external fixtures: 48 methods/variants.
 - Validation candidate methods: 1.
 - Candidate records needing reconciliation: 5.
-- Internal coverage only: 17 methods.
+- Internal coverage only: 16 methods.
 
 ## Internal-Only Methods Still Blocking Full Publication Certification
 
-1. FUCA (Newer ranking) - Needs published-example fixture.
 2. SECA (Newer ranking) - Needs published-example fixture.
 3. DEAR (Newer ranking) - Needs published-example fixture.
 4. EAMR (Newer ranking) - Needs published-example fixture.

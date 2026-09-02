@@ -21,9 +21,9 @@ export const validationEvidence = {
   externalBenchmarks: {
     label: 'External published-example validation',
     status: 'In progress',
-    count: 47 as number,
+    count: 48 as number,
     candidateRecords: 5,
-    scope: 'TOPSIS, AHP, DEMATEL, VIKOR, COPRAS, WASPAS, SAW/WSM, SRP, WPM, MOORA, MOOSRA, MULTIMOORA, MABAC, CODAS, CoCoSo, ARAS, EDAS, PROMETHEE II, ELECTRE I, ORESTE, REGIME, SMART, MAUT, SMARTER, Pugh Matrix, OCRA, ROV, GRA, MARCOS, MAIRCA, PSI, PIV, WISP, RAM, PROBID, SPROBID, LMAW, RIM, RAFSI, SPOTIS, B-SPOTIS, MARA, TODIM, LoPM, AROMAN, COMET, and ERVD external-example fixtures are registered; TOPSIS, CRADIS, fuzzy DEMATEL, and the richer B-SPOTIS used-car published-example candidate are tracked separately; paper-by-paper comparisons for every crisp, fuzzy, and group-decision variant are not yet complete.',
+    scope: 'TOPSIS, AHP, DEMATEL, VIKOR, COPRAS, WASPAS, SAW/WSM, SRP, FUCA, WPM, MOORA, MOOSRA, MULTIMOORA, MABAC, CODAS, CoCoSo, ARAS, EDAS, PROMETHEE II, ELECTRE I, ORESTE, REGIME, SMART, MAUT, SMARTER, Pugh Matrix, OCRA, ROV, GRA, MARCOS, MAIRCA, PSI, PIV, WISP, RAM, PROBID, SPROBID, LMAW, RIM, RAFSI, SPOTIS, B-SPOTIS, MARA, TODIM, LoPM, AROMAN, COMET, and ERVD external-example fixtures are registered; TOPSIS, CRADIS, fuzzy DEMATEL, and the richer B-SPOTIS used-car published-example candidate are tracked separately; paper-by-paper comparisons for every crisp, fuzzy, and group-decision variant are not yet complete.',
   },
 } as const;
 
@@ -75,6 +75,14 @@ export const externalValidationFixtures = [
     sourceUrl: 'https://www.nature.com/articles/s41598-023-35405-z',
     doi: '10.1038/s41598-023-35405-z',
     scope: 'SRP criterion-wise dense ranking, VIMM-derived manual weights, weighted ranking matrix, total ranking scores, and final material ranking.',
+  },
+  {
+    methodId: 'fuca',
+    variant: 'crisp-average-rank-manual-weights-mcdabench-example',
+    source: 'mcdabench 2026 FUCA reference manual example',
+    sourceUrl: 'https://cran.r-universe.dev/mcdabench/doc/manual.html',
+    doi: '10.32614/CRAN.package.mcdabench',
+    scope: 'FUCA criterion-wise average ranks, benefit/cost orientation, manual weights, weighted-rank score aggregation, and lower-is-better final ranking.',
   },
   {
     methodId: 'wpm',
