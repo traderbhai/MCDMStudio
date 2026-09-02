@@ -1,0 +1,67 @@
+{
+  "methodId": "marcos",
+  "variant": "crisp-utility-normalization-roc-weights",
+  "source": "Multi criteria decision making for process parametric optimization of a milling process using the marcos method and different weighing methods, Matéria (Rio de Janeiro), 2026, DOI: 10.1590/1517-7076-RMAT-2025-0857, Tables 2-7",
+  "sourceUrl": "https://www.scielo.br/j/rmat/a/Hvrk63YfJLng6kvdxmzwf5k/?lang=en",
+  "doi": "10.1590/1517-7076-RMAT-2025-0857",
+  "config": {
+    "title": "MARCOS validation: milling process with ROC weights",
+    "weightingId": "manual",
+    "methodParams": {
+      "normalization": "Utility normalization",
+      "marcosScoreMode": "Published range-scaled f(K+) convention",
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      { "id": "A1", "name": "1" },
+      { "id": "A2", "name": "2" },
+      { "id": "A3", "name": "3" },
+      { "id": "A4", "name": "4" },
+      { "id": "A5", "name": "5" },
+      { "id": "A6", "name": "6" },
+      { "id": "A7", "name": "7" },
+      { "id": "A8", "name": "8" },
+      { "id": "A9", "name": "9" }
+    ],
+    "criteria": [
+      { "id": "C1", "name": "Surface roughness", "direction": "cost", "weight": 0.75 },
+      { "id": "C2", "name": "Material removal rate", "direction": "benefit", "weight": 0.25 }
+    ],
+    "values": [
+      [1.254, 145.763],
+      [2.147, 368.224],
+      [1.549, 968.364],
+      [0.985, 526.267],
+      [0.589, 265.321],
+      [1.254, 399.247],
+      [1.691, 312.251],
+      [0.495, 219.368],
+      [1.264, 375.364]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      { "alternative": "2", "score": 0.786362 },
+      { "alternative": "7", "score": 0.725509 },
+      { "alternative": "1", "score": 0.681389 },
+      { "alternative": "9", "score": 0.631292 }
+    ],
+    "tables": [
+      {
+        "id": "marcos-utility",
+        "cells": [
+          { "row": 0, "column": 1, "value": 0.333684 },
+          { "row": 0, "column": 2, "value": 0.156028 },
+          { "row": 0, "column": 5, "value": 0.681389 },
+          { "row": 1, "column": 5, "value": 0.786362 },
+          { "row": 6, "column": 5, "value": 0.725509 },
+          { "row": 8, "column": 5, "value": 0.631292 }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.0015
+}

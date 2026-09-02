@@ -1,0 +1,93 @@
+{
+  "methodId": "comet",
+  "variant": "crisp-minmax-topsis-expert-pymcdm-example",
+  "source": "pymcdm COMET documentation example using MethodExpert(TOPSIS) and min/max characteristic values, citing the COMET foundation paper DOI: 10.1002/mcda.1525",
+  "sourceUrl": "https://pymcdm.readthedocs.io/en/master/pymcdm.methods.html#pymcdm.methods.COMET",
+  "doi": "10.1002/mcda.1525",
+  "config": {
+    "title": "COMET external validation: pymcdm TOPSIS expert example",
+    "weightingId": "manual",
+    "methodParams": {
+      "cometCharacteristicValues": "min,max",
+      "cometPreferenceModel": "TOPSIS expert",
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      { "id": "A1", "name": "A1" },
+      { "id": "A2", "name": "A2" },
+      { "id": "A3", "name": "A3" },
+      { "id": "A4", "name": "A4" },
+      { "id": "A5", "name": "A5" },
+      { "id": "A6", "name": "A6" },
+      { "id": "A7", "name": "A7" },
+      { "id": "A8", "name": "A8" },
+      { "id": "A9", "name": "A9" },
+      { "id": "A10", "name": "A10" },
+      { "id": "A11", "name": "A11" },
+      { "id": "A12", "name": "A12" }
+    ],
+    "criteria": [
+      { "id": "C1", "name": "C1", "direction": "benefit", "weight": 0.1111111111 },
+      { "id": "C2", "name": "C2", "direction": "benefit", "weight": 0.1111111111 },
+      { "id": "C3", "name": "C3", "direction": "benefit", "weight": 0.1111111111 },
+      { "id": "C4", "name": "C4", "direction": "benefit", "weight": 0.1111111111 },
+      { "id": "C5", "name": "C5", "direction": "benefit", "weight": 0.1111111111 },
+      { "id": "C6", "name": "C6", "direction": "cost", "weight": 0.1111111111 },
+      { "id": "C7", "name": "C7", "direction": "benefit", "weight": 0.1111111111 },
+      { "id": "C8", "name": "C8", "direction": "benefit", "weight": 0.1111111111 },
+      { "id": "C9", "name": "C9", "direction": "cost", "weight": 0.1111111111 }
+    ],
+    "values": [
+      [64, 128, 2.9, 4.3, 3.2, 280, 495, 24763, 3990],
+      [28, 56, 3.1, 3.8, 3.8, 255, 417, 12975, 2999],
+      [8, 16, 3.5, 5.3, 4.8, 125, 636, 5725, 539],
+      [12, 24, 3.7, 4.8, 4.5, 105, 637, 8468, 549],
+      [10, 20, 3.7, 5.3, 4.9, 125, 539, 6399, 499],
+      [8, 16, 3.6, 4.4, 4, 65, 501, 4834, 329],
+      [6, 12, 3.7, 4.6, 4.2, 65, 604, 4562, 299],
+      [16, 32, 3.4, 4.9, 4.2, 105, 647, 10428, 799],
+      [8, 16, 3.6, 5, 4.5, 125, 609, 5615, 399],
+      [18, 36, 3, 4.8, 4.3, 165, 480, 8848, 979],
+      [24, 48, 3.8, 4.5, 4, 280, 509, 13552, 1399],
+      [28, 56, 2.5, 3.8, 2.8, 205, 376, 8585, 10000]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      { "alternative": "A4", "score": 0.6168 },
+      { "alternative": "A3", "score": 0.6115 },
+      { "alternative": "A8", "score": 0.61 },
+      { "alternative": "A5", "score": 0.606 },
+      { "alternative": "A9", "score": 0.5719 },
+      { "alternative": "A7", "score": 0.5516 },
+      { "alternative": "A1", "score": 0.5433 },
+      { "alternative": "A11", "score": 0.4979 },
+      { "alternative": "A6", "score": 0.4842 },
+      { "alternative": "A10", "score": 0.4711 },
+      { "alternative": "A2", "score": 0.3447 },
+      { "alternative": "A12", "score": 0.1452 }
+    ],
+    "tables": [
+      {
+        "id": "comet-characteristic-values",
+        "cells": [
+          { "row": 0, "column": 4, "value": 64 },
+          { "row": 5, "column": 4, "value": 280 },
+          { "row": 8, "column": 3, "value": 299 }
+        ]
+      },
+      {
+        "id": "comet-preference-function",
+        "cells": [
+          { "row": 0, "column": 1, "value": 0.5433 },
+          { "row": 3, "column": 1, "value": 0.6168 },
+          { "row": 11, "column": 1, "value": 0.1452 }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.0001
+}

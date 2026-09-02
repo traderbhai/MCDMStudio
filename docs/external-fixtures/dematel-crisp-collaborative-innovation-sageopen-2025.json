@@ -1,0 +1,106 @@
+{
+  "methodId": "dematel",
+  "variant": "crisp-average-expert-direct-matrix-mean-threshold",
+  "source": "Navigating Interdependencies In Collaborative Innovation: A Data-Driven DEMATEL Framework, Sage Open, 2025, DOI: 10.1177/21582440251387390, Tables 2-7",
+  "sourceUrl": "https://journals.sagepub.com/doi/10.1177/21582440251387390",
+  "doi": "10.1177/21582440251387390",
+  "config": {
+    "title": "DEMATEL external validation: collaborative innovation factors",
+    "weightingId": "equal",
+    "methodParams": {
+      "dematelExpertCount": 10,
+      "dematelAggregation": "Arithmetic mean",
+      "dematelThreshold": "Mean threshold",
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      { "id": "F1", "name": "Market Dynamic Environment" },
+      { "id": "F2", "name": "Knowledge Creation and Acquisition" },
+      { "id": "F3", "name": "Technological Learning" },
+      { "id": "F4", "name": "Trust" },
+      { "id": "F5", "name": "Innovation Culture" },
+      { "id": "F6", "name": "Organizational Learning" },
+      { "id": "F7", "name": "Innovation Capabilities" },
+      { "id": "F8", "name": "Governance" }
+    ],
+    "criteria": [
+      { "id": "F1", "name": "Market Dynamic Environment", "direction": "benefit", "weight": 0.125 },
+      { "id": "F2", "name": "Knowledge Creation and Acquisition", "direction": "benefit", "weight": 0.125 },
+      { "id": "F3", "name": "Technological Learning", "direction": "benefit", "weight": 0.125 },
+      { "id": "F4", "name": "Trust", "direction": "benefit", "weight": 0.125 },
+      { "id": "F5", "name": "Innovation Culture", "direction": "benefit", "weight": 0.125 },
+      { "id": "F6", "name": "Organizational Learning", "direction": "benefit", "weight": 0.125 },
+      { "id": "F7", "name": "Innovation Capabilities", "direction": "benefit", "weight": 0.125 },
+      { "id": "F8", "name": "Governance", "direction": "benefit", "weight": 0.125 }
+    ],
+    "values": [
+      [0, 0.8, 1.8, 0.9, 2.2, 2.3, 3.8, 3.9],
+      [2.7, 0, 4.0, 0, 0, 1.8, 1.9, 2.0],
+      [3.6, 1.8, 0, 0, 0, 1.0, 0, 0.9],
+      [0, 4.0, 3.5, 0, 3.8, 2.2, 1.2, 1.8],
+      [4.0, 2.8, 2.4, 0.7, 0, 4.0, 1.1, 0],
+      [2.8, 3.8, 3.9, 1.0, 0.8, 0, 2.1, 2.1],
+      [2.5, 4.0, 0, 0, 3.0, 1.4, 0, 0],
+      [0, 1.5, 0, 1.8, 2.9, 0, 1.1, 0]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      { "alternative": "Market Dynamic Environment", "score": 5.0477 },
+      { "alternative": "Knowledge Creation and Acquisition", "score": 4.5733 },
+      { "alternative": "Organizational Learning", "score": 4.4805 },
+      { "alternative": "Innovation Culture", "score": 4.2913 },
+      { "alternative": "Innovation Capabilities", "score": 3.7803 },
+      { "alternative": "Technological Learning", "score": 3.6835 },
+      { "alternative": "Trust", "score": 3.2566 },
+      { "alternative": "Governance", "score": 3.1081 }
+    ],
+    "tables": [
+      {
+        "id": "normalized-direct",
+        "cells": [
+          { "row": 0, "column": 2, "value": 0.0428 },
+          { "row": 3, "column": 5, "value": 0.2032 },
+          { "row": 5, "column": 3, "value": 0.2086 },
+          { "row": 7, "column": 5, "value": 0.1551 }
+        ]
+      },
+      {
+        "id": "total-relation",
+        "cells": [
+          { "row": 0, "column": 1, "value": 0.2715 },
+          { "row": 3, "column": 2, "value": 0.4837 },
+          { "row": 5, "column": 6, "value": 0.2032 },
+          { "row": 7, "column": 8, "value": 0.0906 }
+        ]
+      },
+      {
+        "id": "thresholded-total-relation",
+        "cells": [
+          { "row": 0, "column": 2, "value": 0.3303 },
+          { "row": 1, "column": 5, "value": 0 },
+          { "row": 3, "column": 4, "value": 0 },
+          { "row": 7, "column": 1, "value": 0 }
+        ]
+      },
+      {
+        "id": "cause-effect",
+        "cells": [
+          { "row": 0, "column": 4, "value": 5.0477 },
+          { "row": 1, "column": 5, "value": -0.8993 },
+          { "row": 3, "column": 5, "value": 1.8282 },
+          { "row": 7, "column": 4, "value": 3.1081 }
+        ]
+      }
+    ],
+    "diagnostics": [
+      { "label": "Diagonal check", "status": "pass" },
+      { "label": "Normalization", "status": "pass" },
+      { "label": "Threshold method", "status": "pass" }
+    ]
+  },
+  "tolerance": 0.002
+}

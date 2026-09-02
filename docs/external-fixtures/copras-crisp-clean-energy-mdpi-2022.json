@@ -1,0 +1,76 @@
+{
+  "methodId": "copras",
+  "variant": "crisp-column-sum-normalization-manual-weights",
+  "source": "Comparative Analysis of Five Widely-Used Multi-Criteria Decision-Making Methods to Evaluate Clean Energy Technologies: A Case Study, Sustainability, 2022, DOI: 10.3390/su14031403, Tables 14-16",
+  "sourceUrl": "https://www.mdpi.com/2071-1050/14/3/1403",
+  "doi": "10.3390/su14031403",
+  "config": {
+    "title": "COPRAS external validation: clean energy technology selection",
+    "weightingId": "manual",
+    "methodParams": {
+      "normalization": "Linear normalization",
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      { "id": "A1", "name": "Solar PV" },
+      { "id": "A2", "name": "Wind" },
+      { "id": "A3", "name": "Nuclear" },
+      { "id": "A4", "name": "Biomass" }
+    ],
+    "criteria": [
+      { "id": "C1", "name": "C1", "direction": "cost", "weight": 0.03634 },
+      { "id": "C2", "name": "C2", "direction": "benefit", "weight": 0.03527 },
+      { "id": "C3", "name": "C3", "direction": "benefit", "weight": 0.01383 },
+      { "id": "C4", "name": "C4", "direction": "benefit", "weight": 0.03187 },
+      { "id": "C5", "name": "C5", "direction": "cost", "weight": 0.00429 },
+      { "id": "C6", "name": "C6", "direction": "cost", "weight": 0.07736 },
+      { "id": "C7", "name": "C7", "direction": "cost", "weight": 0.02712 },
+      { "id": "C8", "name": "C8", "direction": "cost", "weight": 0.07797 },
+      { "id": "C9", "name": "C9", "direction": "cost", "weight": 0.27276 },
+      { "id": "C10", "name": "C10", "direction": "cost", "weight": 0.23455 },
+      { "id": "C11", "name": "C11", "direction": "benefit", "weight": 0.10175 },
+      { "id": "C12", "name": "C12", "direction": "benefit", "weight": 0.08731 }
+    ],
+    "values": [
+      [0.1429, 0.3000, 0.1417, 0.1852, 0.2618, 0.3462, 0.4065, 0.2000, 0.0085, 0.0025, 0.6176, 0.1200],
+      [0.1429, 0.2000, 0.3333, 0.1481, 0.1885, 0.4601, 0.1611, 0.1250, 0.0845, 0.0013, 0.1250, 0.5600],
+      [0.4286, 0.1000, 0.2750, 0.4444, 0.2984, 0.1435, 0.1552, 0.1125, 0.0614, 0.6305, 0.1029, 0.0800],
+      [0.2857, 0.4000, 0.2500, 0.2222, 0.2513, 0.0503, 0.2772, 0.5625, 0.8455, 0.3657, 0.1544, 0.2400]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      { "alternative": "Solar PV", "score": 0.4148 },
+      { "alternative": "Wind", "score": 0.3338 },
+      { "alternative": "Nuclear", "score": 0.1373 },
+      { "alternative": "Biomass", "score": 0.1141 }
+    ],
+    "tables": [
+      {
+        "id": "copras-components",
+        "cells": [
+          { "row": 0, "column": 1, "value": 0.0917 },
+          { "row": 0, "column": 2, "value": 0.0626 },
+          { "row": 0, "column": 3, "value": 0.4148 },
+          { "row": 0, "column": 4, "value": 100 },
+          { "row": 1, "column": 1, "value": 0.0779 },
+          { "row": 1, "column": 2, "value": 0.0791 },
+          { "row": 1, "column": 3, "value": 0.3335 },
+          { "row": 1, "column": 4, "value": 80.4829 },
+          { "row": 2, "column": 1, "value": 0.0390 },
+          { "row": 2, "column": 2, "value": 0.2050 },
+          { "row": 2, "column": 3, "value": 0.1376 },
+          { "row": 2, "column": 4, "value": 33.1114 },
+          { "row": 3, "column": 1, "value": 0.0613 },
+          { "row": 3, "column": 2, "value": 0.3834 },
+          { "row": 3, "column": 3, "value": 0.1140 },
+          { "row": 3, "column": 4, "value": 27.5054 }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.006
+}

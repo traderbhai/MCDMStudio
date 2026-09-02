@@ -1,0 +1,91 @@
+{
+  "status": "candidate-discrepancy",
+  "methodId": "topsis",
+  "variant": "crisp-vector-normalization-ahp-weights-barge-service",
+  "source": "Supplier selection through an integrated multi-criteria decision-making model: A study on barge service providers in the Mekong Delta of Vietnam, The Asian Journal of Shipping and Logistics, 2025, DOI: 10.1016/j.ajsl.2024.11.002, Tables 8-13",
+  "sourceUrl": "https://doi.org/10.1016/j.ajsl.2024.11.002",
+  "doi": "10.1016/j.ajsl.2024.11.002",
+  "config": {
+    "title": "TOPSIS discrepancy candidate: barge service provider selection",
+    "weightingId": "manual",
+    "methodParams": {
+      "normalization": "Vector normalization",
+      "distanceMetric": "Euclidean",
+      "idealSolution": "Benefit/cost aware",
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      { "id": "A", "name": "A" },
+      { "id": "B", "name": "B" },
+      { "id": "C", "name": "C" },
+      { "id": "D", "name": "D" },
+      { "id": "E", "name": "E" },
+      { "id": "F", "name": "F" }
+    ],
+    "criteria": [
+      { "id": "C1", "name": "C1", "direction": "benefit", "weight": 0.0749 },
+      { "id": "C2", "name": "C2", "direction": "benefit", "weight": 0.0457 },
+      { "id": "C3", "name": "C3", "direction": "benefit", "weight": 0.4996 },
+      { "id": "C4", "name": "C4", "direction": "benefit", "weight": 0.2548 },
+      { "id": "C5", "name": "C5", "direction": "benefit", "weight": 0.1251 }
+    ],
+    "values": [
+      [8, 8, 8, 5, 8],
+      [6, 7, 7, 6, 6],
+      [6, 6, 5, 4, 5],
+      [6, 6, 6, 4, 6],
+      [6, 6, 6, 7, 7],
+      [5, 5, 5, 5, 6]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      { "alternative": "F", "score": 0.6404 },
+      { "alternative": "C", "score": 0.6352 },
+      { "alternative": "D", "score": 0.6343 },
+      { "alternative": "B", "score": 0.6164 },
+      { "alternative": "E", "score": 0.6084 },
+      { "alternative": "A", "score": 0.5764 }
+    ],
+    "scores": [
+      { "alternative": "A", "score": 0.5764 },
+      { "alternative": "B", "score": 0.6164 },
+      { "alternative": "C", "score": 0.6352 },
+      { "alternative": "D", "score": 0.6343 },
+      { "alternative": "E", "score": 0.6084 },
+      { "alternative": "F", "score": 0.6404 }
+    ]
+  },
+  "appObserved": {
+    "ranking": [
+      { "alternative": "A", "score": 0.7250 },
+      { "alternative": "B", "score": 0.6440 },
+      { "alternative": "E", "score": 0.5109 },
+      { "alternative": "D", "score": 0.2740 },
+      { "alternative": "F", "score": 0.1645 },
+      { "alternative": "C", "score": 0.0464 }
+    ],
+    "scores": [
+      { "alternative": "A", "score": 0.7250 },
+      { "alternative": "B", "score": 0.6440 },
+      { "alternative": "C", "score": 0.0464 },
+      { "alternative": "D", "score": 0.2740 },
+      { "alternative": "E", "score": 0.5109 },
+      { "alternative": "F", "score": 0.1645 }
+    ]
+  },
+  "auditedVariants": [
+    "Vector normalization + Euclidean distance + normalized weights",
+    "Vector normalization + Euclidean distance + raw weights",
+    "Vector normalization + Manhattan distance",
+    "Linear min-max normalization + Euclidean distance",
+    "Linear min-max normalization + Manhattan distance",
+    "Max/ratio normalization + Euclidean distance",
+    "Max/ratio normalization + Manhattan distance"
+  ],
+  "discrepancy": "The source states vector normalization, AHP weights, Euclidean distances, positive/negative ideal solutions, and closeness coefficients. However, the published normalized matrix appears to reuse the C1 normalization denominator for multiple criteria even though the source decision matrix columns have different squared-sum denominators. Under standard vector-normalized TOPSIS with internally normalized rounded AHP weights, MCDM Studio does not reproduce the published distance or performance-index ranking. Keep this as a discrepancy candidate until the source arithmetic, rounded-table dependency, or method interpretation is reconciled.",
+  "tolerance": 0.0005
+}

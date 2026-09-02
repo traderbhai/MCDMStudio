@@ -1,0 +1,85 @@
+{
+  "methodId": "codas",
+  "variant": "crisp-linear-normalization-manual-weights-tau-0.02",
+  "source": "A New Combinative Distance-Based Assessment (CODAS) Method for Multi-Criteria Decision-Making, Economic Computation and Economic Cybernetics Studies and Research, 2016, robot selection example, Tables 1-5",
+  "sourceUrl": "https://www.researchgate.net/publication/308697546_A_new_combinative_distance-based_assessment_CODAS_method_for_multi-criteria_decision-making",
+  "doi": "10.24818/18423264/50.3.16.07",
+  "config": {
+    "title": "CODAS external validation: industrial robot selection",
+    "weightingId": "manual",
+    "methodParams": {
+      "normalization": "Linear normalization",
+      "codasTau": 0.02,
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      { "id": "A1", "name": "ASEA-IRB 60/2" },
+      { "id": "A2", "name": "Cincinnati Milacrone T3-726" },
+      { "id": "A3", "name": "Cybotech V15 Electric Robot" },
+      { "id": "A4", "name": "Hitachi America Process Robot" },
+      { "id": "A5", "name": "Unimation PUMA 500/600" },
+      { "id": "A6", "name": "United States Robots Maker 110" },
+      { "id": "A7", "name": "Yaskawa Electric Motoman L3C" }
+    ],
+    "criteria": [
+      { "id": "C1", "name": "Load capacity", "direction": "benefit", "weight": 0.036 },
+      { "id": "C2", "name": "Maximum tip speed", "direction": "cost", "weight": 0.192 },
+      { "id": "C3", "name": "Memory capacity", "direction": "cost", "weight": 0.326 },
+      { "id": "C4", "name": "Manipulator reach", "direction": "benefit", "weight": 0.326 },
+      { "id": "C5", "name": "Repeatability", "direction": "benefit", "weight": 0.12 }
+    ],
+    "values": [
+      [60, 0.4, 2540, 500, 990],
+      [6.35, 0.15, 1016, 3000, 1041],
+      [6.8, 0.1, 1727.2, 1500, 1676],
+      [10, 0.2, 1000, 2000, 965],
+      [2.5, 0.1, 560, 500, 915],
+      [4.5, 0.08, 1016, 350, 508],
+      [3, 0.1, 1778, 1000, 920]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      { "alternative": "Cincinnati Milacrone T3-726", "score": 2.0940 },
+      { "alternative": "Unimation PUMA 500/600", "score": 1.2479 },
+      { "alternative": "Hitachi America Process Robot", "score": 0.4537 },
+      { "alternative": "Cybotech V15 Electric Robot", "score": 0.1483 },
+      { "alternative": "United States Robots Maker 110", "score": -0.3730 },
+      { "alternative": "Yaskawa Electric Motoman L3C", "score": -0.9056 },
+      { "alternative": "ASEA-IRB 60/2", "score": -2.6652 }
+    ],
+    "tables": [
+      {
+        "id": "weighted",
+        "cells": [
+          { "row": 0, "column": 1, "value": 0.0360 },
+          { "row": 1, "column": 2, "value": 0.1024 },
+          { "row": 4, "column": 3, "value": 0.3260 },
+          { "row": 1, "column": 4, "value": 0.3260 }
+        ]
+      },
+      {
+        "id": "codas-distances",
+        "cells": [
+          { "row": 0, "column": 1, "value": 0.0514 },
+          { "row": 1, "column": 1, "value": 0.3164 },
+          { "row": 1, "column": 2, "value": 0.5002 },
+          { "row": 4, "column": 2, "value": 0.4148 }
+        ]
+      },
+      {
+        "id": "codas-relative-assessment",
+        "cells": [
+          { "row": 0, "column": 7, "value": -0.2514 },
+          { "row": 1, "column": 8, "value": 2.0940 },
+          { "row": 4, "column": 8, "value": 1.2479 },
+          { "row": 6, "column": 8, "value": -0.9056 }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.0015
+}

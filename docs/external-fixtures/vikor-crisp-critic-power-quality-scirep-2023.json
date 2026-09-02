@@ -1,0 +1,80 @@
+{
+  "methodId": "vikor",
+  "variant": "crisp-manual-critic-weights-v-0.5",
+  "source": "Comprehensive power quality performance assessment for electrical system of a nuclear research reactor, Scientific Reports, 2023, DOI: 10.1038/s41598-023-36692-2, Tables 2, 5, 7, and 8",
+  "sourceUrl": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10279760/",
+  "doi": "10.1038/s41598-023-36692-2",
+  "config": {
+    "title": "VIKOR external validation: nuclear reactor power quality assessment",
+    "weightingId": "manual",
+    "methodParams": {
+      "vikorV": 0.5,
+      "vikorAcceptableAdvantageMode": "Auto DQ = 1/(m-1)",
+      "vikorStabilityRule": "Q winner must also lead S or R",
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      { "id": "S1", "name": "Sample 1" },
+      { "id": "S2", "name": "Sample 2" },
+      { "id": "S3", "name": "Sample 3" },
+      { "id": "S4", "name": "Sample 4" },
+      { "id": "S5", "name": "Sample 5" },
+      { "id": "S6", "name": "Sample 6" }
+    ],
+    "criteria": [
+      { "id": "C1", "name": "F_dev", "direction": "cost", "weight": 0.124 },
+      { "id": "C2", "name": "V_Un", "direction": "cost", "weight": 0.1642 },
+      { "id": "C3", "name": "I_Un", "direction": "cost", "weight": 0.1252 },
+      { "id": "C4", "name": "Pst", "direction": "cost", "weight": 0.1287 },
+      { "id": "C5", "name": "Plt", "direction": "cost", "weight": 0.1143 },
+      { "id": "C6", "name": "VTHD", "direction": "cost", "weight": 0.1108 },
+      { "id": "C7", "name": "ITHD", "direction": "cost", "weight": 0.1223 },
+      { "id": "C8", "name": "PF", "direction": "benefit", "weight": 0.1104 }
+    ],
+    "values": [
+      [0.14508, 0.0935, 3.2588, 0.105193333, 0.085046667, 0.844866667, 5.8457, 0.9684],
+      [0.25958, 0.065, 4.2029, 0.105323333, 0.109903333, 0.965, 8.030833333, 0.9747],
+      [0.15946, 0.0323, 3.1262, 0.126253333, 0.158126667, 0.967466667, 7.130566667, 0.964],
+      [0.18056, 0.0708, 2.8682, 0.106096667, 0.142603333, 1.2088, 6.127033333, 0.9661],
+      [0.31088, 0.0739, 3.6941, 0.097556667, 0.10393, 0.908266667, 6.840866667, 0.9648],
+      [0.26864, 0.0323, 2.0803, 0.13881, 0.20178, 0.9539, 5.280833333, 0.9523]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      { "alternative": "Sample 3", "score": 0.239469579 },
+      { "alternative": "Sample 4", "score": 0.497224467 },
+      { "alternative": "Sample 1", "score": 0.5 },
+      { "alternative": "Sample 5", "score": 0.680741687 },
+      { "alternative": "Sample 6", "score": 0.691920046 },
+      { "alternative": "Sample 2", "score": 0.738955823 }
+    ],
+    "tables": [
+      {
+        "id": "vikor",
+        "cells": [
+          { "row": 0, "column": 1, "value": 0.3138 },
+          { "row": 1, "column": 2, "value": 0.1252 },
+          { "row": 2, "column": 3, "value": 0.239469579 },
+          { "row": 3, "column": 3, "value": 0.497224467 },
+          { "row": 5, "column": 1, "value": 0.479 }
+        ]
+      },
+      {
+        "id": "vikor-acceptable-solution",
+        "cells": [
+          { "row": 0, "column": 3, "value": "Accepted" },
+          { "row": 1, "column": 3, "value": "Accepted" }
+        ]
+      }
+    ],
+    "diagnostics": [
+      { "label": "VIKOR acceptable advantage", "status": "pass" },
+      { "label": "VIKOR acceptable stability", "status": "pass" }
+    ]
+  },
+  "tolerance": 0.0002
+}

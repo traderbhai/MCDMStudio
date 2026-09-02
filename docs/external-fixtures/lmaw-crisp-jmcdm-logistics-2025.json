@@ -1,0 +1,87 @@
+{
+  "methodId": "lmaw",
+  "variant": "crisp-nonlinear-q-utility-jmcdm",
+  "source": "JMcDM LMAW worked example, generated documentation dated 2025-04-29, citing Pamucar et al. 2021 original LMAW paper",
+  "sourceUrl": "https://jbytecode.github.io/JMcDM/stable/mcdms/#LMAW",
+  "doi": "10.22190/FUME210214031P",
+  "config": {
+    "title": "LMAW validation: JMcDM logistics worked example",
+    "weightingId": "manual",
+    "methodParams": {
+      "lmawScaling": "Log additive scaling",
+      "lmawScoreMode": "Nonlinear Q utility",
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      { "id": "A1", "name": "A1" },
+      { "id": "A2", "name": "A2" },
+      { "id": "A3", "name": "A3" },
+      { "id": "A4", "name": "A4" },
+      { "id": "A5", "name": "A5" },
+      { "id": "A6", "name": "A6" }
+    ],
+    "criteria": [
+      { "id": "C1", "name": "C1", "direction": "benefit", "weight": 0.215 },
+      { "id": "C2", "name": "C2", "direction": "benefit", "weight": 0.126 },
+      { "id": "C3", "name": "C3", "direction": "cost", "weight": 0.152 },
+      { "id": "C4", "name": "C4", "direction": "cost", "weight": 0.091 },
+      { "id": "C5", "name": "C5", "direction": "cost", "weight": 0.19 },
+      { "id": "C6", "name": "C6", "direction": "benefit", "weight": 0.226 }
+    ],
+    "values": [
+      [647.34, 6.24, 49.87, 19.46, 212.58, 6.75],
+      [115.64, 3.24, 16.26, 9.69, 207.59, 3.00],
+      [373.61, 5.00, 26.43, 12.00, 184.62, 3.74],
+      [37.63, 2.48, 2.85, 9.25, 142.50, 3.24],
+      [858.01, 4.74, 62.85, 45.96, 267.95, 4.00],
+      [222.92, 3.00, 19.24, 21.46, 221.38, 3.49]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      { "alternative": "A1", "score": 4.8390 },
+      { "alternative": "A3", "score": 4.7977 },
+      { "alternative": "A5", "score": 4.7342 },
+      { "alternative": "A4", "score": 4.7321 },
+      { "alternative": "A6", "score": 4.7022 },
+      { "alternative": "A2", "score": 4.6797 }
+    ],
+    "scores": [
+      { "alternative": "A1", "score": 4.8390 },
+      { "alternative": "A2", "score": 4.6797 },
+      { "alternative": "A3", "score": 4.7977 },
+      { "alternative": "A4", "score": 4.7321 },
+      { "alternative": "A5", "score": 4.7342 },
+      { "alternative": "A6", "score": 4.7022 }
+    ],
+    "tables": [
+      {
+        "id": "standardized",
+        "cells": [
+          { "row": 0, "column": 1, "value": 1.7545 },
+          { "row": 0, "column": 3, "value": 1.0571 },
+          { "row": 3, "column": 5, "value": 2.0000 }
+        ]
+      },
+      {
+        "id": "weighted",
+        "cells": [
+          { "row": 0, "column": 1, "value": 0.8067 },
+          { "row": 0, "column": 2, "value": 0.8726 },
+          { "row": 0, "column": 6, "value": 0.7834 }
+        ]
+      },
+      {
+        "id": "lmaw-index",
+        "cells": [
+          { "row": 0, "column": 1, "value": 4.8390 },
+          { "row": 1, "column": 1, "value": 4.6797 }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.0001
+}

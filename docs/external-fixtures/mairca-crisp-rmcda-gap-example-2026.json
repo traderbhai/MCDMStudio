@@ -1,0 +1,83 @@
+{
+  "methodId": "mairca",
+  "variant": "crisp-minmax-gap-rmcda-example",
+  "source": "RMCDA apply.MAIRCA source implementation and documentation, built June 28 2026, citing the GIS-MAIRCA foundation paper by Gigovic, Pamucar, Bajic, and Milicevic",
+  "sourceUrl": "https://rdrr.io/cran/RMCDA/src/R/MAIRCA.R",
+  "doi": "10.3390/su8040372",
+  "config": {
+    "title": "MAIRCA validation: RMCDA example",
+    "weightingId": "manual",
+    "methodParams": {
+      "normalization": "Linear normalization",
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      { "id": "A1", "name": "A1" },
+      { "id": "A2", "name": "A2" },
+      { "id": "A3", "name": "A3" },
+      { "id": "A4", "name": "A4" },
+      { "id": "A5", "name": "A5" }
+    ],
+    "criteria": [
+      { "id": "C1", "name": "C1", "direction": "benefit", "weight": 0.04744 },
+      { "id": "C2", "name": "C2", "direction": "benefit", "weight": 0.02464 },
+      { "id": "C3", "name": "C3", "direction": "benefit", "weight": 0.51357 },
+      { "id": "C4", "name": "C4", "direction": "benefit", "weight": 0.41435 }
+    ],
+    "values": [
+      [70, 245, 16.4, 19],
+      [52, 246, 7.3, 22],
+      [53, 295, 10.3, 25],
+      [63, 256, 12.0, 8],
+      [64, 233, 5.3, 17]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      { "alternative": "A1", "score": 0.0332 },
+      { "alternative": "A3", "score": 0.0654 },
+      { "alternative": "A2", "score": 0.1122 },
+      { "alternative": "A4", "score": 0.1304 },
+      { "alternative": "A5", "score": 0.1498 }
+    ],
+    "tables": [
+      {
+        "id": "normalized",
+        "cells": [
+          { "row": 0, "column": 1, "value": 1.0000 },
+          { "row": 1, "column": 3, "value": 0.1802 },
+          { "row": 2, "column": 2, "value": 1.0000 },
+          { "row": 4, "column": 4, "value": 0.5294 }
+        ]
+      },
+      {
+        "id": "theoretical-assessment",
+        "cells": [
+          { "row": 0, "column": 1, "value": 0.0095 },
+          { "row": 0, "column": 3, "value": 0.1027 },
+          { "row": 3, "column": 4, "value": 0.0829 }
+        ]
+      },
+      {
+        "id": "real-assessment",
+        "cells": [
+          { "row": 0, "column": 3, "value": 0.1027 },
+          { "row": 1, "column": 4, "value": 0.0682 },
+          { "row": 2, "column": 2, "value": 0.0049 }
+        ]
+      },
+      {
+        "id": "gap",
+        "cells": [
+          { "row": 0, "column": 2, "value": 0.0040 },
+          { "row": 2, "column": 3, "value": 0.0564 },
+          { "row": 4, "column": 4, "value": 0.0390 }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.0003
+}

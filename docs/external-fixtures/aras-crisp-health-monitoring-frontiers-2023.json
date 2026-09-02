@@ -1,0 +1,90 @@
+{
+  "methodId": "aras",
+  "variant": "crisp-normalized-matrix-manual-ahp-weights",
+  "source": "An integration of hybrid MCDA framework to the statistical analysis of computer-based health monitoring applications, Frontiers in Public Health, 2023, DOI: 10.3389/fpubh.2023.1341871, Tables 2-4",
+  "sourceUrl": "https://www.frontiersin.org/journals/public-health/articles/10.3389/fpubh.2023.1341871/full",
+  "doi": "10.3389/fpubh.2023.1341871",
+  "config": {
+    "title": "ARAS external validation: health monitoring application selection",
+    "weightingId": "manual",
+    "methodParams": {
+      "normalization": "Linear normalization",
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      { "id": "A1", "name": "Ap1" },
+      { "id": "A2", "name": "Ap2" },
+      { "id": "A3", "name": "Ap3" },
+      { "id": "A4", "name": "Ap4" },
+      { "id": "A5", "name": "Ap5" },
+      { "id": "A6", "name": "Ap6" },
+      { "id": "A7", "name": "Ap7" },
+      { "id": "A8", "name": "Ap8" }
+    ],
+    "criteria": [
+      { "id": "C1", "name": "C1", "direction": "benefit", "weight": 0.12 },
+      { "id": "C2", "name": "C2", "direction": "benefit", "weight": 0.03 },
+      { "id": "C3", "name": "C3", "direction": "benefit", "weight": 0.08 },
+      { "id": "C4", "name": "C4", "direction": "benefit", "weight": 0.14 },
+      { "id": "C5", "name": "C5", "direction": "benefit", "weight": 0.10 },
+      { "id": "C6", "name": "C6", "direction": "benefit", "weight": 0.17 },
+      { "id": "C7", "name": "C7", "direction": "benefit", "weight": 0.35 },
+      { "id": "C8", "name": "C8", "direction": "benefit", "weight": 0.02 }
+    ],
+    "values": [
+      [0.09, 0.12, 0.18, 0.07, 0.12, 0.16, 0.04, 0.13],
+      [0.15, 0.06, 0.04, 0.09, 0.15, 0.10, 0.17, 0.15],
+      [0.04, 0.08, 0.12, 0.16, 0.12, 0.06, 0.15, 0.07],
+      [0.11, 0.14, 0.06, 0.05, 0.10, 0.16, 0.10, 0.04],
+      [0.06, 0.04, 0.10, 0.14, 0.05, 0.08, 0.13, 0.17],
+      [0.19, 0.16, 0.08, 0.07, 0.15, 0.14, 0.04, 0.09],
+      [0.04, 0.12, 0.14, 0.12, 0.10, 0.12, 0.06, 0.04],
+      [0.13, 0.10, 0.08, 0.14, 0.07, 0.04, 0.13, 0.15]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      { "alternative": "Ap2", "score": 0.769 },
+      { "alternative": "Ap3", "score": 0.691 },
+      { "alternative": "Ap8", "score": 0.637 },
+      { "alternative": "Ap5" },
+      { "alternative": "Ap4" },
+      { "alternative": "Ap6" },
+      { "alternative": "Ap1" },
+      { "alternative": "Ap7", "score": 0.509 }
+    ],
+    "tables": [
+      {
+        "id": "aras-normalized",
+        "cells": [
+          { "row": 0, "column": 1, "value": 0.09 },
+          { "row": 1, "column": 7, "value": 0.17 },
+          { "row": 5, "column": 1, "value": 0.19 },
+          { "row": 7, "column": 8, "value": 0.15 }
+        ]
+      },
+      {
+        "id": "aras-weighted",
+        "cells": [
+          { "row": 0, "column": 3, "value": 0.015 },
+          { "row": 1, "column": 7, "value": 0.061 },
+          { "row": 2, "column": 4, "value": 0.022 },
+          { "row": 7, "column": 7, "value": 0.047 }
+        ]
+      },
+      {
+        "id": "aras-utility",
+        "cells": [
+          { "row": 0, "column": 1, "value": 0.092 },
+          { "row": 1, "column": 2, "value": 0.769 },
+          { "row": 2, "column": 2, "value": 0.691 },
+          { "row": 6, "column": 2, "value": 0.509 }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.015
+}

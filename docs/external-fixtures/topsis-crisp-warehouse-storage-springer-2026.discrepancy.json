@@ -1,0 +1,82 @@
+{
+  "status": "candidate-discrepancy",
+  "methodId": "topsis",
+  "variant": "crisp-vector-normalization-manual-weights",
+  "source": "Selection of warehouse storage system using the TOPSIS method, Central European Journal of Operations Research, 2026, DOI: 10.1007/s10100-026-01038-6, Tables 1-7",
+  "sourceUrl": "https://link.springer.com/article/10.1007/s10100-026-01038-6",
+  "doi": "10.1007/s10100-026-01038-6",
+  "config": {
+    "title": "TOPSIS discrepancy candidate: warehouse storage systems",
+    "weightingId": "manual",
+    "methodParams": {
+      "normalization": "Vector normalization",
+      "distanceMetric": "Euclidean",
+      "idealSolution": "Benefit/cost aware",
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      { "id": "M1", "name": "ASRS" },
+      { "id": "M2", "name": "Traditional Shelving Systems" },
+      { "id": "M3", "name": "Mobile Shelving" },
+      { "id": "M4", "name": "Flow Racks" }
+    ],
+    "criteria": [
+      { "id": "c1", "name": "Capacity/Space Efficiency", "direction": "benefit", "weight": 0.15 },
+      { "id": "c2", "name": "Accessibility to Products", "direction": "benefit", "weight": 0.10 },
+      { "id": "c3", "name": "Maintenance of Storage Conditions/Ease", "direction": "benefit", "weight": 0.10 },
+      { "id": "c4", "name": "Flexibility", "direction": "benefit", "weight": 0.15 },
+      { "id": "c5", "name": "Safety and Ergonomics of Human Resources", "direction": "benefit", "weight": 0.20 },
+      { "id": "c6", "name": "Cost of the Storage System", "direction": "cost", "weight": 0.15 },
+      { "id": "c7", "name": "Impact on the Quality of Stored Products", "direction": "benefit", "weight": 0.10 },
+      { "id": "c8", "name": "Type of Product", "direction": "benefit", "weight": 0.05 }
+    ],
+    "values": [
+      [5.00, 4.63, 4.75, 3.88, 5.00, 2.00, 5.00, 5.00],
+      [2.88, 4.63, 3.63, 3.75, 3.00, 4.00, 3.63, 3.00],
+      [4.00, 3.38, 4.63, 5.00, 4.00, 3.00, 4.75, 4.00],
+      [4.13, 4.00, 4.00, 4.00, 4.00, 3.00, 4.00, 4.00]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      { "alternative": "ASRS", "score": 0.808 },
+      { "alternative": "Flow Racks", "score": 0.657 },
+      { "alternative": "Mobile Shelving", "score": 0.556 },
+      { "alternative": "Traditional Shelving Systems", "score": 0.192 }
+    ],
+    "scores": [
+      { "alternative": "ASRS", "score": 0.808 },
+      { "alternative": "Traditional Shelving Systems", "score": 0.192 },
+      { "alternative": "Mobile Shelving", "score": 0.556 },
+      { "alternative": "Flow Racks", "score": 0.657 }
+    ]
+  },
+  "appObserved": {
+    "ranking": [
+      { "alternative": "ASRS", "score": 0.8078 },
+      { "alternative": "Mobile Shelving", "score": 0.5386 },
+      { "alternative": "Flow Racks", "score": 0.4873 },
+      { "alternative": "Traditional Shelving Systems", "score": 0.1478 }
+    ],
+    "scores": [
+      { "alternative": "ASRS", "score": 0.8078 },
+      { "alternative": "Traditional Shelving Systems", "score": 0.1478 },
+      { "alternative": "Mobile Shelving", "score": 0.5386 },
+      { "alternative": "Flow Racks", "score": 0.4873 }
+    ]
+  },
+  "auditedVariants": [
+    "Vector normalization + Euclidean distance + normalized weights",
+    "Vector normalization + Euclidean distance + raw weights",
+    "Vector normalization + Manhattan distance",
+    "Linear min-max normalization + Euclidean distance",
+    "Linear min-max normalization + Manhattan distance",
+    "Max/ratio normalization + Euclidean distance",
+    "Max/ratio normalization + Manhattan distance"
+  ],
+  "discrepancy": "The paper's Table 1 values, Table 2 weights, vector normalization, Euclidean distances, and benefit/cost directions reproduce ASRS as rank 1 but do not reproduce the paper's middle ranking or published M2-M4 closeness scores in MCDM Studio's standard TOPSIS calculation. Keep this as a candidate until the source arithmetic, rounding, or method-parameter interpretation is reconciled.",
+  "tolerance": 0.0003
+}

@@ -1,0 +1,86 @@
+{
+  "methodId": "rov",
+  "variant": "crisp-linear-max-min-entropy-weights-fortune500",
+  "source": "Selecting the Best Normalization Technique for ROV Method: Towards a Real Life Application, Gazi University Journal of Science, 2021, DOI: 10.35378/gujs.767525, Tables 4, 7-10",
+  "sourceUrl": "https://doi.org/10.35378/gujs.767525",
+  "doi": "10.35378/gujs.767525",
+  "config": {
+    "title": "ROV Fortune 500 financial performance validation",
+    "weightingId": "manual",
+    "methodParams": {
+      "normalization": "Linear normalization",
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      { "id": "Walmart", "name": "Walmart" },
+      { "id": "Amazon", "name": "Amazon.com" },
+      { "id": "Exxon", "name": "Exxon Mobil" },
+      { "id": "Apple", "name": "Apple" },
+      { "id": "CVS", "name": "CVS Health" },
+      { "id": "Berkshire", "name": "Berkshire Hathaway" },
+      { "id": "Unitedhealth", "name": "Unitedhealth Group" },
+      { "id": "McKesson", "name": "McKesson" },
+      { "id": "ATT", "name": "AT&T" },
+      { "id": "AmerisourceBergen", "name": "AmerisourceBergen" }
+    ],
+    "criteria": [
+      { "id": "CR", "name": "Current ratio", "direction": "benefit", "weight": 0.085 },
+      { "id": "QR", "name": "Quick ratio", "direction": "benefit", "weight": 0.127 },
+      { "id": "ROE", "name": "Return on equity", "direction": "benefit", "weight": 0.224 },
+      { "id": "ROA", "name": "Return on assets", "direction": "benefit", "weight": 0.217 },
+      { "id": "ATR", "name": "Asset turnover rate", "direction": "benefit", "weight": 0.224 },
+      { "id": "LR", "name": "Leverage ratio", "direction": "cost", "weight": 0.015 },
+      { "id": "DTE", "name": "Debt to equity ratio", "direction": "cost", "weight": 0.107 }
+    ],
+    "values": [
+      [0.80, 0.23, 0.09, 0.03, 2.33, 0.64, 0.78],
+      [1.10, 0.86, 0.19, 0.05, 1.25, 0.72, 1.21],
+      [0.78, 0.56, 0.07, 0.04, 0.73, 0.45, 0.50],
+      [1.54, 1.50, 0.61, 0.16, 0.77, 0.73, 1.57],
+      [0.94, 0.62, 0.10, 0.03, 1.15, 0.71, 1.64],
+      [0.39, 0.32, 0.19, 0.10, 0.31, 0.48, 0.24],
+      [0.69, 0.58, 0.23, 0.08, 1.39, 0.64, 0.83],
+      [1.02, 0.58, 0.03, 0.004, 3.59, 0.84, 1.49],
+      [0.79, 0.79, 0.07, 0.03, 0.33, 0.63, 2.39],
+      [0.11, 0.11, 0.29, 0.02, 4.58, 0.92, 2.20]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      { "alternative": "Apple", "score": 0.362 },
+      { "alternative": "Unitedhealth Group", "score": 0.202 },
+      { "alternative": "Amazon.com", "score": 0.184 },
+      { "alternative": "AmerisourceBergen", "score": 0.178 },
+      { "alternative": "Berkshire Hathaway", "score": 0.176 },
+      { "alternative": "McKesson", "score": 0.158 },
+      { "alternative": "Walmart", "score": 0.153 },
+      { "alternative": "Exxon Mobil", "score": 0.139 },
+      { "alternative": "CVS Health", "score": 0.124 },
+      { "alternative": "AT&T", "score": 0.082 }
+    ],
+    "tables": [
+      {
+        "id": "normalized",
+        "cells": [
+          { "row": 0, "column": 1, "value": 0.483 },
+          { "row": 0, "column": 6, "value": 0.596 },
+          { "row": 3, "column": 1, "value": 1 },
+          { "row": 9, "column": 5, "value": 1 }
+        ]
+      },
+      {
+        "id": "rov-utilities",
+        "cells": [
+          { "row": 3, "column": 1, "value": 0.678 },
+          { "row": 3, "column": 2, "value": 0.047 },
+          { "row": 6, "column": 3, "value": 0.202 },
+          { "row": 8, "column": 3, "value": 0.082 }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.002
+}

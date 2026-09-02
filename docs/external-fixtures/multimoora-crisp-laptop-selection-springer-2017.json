@@ -1,0 +1,76 @@
+{
+  "methodId": "multimoora",
+  "variant": "crisp-dominance-theory-manual-weights",
+  "source": "The multi-objective decision making methods based on MULTIMOORA and MOOSRA for the laptop selection problem, Journal of Industrial Engineering International, 2017, DOI: 10.1007/s40092-016-0175-5, Tables 1, 5, 6, 7, 8, and 9",
+  "sourceUrl": "https://doi.org/10.1007/s40092-016-0175-5",
+  "doi": "10.1007/s40092-016-0175-5",
+  "config": {
+    "title": "MULTIMOORA external validation: laptop selection",
+    "weightingId": "manual",
+    "methodParams": {
+      "multimooraAggregation": "Dominance theory",
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      { "id": "A1", "name": "A1" },
+      { "id": "A2", "name": "A2" },
+      { "id": "A3", "name": "A3" },
+      { "id": "A4", "name": "A4" },
+      { "id": "A5", "name": "A5" },
+      { "id": "A6", "name": "A6" },
+      { "id": "A7", "name": "A7" }
+    ],
+    "criteria": [
+      { "id": "C1", "name": "Processor speed", "direction": "benefit", "weight": 0.297 },
+      { "id": "C2", "name": "Cache memory", "direction": "benefit", "weight": 0.025 },
+      { "id": "C3", "name": "Storage", "direction": "benefit", "weight": 0.035 },
+      { "id": "C4", "name": "Display card memory", "direction": "benefit", "weight": 0.076 },
+      { "id": "C5", "name": "RAM", "direction": "benefit", "weight": 0.154 },
+      { "id": "C6", "name": "Screen resolution", "direction": "benefit", "weight": 0.053 },
+      { "id": "C7", "name": "Screen size", "direction": "benefit", "weight": 0.104 },
+      { "id": "C8", "name": "Brand reliability", "direction": "benefit", "weight": 0.017 },
+      { "id": "C9", "name": "Weight", "direction": "cost", "weight": 0.025 },
+      { "id": "C10", "name": "Cost", "direction": "cost", "weight": 0.214 }
+    ],
+    "values": [
+      [3.5, 6, 1256, 4, 16, 3, 17.3, 8, 2.82, 4100],
+      [3.1, 4, 1000, 2, 8, 1, 15.6, 5, 3.08, 3800],
+      [3.6, 6, 2000, 4, 16, 3, 17.3, 5, 2.9, 4000],
+      [3, 4, 1000, 2, 8, 2, 17.3, 5, 2.6, 3500],
+      [3.3, 6, 1008, 4, 12, 3, 15.6, 8, 2.3, 3800],
+      [3.6, 6, 1000, 2, 16, 3, 15.6, 5, 2.8, 4000],
+      [3.5, 6, 1256, 2, 16, 1, 15.6, 6, 2.9, 4000]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      { "alternative": "A3" },
+      { "alternative": "A1" },
+      { "alternative": "A5" },
+      { "alternative": "A6" },
+      { "alternative": "A7" },
+      { "alternative": "A4" },
+      { "alternative": "A2" }
+    ],
+    "tables": [
+      {
+        "id": "multimoora-components",
+        "cells": [
+          { "row": 0, "column": 1, "value": 0.226 },
+          { "row": 0, "column": 7, "value": 6 },
+          { "row": 1, "column": 1, "value": 0.135 },
+          { "row": 1, "column": 7, "value": 20 },
+          { "row": 2, "column": 1, "value": 0.236 },
+          { "row": 2, "column": 7, "value": 3 }
+        ]
+      }
+    ],
+    "diagnostics": [
+      { "label": "MULTIMOORA aggregation", "status": "pass" }
+    ]
+  },
+  "tolerance": 0.001
+}

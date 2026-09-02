@@ -1,0 +1,64 @@
+{
+  "methodId": "topsis",
+  "variant": "crisp-vector-normalization-ahp-weights-hospital-supplier",
+  "source": "Integrated Multicriteria Decision-Making Methods to Solve Supplier Selection Problem: A Case Study in a Hospital, Journal of Healthcare Engineering, 2019, DOI: 10.1155/2019/5614892, Tables 3-4",
+  "sourceUrl": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6811789/",
+  "doi": "10.1155/2019/5614892",
+  "config": {
+    "title": "TOPSIS hospital supplier-selection validation",
+    "weightingId": "manual",
+    "methodParams": {
+      "normalization": "Vector normalization",
+      "distanceMetric": "Euclidean",
+      "idealSolution": "Benefit/cost aware",
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      { "id": "S1", "name": "Supplier1" },
+      { "id": "S2", "name": "Supplier2" },
+      { "id": "S3", "name": "Supplier3" }
+    ],
+    "criteria": [
+      { "id": "Logistics", "name": "Logistics", "direction": "benefit", "weight": 0.513 },
+      { "id": "Quality", "name": "Quality", "direction": "benefit", "weight": 0.129 },
+      { "id": "Cost", "name": "Cost", "direction": "cost", "weight": 0.262 },
+      { "id": "Flexibility", "name": "Flexibility", "direction": "benefit", "weight": 0.063 },
+      { "id": "Reliability", "name": "Reliability", "direction": "benefit", "weight": 0.033 }
+    ],
+    "values": [
+      [0.731, 0.292, 0.193, 0.640, 0.086],
+      [0.188, 0.079, 0.203, 0.183, 0.314],
+      [0.081, 0.629, 0.605, 0.177, 0.600]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      { "alternative": "Supplier1", "score": 0.876 },
+      { "alternative": "Supplier2", "score": 0.312 },
+      { "alternative": "Supplier3", "score": 0.182 }
+    ],
+    "tables": [
+      {
+        "id": "topsis-distances",
+        "cells": [
+          { "row": 0, "column": 1, "value": 0.067 },
+          { "row": 0, "column": 2, "value": 0.472 },
+          { "row": 1, "column": 1, "value": 0.383 },
+          { "row": 2, "column": 2, "value": 0.105 }
+        ]
+      },
+      {
+        "id": "ideal",
+        "cells": [
+          { "row": 0, "column": 1, "value": 0.494 },
+          { "row": 0, "column": 3, "value": 0.0758 },
+          { "row": 1, "column": 3, "value": 0.2378 }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.001
+}

@@ -1,0 +1,74 @@
+{
+  "methodId": "maut",
+  "variant": "crisp-input-utilities-manual-weights-linear",
+  "source": "Comparative Analysis of Multi-Criteria Decision-Making Methods for Seismic Structural Retrofitting, Computer-Aided Civil and Infrastructure Engineering, 2009, DOI: 10.1111/j.1467-8667.2009.00599.x, MAUT Table 11",
+  "sourceUrl": "https://onlinelibrary.wiley.com/doi/10.1111/j.1467-8667.2009.00599.x",
+  "doi": "10.1111/j.1467-8667.2009.00599.x",
+  "config": {
+    "title": "MAUT external validation: seismic structural retrofitting",
+    "weightingId": "manual",
+    "methodParams": {
+      "normalization": "Input values are utilities",
+      "mautUtilityShape": "Linear",
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      { "id": "A1", "name": "A1" },
+      { "id": "A2", "name": "A2" },
+      { "id": "A3", "name": "A3" },
+      { "id": "A4", "name": "A4" },
+      { "id": "A5", "name": "A5" }
+    ],
+    "criteria": [
+      { "id": "C1", "name": "C1", "direction": "benefit", "weight": 0.08 },
+      { "id": "C2", "name": "C2", "direction": "benefit", "weight": 0.15 },
+      { "id": "C3", "name": "C3", "direction": "benefit", "weight": 0.08 },
+      { "id": "C4", "name": "C4", "direction": "benefit", "weight": 0.28 },
+      { "id": "C5", "name": "C5", "direction": "benefit", "weight": 0.03 },
+      { "id": "C6", "name": "C6", "direction": "benefit", "weight": 0.17 },
+      { "id": "C7", "name": "C7", "direction": "benefit", "weight": 0.03 },
+      { "id": "C8", "name": "C8", "direction": "benefit", "weight": 0.18 }
+    ],
+    "values": [
+      [0.625, 0.913333, 0.6625, 1, 0, 0.958824, 0.533333, 0],
+      [0.25, 0, 0, 0.128571, 0.633333, 0, 0.466667, 0.777778],
+      [0.775, 0.746667, 0.6625, 0.528571, 0.766667, 0.952941, 0, 0.305556],
+      [0, 0.173333, 0.025, 0.207143, 0, 0.976471, 0.6, 0.783333],
+      [0.5125, 0.78, 0.775, 0.207143, 0.633333, 0.958824, 0, 0.05]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      { "alternative": "A1", "score": 0.699 },
+      { "alternative": "A3", "score": 0.615 },
+      { "alternative": "A5", "score": 0.469 },
+      { "alternative": "A4", "score": 0.411 },
+      { "alternative": "A2", "score": 0.229 }
+    ],
+    "tables": [
+      {
+        "id": "utilities",
+        "cells": [
+          { "row": 0, "column": 4, "value": 1 },
+          { "row": 1, "column": 8, "value": 0.7778 },
+          { "row": 2, "column": 5, "value": 0.7667 },
+          { "row": 4, "column": 3, "value": 0.775 }
+        ]
+      },
+      {
+        "id": "weighted-utilities",
+        "cells": [
+          { "row": 0, "column": 1, "value": 0.05 },
+          { "row": 0, "column": 4, "value": 0.28 },
+          { "row": 2, "column": 6, "value": 0.162 },
+          { "row": 3, "column": 8, "value": 0.141 },
+          { "row": 4, "column": 3, "value": 0.062 }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.001
+}

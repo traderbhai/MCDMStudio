@@ -1,0 +1,66 @@
+{
+  "methodId": "electre",
+  "variant": "crisp-hand-computed-rmcda-package",
+  "source": "surveyframe R package ELECTRE I hand-computed test case based on the RMCDA ELECTRE I worked example, with standard ELECTRE reference DOI 10.2307/2628673",
+  "sourceUrl": "https://rdrr.io/cran/surveyframe/src/tests/testthat/test-decision-preference.R",
+  "doi": "10.2307/2628673",
+  "config": {
+    "title": "ELECTRE I external validation: hand-computed concordance and discordance",
+    "weightingId": "manual",
+    "methodParams": {
+      "electreConcordance": 0.7,
+      "electreDiscordance": 0.3,
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      { "id": "a1", "name": "a1" },
+      { "id": "a2", "name": "a2" },
+      { "id": "a3", "name": "a3" }
+    ],
+    "criteria": [
+      { "id": "c1", "name": "c1", "direction": "benefit", "weight": 0.2 },
+      { "id": "c2", "name": "c2", "direction": "benefit", "weight": 0.15 },
+      { "id": "c3", "name": "c3", "direction": "benefit", "weight": 0.4 },
+      { "id": "c4", "name": "c4", "direction": "benefit", "weight": 0.25 }
+    ],
+    "values": [
+      [25, 20, 15, 30],
+      [10, 30, 20, 30],
+      [30, 10, 30, 10]
+    ]
+  },
+  "expected": {
+    "tables": [
+      {
+        "id": "concordance",
+        "cells": [
+          { "row": 0, "column": 2, "value": 0.45 },
+          { "row": 1, "column": 1, "value": 0.8 },
+          { "row": 2, "column": 1, "value": 0.6 },
+          { "row": 2, "column": 2, "value": 0.6 }
+        ]
+      },
+      {
+        "id": "discordance",
+        "cells": [
+          { "row": 0, "column": 2, "value": 0.5 },
+          { "row": 1, "column": 1, "value": 0.75 },
+          { "row": 2, "column": 1, "value": 1 },
+          { "row": 2, "column": 2, "value": 1 }
+        ]
+      },
+      {
+        "id": "outranking",
+        "cells": [
+          { "row": 0, "column": 2, "value": 0 },
+          { "row": 1, "column": 1, "value": 0 },
+          { "row": 2, "column": 1, "value": 0 }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.0001
+}

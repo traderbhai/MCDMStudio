@@ -1,0 +1,83 @@
+{
+  "methodId": "lopm",
+  "variant": "crisp-manual-property-limits-pymcdm-material-selection",
+  "source": "pymcdm LoPM documentation example, crawled 2026, citing Farag 2020 Materials and process selection for engineering design, DOI: 10.1201/9781003006091",
+  "sourceUrl": "https://pymcdm.readthedocs.io/en/master/pymcdm.methods.html#pymcdm.methods.LoPM",
+  "doi": "10.1201/9781003006091",
+  "config": {
+    "title": "LoPM validation: pymcdm material-selection example",
+    "weightingId": "manual",
+    "methodParams": {
+      "lopmLimitsMode": "Manual property limits",
+      "lopmTargetTolerance": 0,
+      "lopmPropertyTypes": "lower,lower,upper,upper,target,upper",
+      "lopmPropertyLimits": "10000,14,0.0015,3.5,2.3,9.0",
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      { "id": "A1", "name": "A1" },
+      { "id": "A2", "name": "A2" },
+      { "id": "A3", "name": "A3" },
+      { "id": "A4", "name": "A4" },
+      { "id": "A5", "name": "A5" },
+      { "id": "A6", "name": "A6" }
+    ],
+    "criteria": [
+      { "id": "C1", "name": "C1", "direction": "benefit", "weight": 0.20 },
+      { "id": "C2", "name": "C2", "direction": "benefit", "weight": 0.33 },
+      { "id": "C3", "name": "C3", "direction": "cost", "weight": 0.13 },
+      { "id": "C4", "name": "C4", "direction": "cost", "weight": 0.07 },
+      { "id": "C5", "name": "C5", "direction": "benefit", "weight": 0.07 },
+      { "id": "C6", "name": "C6", "direction": "cost", "weight": 0.20 }
+    ],
+    "values": [
+      [14820, 18, 0.0002, 2.1, 9.5, 4.5],
+      [21450, 18, 0.0012, 2.7, 14.4, 9.0],
+      [78000, 16, 0.0006, 2.6, 9.0, 8.5],
+      [20475, 17, 0.0006, 2.6, 6.5, 2.6],
+      [16575, 14, 0.0010, 3.1, 5.6, 3.5],
+      [21450, 16, 0.0005, 2.2, 8.6, 1.0]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      { "alternative": "A4", "score": 0.6590 },
+      { "alternative": "A6", "score": 0.6833 },
+      { "alternative": "A1", "score": 0.7701 },
+      { "alternative": "A5", "score": 0.7775 },
+      { "alternative": "A3", "score": 0.8112 },
+      { "alternative": "A2", "score": 1.0762 }
+    ],
+    "tables": [
+      {
+        "id": "lopm-property-limits",
+        "cells": [
+          { "row": 0, "column": 3, "value": "lower" },
+          { "row": 2, "column": 3, "value": "upper" },
+          { "row": 4, "column": 3, "value": "target" },
+          { "row": 5, "column": 4, "value": 9.0 }
+        ]
+      },
+      {
+        "id": "lopm-merit-components",
+        "cells": [
+          { "row": 0, "column": 1, "value": 0.6748 },
+          { "row": 0, "column": 5, "value": 3.1304 },
+          { "row": 3, "column": 6, "value": 0.2889 }
+        ]
+      },
+      {
+        "id": "lopm-weighted-merit",
+        "cells": [
+          { "row": 0, "column": 1, "value": 0.1350 },
+          { "row": 0, "column": 5, "value": 0.2191 },
+          { "row": 3, "column": 6, "value": 0.0578 }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.0005
+}

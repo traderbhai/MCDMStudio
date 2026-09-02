@@ -1,0 +1,119 @@
+{
+  "status": "candidate-discrepancy",
+  "methodId": "cradis",
+  "variant": "crisp-ratio-normalization-combined-weights-electric-vehicle",
+  "source": "Applying MCDM Methods for Electric Vehicle Selection: A Comparative Study Between CRADIS and PIV Methods, Journal of Applied Engineering Science, 2025, DOI: 10.5937/jaes0-56793, Tables 2-5",
+  "sourceUrl": "https://www.engineeringscience.rs/articles/applying-mcdm-methods-for-electric-vehicle-selection-a-comparative-study-between-cradis-and-piv-methods",
+  "doi": "10.5937/jaes0-56793",
+  "config": {
+    "title": "CRADIS candidate validation: electric vehicle selection",
+    "weightingId": "manual",
+    "methodParams": {
+      "normalization": "Ratio normalization",
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      { "id": "A1", "name": "TOGG T10F 218 PS" },
+      { "id": "A2", "name": "Xiaomi SU7 295 HP" },
+      { "id": "A3", "name": "Ssangyong Torres EVX 207 PS" },
+      { "id": "A4", "name": "Renault 5 E-Tech 150 HP" },
+      { "id": "A5", "name": "Hyundai IOVIQ 6 151 BG Progressive" },
+      { "id": "A6", "name": "Kia EV3 204 PS GT Line" },
+      { "id": "A7", "name": "Opel Combo 136 HP Edition" },
+      { "id": "A8", "name": "Volvo EX30 272 HP" },
+      { "id": "A9", "name": "Tesla Cybertruck Cyberbrast 845 HP" },
+      { "id": "A10", "name": "Citroen e-C3 113 BG" }
+    ],
+    "criteria": [
+      { "id": "C1", "name": "Range", "direction": "cost", "weight": 0.0658 },
+      { "id": "C2", "name": "Fast Charging", "direction": "cost", "weight": 0.0526 },
+      { "id": "C3", "name": "Acceleration", "direction": "cost", "weight": 0.2426 },
+      { "id": "C4", "name": "Energy Consumption", "direction": "cost", "weight": 0.0052 },
+      { "id": "C5", "name": "Battery Capacity", "direction": "benefit", "weight": 0.0956 },
+      { "id": "C6", "name": "Top Speed", "direction": "benefit", "weight": 0.0066 },
+      { "id": "C7", "name": "Maximum Torque", "direction": "benefit", "weight": 0.5317 }
+    ],
+    "values": [
+      [350, 28, 7.2, 16, 52.4, 180, 350],
+      [668, 15, 5.3, 12.5, 73.6, 210, 400],
+      [635, 37, 8.11, 18.6, 73.4, 175, 339],
+      [400, 26, 7.5, 13, 52, 150, 245],
+      [429, 32, 8.8, 16.1, 53, 185, 350],
+      [584, 29, 7.9, 14.9, 81.4, 170, 283],
+      [346, 30, 11.7, 19.5, 50, 132, 270],
+      [344, 26, 5.4, 16.7, 51, 180, 343],
+      [515, 15, 2.7, 15.4, 123, 209, 740],
+      [320, 26, 11, 16.4, 45, 135, 120]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      { "alternative": "Tesla Cybertruck Cyberbrast 845 HP", "score": 0.982 },
+      { "alternative": "Xiaomi SU7 295 HP", "score": 0.708 },
+      { "alternative": "Volvo EX30 272 HP", "score": 0.672 },
+      { "alternative": "TOGG T10F 218 PS", "score": 0.654 },
+      { "alternative": "Hyundai IOVIQ 6 151 BG Progressive", "score": 0.635 },
+      { "alternative": "Ssangyong Torres EVX 207 PS", "score": 0.631 },
+      { "alternative": "Kia EV3 204 PS GT Line", "score": 0.617 },
+      { "alternative": "Renault 5 E-Tech 150 HP", "score": 0.600 },
+      { "alternative": "Opel Combo 136 HP Edition", "score": 0.592 },
+      { "alternative": "Citroen e-C3 113 BG", "score": 0.530 }
+    ]
+  },
+  "appObserved": {
+    "ranking": [
+      { "alternative": "Tesla Cybertruck Cyberbrast 845 HP" },
+      { "alternative": "Xiaomi SU7 295 HP" },
+      { "alternative": "Volvo EX30 272 HP" },
+      { "alternative": "TOGG T10F 218 PS" },
+      { "alternative": "Hyundai IOVIQ 6 151 BG Progressive" },
+      { "alternative": "Ssangyong Torres EVX 207 PS" },
+      { "alternative": "Kia EV3 204 PS GT Line" },
+      { "alternative": "Renault 5 E-Tech 150 HP" },
+      { "alternative": "Opel Combo 136 HP Edition" },
+      { "alternative": "Citroen e-C3 113 BG" }
+    ],
+    "scores": [
+      { "alternative": "Tesla Cybertruck Cyberbrast 845 HP", "score": 1.0000 },
+      { "alternative": "Xiaomi SU7 295 HP", "score": 0.2514 },
+      { "alternative": "Volvo EX30 272 HP", "score": 0.2103 },
+      { "alternative": "TOGG T10F 218 PS", "score": 0.1904 }
+    ],
+    "tables": [
+      {
+        "id": "cradis-normalized",
+        "cells": [
+          { "row": 0, "column": 1, "value": 0.9143 },
+          { "row": 1, "column": 7, "value": 0.5405 },
+          { "row": 8, "column": 3, "value": 1.0 }
+        ]
+      },
+      {
+        "id": "cradis-weighted",
+        "cells": [
+          { "row": 0, "column": 1, "value": 0.0602 },
+          { "row": 1, "column": 7, "value": 0.2874 },
+          { "row": 8, "column": 3, "value": 0.2426 }
+        ]
+      },
+      {
+        "id": "cradis-appraisal",
+        "cells": [
+          { "row": 0, "column": 1, "value": 0.5188 },
+          { "row": 8, "column": 3, "value": 1.0 },
+          { "row": 0, "column": 5, "value": 0.1904 }
+        ]
+      }
+    ]
+  },
+  "auditedVariants": [
+    "Benefit/cost ratio normalization from equations 1-2",
+    "All-criteria benefit ratio normalization",
+    "All-criteria cost ratio normalization"
+  ],
+  "discrepancy": "The app reproduces the full combined-weight CRADIS ranking from Table 5, but the CRADIS score magnitudes differ from the published scores. The method equations identify S0+ as the minimum S+ and S0- as the maximum S-, which yields the app-observed score scale. The published table appears to use a different or post-scaled score convention that is not specified in the visible equations.",
+  "tolerance": 0.001
+}

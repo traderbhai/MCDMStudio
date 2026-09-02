@@ -1,0 +1,70 @@
+{
+  "methodId": "pugh",
+  "variant": "crisp-uploaded-score-global-rescale-travel-selection",
+  "source": "Public Pugh travel-selection worked example from arthurrichards77/mcdm, following Mistree, Lewis, and Stonis, Selection in the Conceptual Design of Aircraft, AIAA-94-4382, 1994, DOI: 10.2514/6.1994-4382",
+  "sourceUrl": "https://github.com/arthurrichards77/mcdm",
+  "doi": "10.2514/6.1994-4382",
+  "config": {
+    "title": "Pugh external validation: travel selection",
+    "weightingId": "manual",
+    "methodParams": {
+      "pughScoringMode": "Use uploaded Pugh scores",
+      "pughScoreTransform": "Global 0-1 rescale",
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      { "id": "Car", "name": "Car" },
+      { "id": "Train", "name": "Train" },
+      { "id": "Plane", "name": "Plane" }
+    ],
+    "criteria": [
+      { "id": "Price", "name": "Price", "direction": "benefit", "weight": 0.2 },
+      { "id": "Speed", "name": "Speed", "direction": "benefit", "weight": 0.1 },
+      { "id": "Work", "name": "Work", "direction": "benefit", "weight": 0.3 },
+      { "id": "Conv", "name": "Convenience", "direction": "benefit", "weight": 0.3 },
+      { "id": "Env", "name": "Environment", "direction": "benefit", "weight": 0.1 }
+    ],
+    "values": [
+      [3, -2, -2, 3, 0],
+      [0, 0, 2, 0, 3],
+      [-3, 3, 0, -3, -2]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      { "alternative": "Train", "score": 0.65 },
+      { "alternative": "Car", "score": 0.6167 },
+      { "alternative": "Plane", "score": 0.2667 }
+    ],
+    "tables": [
+      {
+        "id": "pugh-relative-scores",
+        "cells": [
+          { "row": 0, "column": 1, "value": 3 },
+          { "row": 2, "column": 2, "value": 3 },
+          { "row": 1, "column": 5, "value": 3 }
+        ]
+      },
+      {
+        "id": "pugh-transformed-scores",
+        "cells": [
+          { "row": 0, "column": 2, "value": 0.1667 },
+          { "row": 1, "column": 3, "value": 0.8333 },
+          { "row": 2, "column": 5, "value": 0.1667 }
+        ]
+      },
+      {
+        "id": "pugh-weighted-scores",
+        "cells": [
+          { "row": 1, "column": 3, "value": 0.25 },
+          { "row": 0, "column": 4, "value": 0.3 },
+          { "row": 2, "column": 2, "value": 0.1 }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.0001
+}

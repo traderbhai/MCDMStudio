@@ -1,0 +1,147 @@
+{
+  "status": "candidate-discrepancy",
+  "methodId": "dematel",
+  "variant": "native-fuzzy-triangular-smart-manufacturing",
+  "source": "Analyzing Interdependencies among Influencing Factors in Smart Manufacturing, Sustainability, 2023, DOI: 10.3390/su15043864, Tables 2 and 6",
+  "sourceUrl": "https://www.mdpi.com/2071-1050/15/4/3864",
+  "doi": "10.3390/su15043864",
+  "config": {
+    "title": "Fuzzy DEMATEL smart-manufacturing candidate validation",
+    "weightingId": "manual",
+    "methodParams": {
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Native fuzzy DEMATEL",
+      "dematelThreshold": "Mean threshold",
+      "dematelAggregation": "Arithmetic mean"
+    }
+  },
+  "input": {
+    "alternatives": [
+      { "id": "C", "name": "Cost" },
+      { "id": "Q", "name": "Quality" },
+      { "id": "D", "name": "Delivery" },
+      { "id": "F", "name": "Flexibility" },
+      { "id": "P", "name": "Performance" },
+      { "id": "I", "name": "Innovativeness" }
+    ],
+    "criteria": [
+      { "id": "C", "name": "Cost", "direction": "benefit", "weight": 0.166667 },
+      { "id": "Q", "name": "Quality", "direction": "benefit", "weight": 0.166667 },
+      { "id": "D", "name": "Delivery", "direction": "benefit", "weight": 0.166667 },
+      { "id": "F", "name": "Flexibility", "direction": "benefit", "weight": 0.166667 },
+      { "id": "P", "name": "Performance", "direction": "benefit", "weight": 0.166667 },
+      { "id": "I", "name": "Innovativeness", "direction": "benefit", "weight": 0.166667 }
+    ],
+    "values": [
+      [0, 0.866667, 0.5, 0.3, 0.7, 0.7],
+      [0.7, 0, 0.133333, 0.3, 0.3, 0.133333],
+      [0.3, 0.133333, 0, 0.133333, 0.133333, 0.133333],
+      [0.7, 0.7, 0.7, 0, 0.5, 0.7],
+      [0.5, 0.3, 0.133333, 0.3, 0, 0.5],
+      [0.7, 0.3, 0.133333, 0.3, 0.866667, 0]
+    ],
+    "fuzzyValues": [
+      [
+        { "values": [0, 0, 0], "type": "triangular" },
+        { "values": [0.7, 0.9, 1], "type": "triangular" },
+        { "values": [0.3, 0.5, 0.7], "type": "triangular" },
+        { "values": [0.1, 0.3, 0.5], "type": "triangular" },
+        { "values": [0.5, 0.7, 0.9], "type": "triangular" },
+        { "values": [0.5, 0.7, 0.9], "type": "triangular" }
+      ],
+      [
+        { "values": [0.5, 0.7, 0.9], "type": "triangular" },
+        { "values": [0, 0, 0], "type": "triangular" },
+        { "values": [0, 0.1, 0.3], "type": "triangular" },
+        { "values": [0.1, 0.3, 0.5], "type": "triangular" },
+        { "values": [0.1, 0.3, 0.5], "type": "triangular" },
+        { "values": [0, 0.1, 0.3], "type": "triangular" }
+      ],
+      [
+        { "values": [0.1, 0.3, 0.5], "type": "triangular" },
+        { "values": [0, 0.1, 0.3], "type": "triangular" },
+        { "values": [0, 0, 0], "type": "triangular" },
+        { "values": [0, 0.1, 0.3], "type": "triangular" },
+        { "values": [0, 0.1, 0.3], "type": "triangular" },
+        { "values": [0, 0.1, 0.3], "type": "triangular" }
+      ],
+      [
+        { "values": [0.5, 0.7, 0.9], "type": "triangular" },
+        { "values": [0.5, 0.7, 0.9], "type": "triangular" },
+        { "values": [0.5, 0.7, 0.9], "type": "triangular" },
+        { "values": [0, 0, 0], "type": "triangular" },
+        { "values": [0.3, 0.5, 0.7], "type": "triangular" },
+        { "values": [0.5, 0.7, 0.9], "type": "triangular" }
+      ],
+      [
+        { "values": [0.3, 0.5, 0.7], "type": "triangular" },
+        { "values": [0.1, 0.3, 0.5], "type": "triangular" },
+        { "values": [0, 0.1, 0.3], "type": "triangular" },
+        { "values": [0.1, 0.3, 0.5], "type": "triangular" },
+        { "values": [0, 0, 0], "type": "triangular" },
+        { "values": [0.3, 0.5, 0.7], "type": "triangular" }
+      ],
+      [
+        { "values": [0.5, 0.7, 0.9], "type": "triangular" },
+        { "values": [0.1, 0.3, 0.5], "type": "triangular" },
+        { "values": [0, 0.1, 0.3], "type": "triangular" },
+        { "values": [0.1, 0.3, 0.5], "type": "triangular" },
+        { "values": [0.7, 0.9, 1], "type": "triangular" },
+        { "values": [0, 0, 0], "type": "triangular" }
+      ]
+    ],
+    "fuzzyCellCount": 30,
+    "fuzzyTypes": ["triangular"]
+  },
+  "expected": {
+    "ranking": [
+      { "alternative": "Cost", "score": 18.45 },
+      { "alternative": "Performance", "score": 17.58 },
+      { "alternative": "Quality", "score": 17.23 },
+      { "alternative": "Flexibility", "score": 16.64 },
+      { "alternative": "Innovativeness", "score": 16.44 },
+      { "alternative": "Delivery", "score": 13.27 }
+    ]
+  },
+  "appObserved": {
+    "ranking": [
+      { "alternative": "Cost" },
+      { "alternative": "Flexibility" },
+      { "alternative": "Innovativeness" },
+      { "alternative": "Performance" },
+      { "alternative": "Quality" },
+      { "alternative": "Delivery" }
+    ],
+    "scores": [
+      { "alternative": "Cost", "score": 3.3686 },
+      { "alternative": "Flexibility", "score": 2.7575 },
+      { "alternative": "Innovativeness", "score": 2.7411 },
+      { "alternative": "Performance", "score": 2.6521 },
+      { "alternative": "Quality", "score": 2.4651 },
+      { "alternative": "Delivery", "score": 1.6231 }
+    ],
+    "tables": [
+      {
+        "id": "fuzzy-dematel-normalized-direct",
+        "cells": [
+          { "row": 0, "column": 2, "value": "(0.1628, 0.2093, 0.2326)" },
+          { "row": 3, "column": 6, "value": "(0.1163, 0.1628, 0.2093)" }
+        ]
+      },
+      {
+        "id": "cause-effect",
+        "cells": [
+          { "row": 0, "column": 4, "value": 3.3686 },
+          { "row": 3, "column": 5, "value": 0.9257 }
+        ]
+      }
+    ]
+  },
+  "auditedVariants": [
+    "Native fuzzy DEMATEL using triangular component matrices and maximum upper-bound row/column normalization",
+    "Published Table 5 crisp average expert influence matrix with standard crisp DEMATEL",
+    "Published Table 2 triangular fuzzy input with centroid-defuzzified direct matrix before crisp DEMATEL"
+  ],
+  "discrepancy": "The app preserves the triangular fuzzy direct-relation matrix and computes native fuzzy DEMATEL component-wise, while the paper's final Table 6 appears to report a defuzzified/scaled DEMATEL result derived after fuzzy triangulation and average expert influence processing. The source remains valuable for fuzzy tuple parsing and formula-path regression, but the final published D/R magnitudes and ranking should not be promoted as a passing native fuzzy fixture until the exact defuzzification and scaling convention is reconciled.",
+  "tolerance": 0.001
+}

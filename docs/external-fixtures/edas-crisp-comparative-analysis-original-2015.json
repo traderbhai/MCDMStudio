@@ -1,0 +1,85 @@
+{
+  "methodId": "edas",
+  "variant": "crisp-average-solution-manual-weights-set-1",
+  "source": "Multi-Criteria Inventory Classification Using a New Method of Evaluation Based on Distance from Average Solution (EDAS), Informatica, 2015, DOI: 10.15388/Informatica.2015.57, Tables 5-7",
+  "sourceUrl": "https://www.researchgate.net/publication/282365682_Multi-Criteria_Inventory_Classification_Using_a_New_Method_of_Evaluation_Based_on_Distance_from_Average_Solution_EDAS",
+  "doi": "10.15388/Informatica.2015.57",
+  "config": {
+    "title": "EDAS external validation: original MCDM comparative analysis",
+    "weightingId": "manual",
+    "methodParams": {
+      "normalization": "Average solution",
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      { "id": "A1", "name": "A1" },
+      { "id": "A2", "name": "A2" },
+      { "id": "A3", "name": "A3" },
+      { "id": "A4", "name": "A4" },
+      { "id": "A5", "name": "A5" },
+      { "id": "A6", "name": "A6" },
+      { "id": "A7", "name": "A7" },
+      { "id": "A8", "name": "A8" },
+      { "id": "A9", "name": "A9" },
+      { "id": "A10", "name": "A10" }
+    ],
+    "criteria": [
+      { "id": "C1", "name": "C1", "direction": "benefit", "weight": 0.25 },
+      { "id": "C2", "name": "C2", "direction": "benefit", "weight": 0.214 },
+      { "id": "C3", "name": "C3", "direction": "benefit", "weight": 0.179 },
+      { "id": "C4", "name": "C4", "direction": "cost", "weight": 0.143 },
+      { "id": "C5", "name": "C5", "direction": "cost", "weight": 0.107 },
+      { "id": "C6", "name": "C6", "direction": "cost", "weight": 0.071 },
+      { "id": "C7", "name": "C7", "direction": "cost", "weight": 0.036 }
+    ],
+    "values": [
+      [23, 264, 2.37, 0.05, 167, 8900, 8.71],
+      [20, 220, 2.2, 0.04, 171, 9100, 8.23],
+      [17, 231, 1.98, 0.15, 192, 10800, 9.91],
+      [12, 210, 1.73, 0.2, 195, 12300, 10.21],
+      [15, 243, 2, 0.14, 187, 12600, 9.34],
+      [14, 222, 1.89, 0.13, 180, 13200, 9.22],
+      [21, 262, 2.43, 0.06, 160, 10300, 8.93],
+      [20, 256, 2.6, 0.07, 163, 11400, 8.44],
+      [19, 266, 2.1, 0.06, 157, 11200, 9.04],
+      [8, 218, 1.94, 0.11, 190, 13400, 10.11]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      { "alternative": "A1" },
+      { "alternative": "A7" },
+      { "alternative": "A8" },
+      { "alternative": "A2" },
+      { "alternative": "A9" },
+      { "alternative": "A3" },
+      { "alternative": "A5" },
+      { "alternative": "A6" },
+      { "alternative": "A10" },
+      { "alternative": "A4" }
+    ],
+    "tables": [
+      {
+        "id": "edas-average-solution",
+        "cells": [
+          { "row": 0, "column": 1, "value": 16.9 },
+          { "row": 0, "column": 4, "value": 0.101 },
+          { "row": 0, "column": 7, "value": 9.214 }
+        ]
+      },
+      {
+        "id": "edas",
+        "cells": [
+          { "row": 0, "column": 5, "value": 1 },
+          { "row": 1, "column": 5, "value": 0.82048 },
+          { "row": 3, "column": 5, "value": 0 },
+          { "row": 6, "column": 5, "value": 0.89946 }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.0001
+}

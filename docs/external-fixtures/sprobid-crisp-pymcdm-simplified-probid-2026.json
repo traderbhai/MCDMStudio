@@ -1,0 +1,95 @@
+{
+  "methodId": "sprobid",
+  "variant": "crisp-vector-normalization-simplified-probid-pymcdm-example",
+  "source": "pymcdm SPROBID implementation example, crawled 2026, citing Preference ranking on the basis of ideal-average distance method for multi-criteria decision-making, Industrial & Engineering Chemistry Research, 2021, DOI: 10.1021/acs.iecr.1c01453",
+  "sourceUrl": "https://pymcdm.readthedocs.io/en/master/pymcdm.methods.html#pymcdm.methods.SPROBID",
+  "doi": "10.1021/acs.iecr.1c01453",
+  "config": {
+    "title": "SPROBID validation: pymcdm implementation example",
+    "weightingId": "manual",
+    "methodParams": {
+      "sprobidReference": "First/last-quarter ideal distance",
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      { "id": "A1", "name": "A1" },
+      { "id": "A2", "name": "A2" },
+      { "id": "A3", "name": "A3" },
+      { "id": "A4", "name": "A4" },
+      { "id": "A5", "name": "A5" },
+      { "id": "A6", "name": "A6" },
+      { "id": "A7", "name": "A7" },
+      { "id": "A8", "name": "A8" },
+      { "id": "A9", "name": "A9" },
+      { "id": "A10", "name": "A10" },
+      { "id": "A11", "name": "A11" }
+    ],
+    "criteria": [
+      { "id": "C1", "name": "C1", "direction": "benefit", "weight": 0.1819 },
+      { "id": "C2", "name": "C2", "direction": "cost", "weight": 0.2131 },
+      { "id": "C3", "name": "C3", "direction": "cost", "weight": 0.1838 },
+      { "id": "C4", "name": "C4", "direction": "cost", "weight": 0.1832 },
+      { "id": "C5", "name": "C5", "direction": "cost", "weight": 0.2379 }
+    ],
+    "values": [
+      [1679000, 0.0000001525, 0.00003747, 0.251, 2.917],
+      [2213000, 0.0000001304, 0.00003250, 0.218, 6.633],
+      [2461000, 0.0000001445, 0.00003854, 0.259, 0.553],
+      [2854000, 0.0000001540, 0.00003970, 0.266, 1.597],
+      [3107000, 0.0000001522, 0.00003779, 0.254, 2.905],
+      [3574000, 0.0000001469, 0.00003297, 0.221, 6.378],
+      [3932000, 0.0000001977, 0.00003129, 0.210, 11.381],
+      [4383000, 0.0000001292, 0.00003142, 0.211, 9.929],
+      [4988000, 0.0000001690, 0.00003767, 0.253, 8.459],
+      [5497000, 0.0000005703, 0.00003012, 0.200, 18.918],
+      [5751000, 0.0000004653, 0.00003017, 0.201, 17.517]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      { "alternative": "A5", "score": 3.4374 },
+      { "alternative": "A4", "score": 3.3702 },
+      { "alternative": "A3", "score": 3.2806 },
+      { "alternative": "A6", "score": 2.6435 },
+      { "alternative": "A1", "score": 2.4246 },
+      { "alternative": "A9", "score": 2.0885 },
+      { "alternative": "A2", "score": 2.0596 },
+      { "alternative": "A8", "score": 1.8158 },
+      { "alternative": "A7", "score": 1.2628 },
+      { "alternative": "A11", "score": 0.4279 },
+      { "alternative": "A10", "score": 0.3399 }
+    ],
+    "tables": [
+      {
+        "id": "normalized",
+        "cells": [
+          { "row": 0, "column": 1, "value": 0.1299 },
+          { "row": 4, "column": 5, "value": 0.0889 },
+          { "row": 9, "column": 2, "value": 0.6560 }
+        ]
+      },
+      {
+        "id": "weighted",
+        "cells": [
+          { "row": 0, "column": 1, "value": 0.0236 },
+          { "row": 4, "column": 5, "value": 0.0211 },
+          { "row": 9, "column": 2, "value": 0.1398 }
+        ]
+      },
+      {
+        "id": "sprobid-distances",
+        "cells": [
+          { "row": 0, "column": 1, "value": 0.0911 },
+          { "row": 0, "column": 2, "value": 0.2208 },
+          { "row": 0, "column": 3, "value": 2.4246 },
+          { "row": 4, "column": 3, "value": 3.4374 },
+          { "row": 9, "column": 3, "value": 0.3399 }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.0002
+}

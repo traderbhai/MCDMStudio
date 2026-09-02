@@ -1,0 +1,77 @@
+{
+  "methodId": "psi",
+  "variant": "crisp-alternative-preference-index-jmcdm",
+  "source": "JMcDM PSI worked example, generated documentation dated 2025-04-29, citing Maniya and Bhatt 2010 Materials & Design PSI foundations",
+  "sourceUrl": "https://jbytecode.github.io/JMcDM/stable/mcdms/#PSI",
+  "doi": "10.1016/j.matdes.2009.11.020",
+  "config": {
+    "title": "PSI validation: JMcDM material-selection worked example",
+    "weightingId": "manual",
+    "methodParams": {
+      "normalization": "Linear normalization",
+      "psiScoreMode": "Alternative preference index",
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      { "id": "A1", "name": "A1" },
+      { "id": "A2", "name": "A2" },
+      { "id": "A3", "name": "A3" },
+      { "id": "A4", "name": "A4" },
+      { "id": "A5", "name": "A5" }
+    ],
+    "criteria": [
+      { "id": "C1", "name": "C1", "direction": "benefit", "weight": 0.166667 },
+      { "id": "C2", "name": "C2", "direction": "cost", "weight": 0.166667 },
+      { "id": "C3", "name": "C3", "direction": "cost", "weight": 0.166667 },
+      { "id": "C4", "name": "C4", "direction": "benefit", "weight": 0.166667 },
+      { "id": "C5", "name": "C5", "direction": "cost", "weight": 0.166667 },
+      { "id": "C6", "name": "C6", "direction": "benefit", "weight": 0.166667 }
+    ],
+    "values": [
+      [3, 12.5, 2, 120, 14, 3],
+      [5, 15, 3, 110, 38, 4],
+      [3, 13, 2, 120, 19, 3],
+      [4, 14, 2, 100, 31, 4],
+      [3, 15, 1.5, 125, 40, 4]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      { "alternative": "A1", "score": 1.1252 },
+      { "alternative": "A3", "score": 1.1060 },
+      { "alternative": "A4", "score": 1.0060 },
+      { "alternative": "A5", "score": 0.7866 },
+      { "alternative": "A2", "score": 0.7626 }
+    ],
+    "scores": [
+      { "alternative": "A1", "score": 1.1252 },
+      { "alternative": "A2", "score": 0.7626 },
+      { "alternative": "A3", "score": 1.1060 },
+      { "alternative": "A4", "score": 1.0060 },
+      { "alternative": "A5", "score": 0.7866 }
+    ],
+    "tables": [
+      {
+        "id": "normalized",
+        "cells": [
+          { "row": 0, "column": 1, "value": 0.6 },
+          { "row": 1, "column": 2, "value": 0.833333 },
+          { "row": 4, "column": 5, "value": 0.35 }
+        ]
+      },
+      {
+        "id": "psi-preference-indexes",
+        "cells": [
+          { "row": 0, "column": 1, "value": 0.1393 },
+          { "row": 0, "column": 3, "value": 0.2224 },
+          { "row": 0, "column": 4, "value": 1.125248 },
+          { "row": 1, "column": 4, "value": 0.762593 }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.0001
+}

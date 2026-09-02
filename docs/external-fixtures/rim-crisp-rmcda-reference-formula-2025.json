@@ -1,0 +1,73 @@
+{
+  "methodId": "rim",
+  "variant": "crisp-reference-ideal-index-rmcda-formula",
+  "source": "RMCDA apply.RIM source implementation and documentation, built June 8 2025, citing RIM-reference ideal method in multicriteria decision making, Information Sciences, 2016, DOI: 10.1016/j.ins.2015.12.011",
+  "sourceUrl": "https://rdrr.io/cran/RMCDA/src/R/RIM.R",
+  "doi": "10.1016/j.ins.2015.12.011",
+  "config": {
+    "title": "RIM validation: RMCDA reference-ideal formula audit case",
+    "weightingId": "manual",
+    "methodParams": {
+      "rimReference": "Manual ideal interval",
+      "rimDomainLower": "0,0,0",
+      "rimDomainUpper": "10,10,10",
+      "rimIdealLower": "8,0,4",
+      "rimIdealUpper": "10,2,6",
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      { "id": "A1", "name": "Ideal profile" },
+      { "id": "A2", "name": "Moderate profile" },
+      { "id": "A3", "name": "Boundary profile" }
+    ],
+    "criteria": [
+      { "id": "C1", "name": "Capability", "direction": "benefit", "weight": 0.5 },
+      { "id": "C2", "name": "Cost exposure", "direction": "cost", "weight": 0.3 },
+      { "id": "C3", "name": "Target fit", "direction": "benefit", "weight": 0.2 }
+    ],
+    "values": [
+      [10, 0, 5],
+      [5, 5, 8],
+      [0, 10, 10]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      { "alternative": "Ideal profile", "score": 1.0000 },
+      { "alternative": "Moderate profile", "score": 0.6112 },
+      { "alternative": "Boundary profile", "score": 0.0000 }
+    ],
+    "tables": [
+      {
+        "id": "rim-closeness",
+        "cells": [
+          { "row": 0, "column": 1, "value": 1.0000 },
+          { "row": 1, "column": 1, "value": 0.6250 },
+          { "row": 1, "column": 3, "value": 0.5000 },
+          { "row": 2, "column": 2, "value": 0.0000 }
+        ]
+      },
+      {
+        "id": "weighted-rim-closeness",
+        "cells": [
+          { "row": 0, "column": 1, "value": 0.5000 },
+          { "row": 1, "column": 2, "value": 0.1875 },
+          { "row": 1, "column": 3, "value": 0.1000 }
+        ]
+      },
+      {
+        "id": "rim-distance-index",
+        "cells": [
+          { "row": 0, "column": 1, "value": 0.0000 },
+          { "row": 1, "column": 1, "value": 0.2404 },
+          { "row": 1, "column": 2, "value": 0.3779 },
+          { "row": 1, "column": 3, "value": 0.6112 }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.0002
+}

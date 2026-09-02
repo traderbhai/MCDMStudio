@@ -1,0 +1,65 @@
+{
+  "methodId": "smarter",
+  "variant": "crisp-roc-utility-input-normalized-total",
+  "source": "Multi-criteria clinical decision support: A primer on the use of multiple criteria decision making methods to promote evidence-based, patient-centered healthcare, Patient, 2011, DOI: 10.2165/11539470-000000000-00000, Table VI",
+  "sourceUrl": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3049911/",
+  "doi": "10.2165/11539470-000000000-00000",
+  "config": {
+    "title": "SMARTER clinical decision-support validation",
+    "weightingId": "manual",
+    "methodParams": {
+      "smarterOrder": "HaltProgression,SeriousAdverse,Cost,SymptomRelief,CommonAdverse",
+      "smarterUtilityMode": "Input values are utilities",
+      "smarterScoreMode": "Normalize total scores",
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      { "id": "DrugA", "name": "Drug A" },
+      { "id": "DrugB1", "name": "Drug B1" },
+      { "id": "DrugC", "name": "Drug C" }
+    ],
+    "criteria": [
+      { "id": "SymptomRelief", "name": "Symptom relief", "direction": "benefit", "weight": 0.09 },
+      { "id": "HaltProgression", "name": "Halt disease progression", "direction": "benefit", "weight": 0.46 },
+      { "id": "SeriousAdverse", "name": "Serious adverse effects", "direction": "benefit", "weight": 0.26 },
+      { "id": "CommonAdverse", "name": "Common adverse effects", "direction": "benefit", "weight": 0.04 },
+      { "id": "Cost", "name": "Cost", "direction": "benefit", "weight": 0.16 }
+    ],
+    "values": [
+      [92, 42, 95, 95, 90],
+      [83, 58, 75, 75, 67],
+      [75, 75, 50, 50, 33]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      { "alternative": "Drug A", "score": 0.35 },
+      { "alternative": "Drug B1", "score": 0.34 },
+      { "alternative": "Drug C", "score": 0.31 }
+    ],
+    "tables": [
+      {
+        "id": "smarter-rank-order",
+        "cells": [
+          { "row": 0, "column": 1, "value": "HaltProgression" },
+          { "row": 0, "column": 3, "value": 0.4567 },
+          { "row": 4, "column": 1, "value": "CommonAdverse" },
+          { "row": 4, "column": 3, "value": 0.04 }
+        ]
+      },
+      {
+        "id": "smarter-weighted-utilities",
+        "cells": [
+          { "row": 0, "column": 1, "value": 0.082 },
+          { "row": 0, "column": 2, "value": 0.1918 },
+          { "row": 1, "column": 3, "value": 0.193 },
+          { "row": 2, "column": 5, "value": 0.052 }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.012
+}

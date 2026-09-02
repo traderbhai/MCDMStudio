@@ -1,0 +1,95 @@
+{
+  "status": "candidate-discrepancy",
+  "methodId": "topsis",
+  "variant": "crisp-vector-normalization-ahp-weights",
+  "source": "Application of an integrated multi-criteria decision making AHP-TOPSIS methodology for ETL software selection, SpringerPlus, 2016, DOI: 10.1186/s40064-016-1888-z, Tables 6-8",
+  "sourceUrl": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4775722/",
+  "doi": "10.1186/s40064-016-1888-z",
+  "config": {
+    "title": "TOPSIS discrepancy candidate: ETL software selection",
+    "weightingId": "manual",
+    "methodParams": {
+      "normalization": "Vector normalization",
+      "distanceMetric": "Euclidean",
+      "idealSolution": "Benefit/cost aware",
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      { "id": "S1", "name": "S1" },
+      { "id": "S2", "name": "S2" },
+      { "id": "S3", "name": "S3" },
+      { "id": "S4", "name": "S4" },
+      { "id": "S5", "name": "S5" }
+    ],
+    "criteria": [
+      { "id": "C11", "name": "C11", "direction": "benefit", "weight": 0.0494 },
+      { "id": "C12", "name": "C12", "direction": "benefit", "weight": 0.0190 },
+      { "id": "C13", "name": "C13", "direction": "benefit", "weight": 0.0494 },
+      { "id": "C14", "name": "C14", "direction": "benefit", "weight": 0.1710 },
+      { "id": "C15", "name": "C15", "direction": "benefit", "weight": 0.0912 },
+      { "id": "C21", "name": "C21", "direction": "benefit", "weight": 0.0259 },
+      { "id": "C22", "name": "C22", "direction": "benefit", "weight": 0.0098 },
+      { "id": "C23", "name": "C23", "direction": "benefit", "weight": 0.0343 },
+      { "id": "C31", "name": "C31", "direction": "benefit", "weight": 0.2542 },
+      { "id": "C32", "name": "C32", "direction": "benefit", "weight": 0.0558 },
+      { "id": "C41", "name": "C41", "direction": "cost", "weight": 0.0333 },
+      { "id": "C42", "name": "C42", "direction": "cost", "weight": 0.0126 },
+      { "id": "C43", "name": "C43", "direction": "cost", "weight": 0.0441 },
+      { "id": "C51", "name": "C51", "direction": "benefit", "weight": 0.0350 },
+      { "id": "C52", "name": "C52", "direction": "benefit", "weight": 0.1050 }
+    ],
+    "values": [
+      [5, 5, 3, 3, 3, 5, 5, 7, 3, 5, 9, 7, 3, 5, 7],
+      [7, 5, 3, 5, 5, 7, 7, 3, 5, 9, 9, 7, 5, 3, 5],
+      [9, 3, 5, 9, 9, 5, 3, 5, 7, 9, 3, 3, 3, 5, 7],
+      [3, 9, 7, 3, 3, 3, 5, 3, 7, 9, 7, 5, 5, 3, 7],
+      [5, 7, 3, 7, 7, 3, 5, 7, 3, 5, 5, 9, 7, 3, 5]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      { "alternative": "S3", "score": 0.0084 },
+      { "alternative": "S4", "score": 0.0007 },
+      { "alternative": "S5", "score": 0.00019 },
+      { "alternative": "S2", "score": 0.00017 },
+      { "alternative": "S1", "score": 0.0000016 }
+    ],
+    "scores": [
+      { "alternative": "S1", "score": 0.0000016 },
+      { "alternative": "S2", "score": 0.00017 },
+      { "alternative": "S3", "score": 0.0084 },
+      { "alternative": "S4", "score": 0.0007 },
+      { "alternative": "S5", "score": 0.00019 }
+    ]
+  },
+  "appObserved": {
+    "ranking": [
+      { "alternative": "S3", "score": 0.8942 },
+      { "alternative": "S4", "score": 0.4936 },
+      { "alternative": "S2", "score": 0.4157 },
+      { "alternative": "S5", "score": 0.3843 },
+      { "alternative": "S1", "score": 0.1797 }
+    ],
+    "scores": [
+      { "alternative": "S1", "score": 0.1797 },
+      { "alternative": "S2", "score": 0.4157 },
+      { "alternative": "S3", "score": 0.8942 },
+      { "alternative": "S4", "score": 0.4936 },
+      { "alternative": "S5", "score": 0.3843 }
+    ]
+  },
+  "auditedVariants": [
+    "Vector normalization + Euclidean distance + normalized weights",
+    "Vector normalization + Euclidean distance + raw weights",
+    "Vector normalization + Manhattan distance",
+    "Linear min-max normalization + Euclidean distance",
+    "Linear min-max normalization + Manhattan distance",
+    "Max/ratio normalization + Euclidean distance",
+    "Max/ratio normalization + Manhattan distance"
+  ],
+  "discrepancy": "The paper states standard TOPSIS with vector normalization, weighted normalization, Euclidean ideal distances, and closeness coefficient. The published Table 8 D- and Ci values do not match the distances and closeness obtained from Tables 6-7 under those settings. MCDM Studio reproduces S3 as rank 1 and S1 as rank 5, but the middle ordering and closeness magnitudes differ. Keep this as a candidate until the source arithmetic, rounding, or interpretation is reconciled.",
+  "tolerance": 0.0003
+}

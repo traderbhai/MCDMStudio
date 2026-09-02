@@ -1,0 +1,78 @@
+# External Validation Fixtures
+
+Place published-example fixtures in this folder as JSON files. Each fixture should come from a peer-reviewed paper, textbook, or official worked example and should include enough expected values to prove the implementation, not only the final top alternative.
+
+Suggested filename:
+
+```text
+<method-id>-<variant>-<source-key>.json
+```
+
+Required fields are documented in `docs/VALIDATION_ROADMAP.md`. Every fixture must include a traceable `sourceUrl` and either a `doi` field or DOI text in the source description.
+
+`scripts/external-validation-smoke.mjs` loads these fixtures, runs the real MCDM Studio engine, and compares expected rankings, scores, diagnostics, and table cells within tolerance.
+
+Active fixtures are intentionally stricter than discrepancy candidates: they must include an explicit DOI, prove the method's final result form, and compare at least one intermediate table or diagnostic. If no diagnostic is available, at least two intermediate table cells must be checked.
+
+Current registered fixtures:
+
+- `topsis-crisp-hospital-supplier-pmc-2019.json`: TOPSIS hospital supplier-selection example with AHP-derived manual weights, vector normalization, ideal/worst ideal solutions, separation distances, closeness coefficients, and final ranking from a Journal of Healthcare Engineering 2019 paper.
+- `ahp-crisp-criteria-weights-energies-2026.json`: AHP 3x3 pairwise matrix with expected criteria priorities and consistency values from an Energies 2026 worked example.
+- `dematel-crisp-collaborative-innovation-sageopen-2025.json`: DEMATEL collaborative-innovation example with averaged expert direct-relation matrix, row/column normalization factor, total-relation matrix, mean-threshold relation matrix, D/R cause-effect indicators, and prominence ranking from a Sage Open 2025 paper.
+- `vikor-crisp-critic-power-quality-scirep-2023.json`: VIKOR nuclear-reactor power-quality example with raw decision matrix, manual CRITIC-derived weights, weighted regret matrix, S/R/Q values, acceptable-solution checks, and final ranking from a Scientific Reports 2023 paper.
+- `copras-crisp-clean-energy-mdpi-2022.json`: COPRAS clean-energy technology example with normalized matrix input, manual weights, beneficial/non-beneficial sums, relative significance, utility degree, and final ranking from a Sustainability 2022 paper.
+- `saw-crisp-university-location-sageopen-2021.json`: SAW/WSM university-location example using the published WSM component from a Sage Open 2021 WASPAS worked example, with raw decision matrix, benefit/cost normalization, manual weights, weighted matrix, and final ranking.
+- `wpm-crisp-university-location-sageopen-2021.json`: WPM university-location example using the published WPM component from a Sage Open 2021 WASPAS worked example, with raw decision matrix, benefit/cost normalization, manual weights, product utility scores, and final ranking.
+- `waspas-crisp-university-location-sageopen-2021.json`: WASPAS university-location example with benefit/cost criteria, manual weights, WSM/WPM components, alpha 0.5 compromise score, and final ranking from a Sage Open 2021 paper.
+- `moora-crisp-laptop-selection-springer-2017.json`: MOORA laptop-selection example with raw decision matrix, AHP-derived manual weights, benefit/cost criteria, ratio-system benefit/cost sums, net score, and final ranking from a Journal of Industrial Engineering International 2017 paper.
+- `moosra-crisp-laptop-selection-springer-2017.json`: MOOSRA laptop-selection example with the same source matrix and weights, benefit/cost sums, benefit-cost ratio score, and final ranking from the Journal of Industrial Engineering International 2017 paper.
+- `multimoora-crisp-laptop-selection-springer-2017.json`: MULTIMOORA laptop-selection example with ratio-system, reference-point, multiplicative-form, dominance-theory aggregation, and final ranking from the Journal of Industrial Engineering International 2017 paper.
+- `mabac-crisp-cross-dock-mdpi-2024.json`: MABAC cross-dock terminal location example with linear normalization, manual IDOCRIW-derived weights, weighted matrix, border approximation area, distance matrix, and final ranking from a Mathematics 2024 paper.
+- `codas-crisp-robot-selection-original-2016.json`: CODAS industrial robot-selection example with linear normalization, manual weights, negative ideal solution, Euclidean/taxicab distances, relative assessment matrix, and final ranking from the original 2016 CODAS paper.
+- `cocoso-crisp-road-mixtures-mdpi-2022.json`: CoCoSo stabilized road-mixture example with linear normalization, manual MEREC-derived weights, S/P comparability sequences, appraisal coefficients, and final ranking from a Buildings 2022 paper.
+- `aras-crisp-health-monitoring-frontiers-2023.json`: ARAS health-monitoring application example with published normalized matrix input, manual AHP-derived weights, weighted matrix, optimality function, utility degree, and final ranking from a Frontiers in Public Health 2023 paper.
+- `edas-crisp-comparative-analysis-original-2015.json`: EDAS original MCDM comparative-analysis example with raw decision matrix, Set 1 manual weights, average solution, appraisal scores, and final ranking from the Informatica 2015 EDAS paper.
+- `promethee-crisp-usual-hand-computed-r-package.json`: PROMETHEE II usual-function hand-computed example from an R package test case, with complete raw matrix, manual weights, preference-index cells, positive/negative/net flows, and final ranking; fixture metadata cites the standard PROMETHEE reference DOI.
+- `electre-crisp-hand-computed-rmcda-package.json`: ELECTRE I hand-computed example from an R package test case based on an RMCDA worked example, with complete raw matrix, manual weights, concordance cells, discordance cells, and outranking relation under explicit thresholds.
+- `smart-crisp-student-achievement-iop-2017.json`: SMART student-achievement example with point-derived relative weights, raw criterion values, positive-ratio utility scaling for positive benefit criteria, weighted utilities, and final ranking from a Journal of Physics: Conference Series 2017 paper.
+- `maut-crisp-seismic-retrofitting-wiley-2009.json`: MAUT seismic-retrofitting example using the published utility-table path, manual weights, weighted utilities, and final ranking from a Computer-Aided Civil and Infrastructure Engineering 2009 paper.
+- `smarter-crisp-clinical-cdss-pmc-2011.json`: SMARTER clinical decision-support example with rank-order centroid weights, published utility-score inputs, weighted utilities, normalized total scores, and final ranking from Patient 2010.
+- `pugh-crisp-travel-selection-github-aiaa-1994.json`: Pugh travel-selection example using uploaded qualitative scores, global 0-1 rescaling, manual intuition weights, weighted scores, and final ranking from a public worked example following Mistree, Lewis, and Stonis 1994.
+- `rov-crisp-fortune500-gujs-2021.json`: ROV Fortune 500 financial-performance example with linear max-min normalization, entropy-derived manual weights, best/worst utility functions, average utility scores, and final ranking from Gazi University Journal of Science 2021.
+- `marcos-crisp-milling-scielo-2026.json`: MARCOS milling-process example with utility normalization, ROC weights, range-scaled K- convention, f(K+) utility ranking, utility-table cells, and final ranking from a Materia 2026 paper.
+- `mairca-crisp-rmcda-gap-example-2026.json`: MAIRCA worked example from RMCDA documentation/source, with min-max normalization, theoretical assessment, real assessment, gap matrix, total gap values, and final ranking.
+- `psi-crisp-jmcdm-material-selection-2025.json`: PSI material-selection example with divide-by-column max/min normalization, alternative preference variation, preference index, final scores, and best alternative from JMcDM documentation citing the original PSI paper.
+- `piv-crisp-electric-vehicle-jaes-2025.json`: PIV electric-vehicle selection example with raw EV data, combined criterion weights, vector normalization, weighted proximity matrix, overall proximity values, and final ranking from Journal of Applied Engineering Science 2025.
+- `wisp-crisp-rmcda-material-selection-2025.json`: WISP material-selection worked example from RMCDA documentation/source, with max normalization, weighted normalized matrix, sum/product difference and ratio utilities, recalculated utilities, and final ranking.
+- `ram-crisp-pymcdm-root-assessment-2026.json`: RAM documentation example from pymcdm, with column-sum normalization, weighted matrix, S+/S- utility sums, root assessment RI score, and final ranking; fixture metadata cites the Journal of Cleaner Production 2023 RAM paper.
+- `probid-crisp-pymcdm-ideal-average-distance-2026.json`: PROBID documentation example from pymcdm, with vector normalization, weighted matrix, ordered positive/negative ideal distance aggregation, preference index, and final ranking; fixture metadata cites the Industrial & Engineering Chemistry Research 2021 PROBID paper.
+- `sprobid-crisp-pymcdm-simplified-probid-2026.json`: SPROBID implementation example from pymcdm, with vector normalization, weighted matrix, ordered ideal solutions, first/last-quarter ideal-distance aggregation, preference index, and final ranking; fixture metadata cites the Industrial & Engineering Chemistry Research 2021 PROBID paper.
+- `rim-crisp-rmcda-reference-formula-2025.json`: RIM reference-ideal formula audit case from RMCDA documentation/source, with domain bounds, ideal intervals, normalized closeness, weighted closeness, positive/negative distances, R index, and final ranking.
+- `lmaw-crisp-jmcdm-logistics-2025.json`: LMAW logistics example with positive standardization, logarithmic normalization, nonlinear Q utility values, final scores, and best alternative from JMcDM documentation citing the original LMAW paper.
+- `rafsi-crisp-r-package-example-2024.json`: RAFSI R package example with manual ideal/anti-ideal references, functional mapping, arithmetic/harmonic normalization, weighted matrix, final scores, and ranking; fixture metadata cites the original Mathematics 2020 RAFSI paper.
+- `lopm-crisp-pymcdm-material-selection-2026.json`: LoPM material-selection example from pymcdm documentation, with lower/upper/target property limits, merit components, weighted merit matrix, lower-is-better merit values, and final ranking.
+- `aroman-crisp-pymcdm-beta-lambda-2026.json`: AROMAN beta/lambda example from pymcdm documentation, with min-max normalization, vector normalization, beta-averaged blended matrix, weighted matrix, lambda-powered cost/profit components, and final ranking.
+- `comet-crisp-pymcdm-topsis-expert-2026.json`: COMET example from pymcdm documentation with min/max characteristic values, TOPSIS method-expert ranking of characteristic objects, rank-derived preference levels, triangular fuzzy membership interpolation, and final preference ranking.
+- `ervd-crisp-pymcdm-relative-value-distances-2026.json`: ERVD relative-value-distance example from pymcdm documentation, with normalized reference point, relative performance matrix, weighted separation measures, preference scores, and final ranking.
+- `spotis-crisp-rank-reversal-original-2020.json`: SPOTIS original rank-reversal example with manual criterion bounds, ideal solution point, normalized distance matrix, weighted distance scores, and final ordering from the original SPOTIS paper.
+- `balanced-spotis-crisp-pymcdm-2026.json`: B-SPOTIS reference example from pymcdm documentation, with manual criterion bounds, expected solution point, alpha 0.5, normalized ESP/ISP distances, balanced distance scores, and final lower-is-better ranking; fixture metadata cites the SciTePress 2025 B-SPOTIS paper.
+- `mara-crisp-rmcda-area-ranking-2025.json`: MARA area-gap example from RMCDA source documentation, with benefit/cost normalization, weighted normalized matrix, optimal alternative, benefit/cost intensities, lower-is-better gap scores, and final ranking; fixture metadata cites the RMCDA software paper.
+- `ocra-crisp-tablet-selection-jmcdm-2017.json`: OCRA tablet-computer selection example from the JMcDM official worked example, citing Parkan 1994 OCRA foundations, with relative-distance benefit/cost preference terms, shifted total preference scores, and final ranking.
+- `gra-crisp-hospital-supplier-pmc-2019.json`: GRA hospital supplier-selection example with raw AHP decision matrix, AHP-derived manual weights, benefit/cost criterion directions, weighted grey relational coefficients, grey relational grades, and final ranking from a Journal of Healthcare Engineering 2019 paper.
+
+Discrepancy candidates:
+
+- `cradis-crisp-electric-vehicle-jaes-2025.discrepancy.json`: CRADIS electric-vehicle example from Journal of Applied Engineering Science 2025 where the app reproduces the published combined-weight ranking but not the reported score magnitudes under the visible CRADIS utility equations.
+- `dematel-fuzzy-smart-manufacturing-sustainability-2023.discrepancy.json`: fuzzy DEMATEL smart-manufacturing example from Sustainability 2023 where the app preserves the triangular fuzzy input through native fuzzy DEMATEL, but the published final table appears to use a defuzzified or scaled convention before D/R reporting.
+- `topsis-crisp-warehouse-storage-springer-2026.discrepancy.json`: TOPSIS warehouse-storage example from a Central European Journal of Operations Research 2026 paper where the source matrix and weights reproduce the best alternative but not all published closeness values under standard vector TOPSIS.
+- `topsis-crisp-etl-software-springerplus-2016.discrepancy.json`: TOPSIS ETL software-selection example from a SpringerPlus 2016 paper where the source matrix and AHP-derived weights reproduce the best and worst alternatives but not all published closeness values or the middle ordering under standard vector TOPSIS.
+- `topsis-crisp-barge-service-sciencedirect-2025.discrepancy.json`: TOPSIS barge-service supplier example from The Asian Journal of Shipping and Logistics 2025 where the stated vector-normalized TOPSIS workflow and AHP weights do not reproduce the published normalized matrix or performance-index ranking under standard column-wise vector normalization.
+Candidate-discrepancy files preserve useful published examples when the app result does not match the published result under the documented method settings. They are checked for reproducibility but are not counted as passing external validation fixtures until the discrepancy is explained and resolved.
+Each discrepancy file must also list audited variants, so a candidate is not retained merely because the first attempted setting failed.
+When a candidate includes `appObserved.tables`, the fixture runner also checks those intermediate cells so formula-path regressions are caught while the published discrepancy remains unresolved.
+
+Additional validation candidates:
+
+- B-SPOTIS used-car example from SciTePress 2025, DOI: 10.5220/0013119800003890. B-SPOTIS now has a passing pymcdm reference fixture; this richer used-car case remains tracked in the app evidence registry until the full criteria/weight table can be extracted and audited.
+
+External published-example fixtures must be sourced; do not invent examples.

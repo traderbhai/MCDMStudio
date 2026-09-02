@@ -1,0 +1,478 @@
+{
+  "methodId": "ervd",
+  "variant": "crisp-manual-reference-pymcdm-example",
+  "source": "pymcdm ERVD documentation example, crawled 2026, citing A multiple criteria decision making method based on relative value distances, Foundations of Computing and Decision Sciences, 2015, DOI: 10.1515/fcds-2015-0017",
+  "sourceUrl": "https://pymcdm.readthedocs.io/en/master/pymcdm.methods.html#pymcdm.methods.ERVD",
+  "doi": "10.1515/fcds-2015-0017",
+  "config": {
+    "title": "ERVD validation: pymcdm documentation example",
+    "weightingId": "manual",
+    "methodParams": {
+      "ervdReferenceMode": "Manual reference point",
+      "ervdReferencePoint": "80,80,80,80,80,80,80",
+      "ervdLambda": 2.25,
+      "ervdAlpha": 0.88,
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      {
+        "id": "A1",
+        "name": "A1"
+      },
+      {
+        "id": "A2",
+        "name": "A2"
+      },
+      {
+        "id": "A3",
+        "name": "A3"
+      },
+      {
+        "id": "A4",
+        "name": "A4"
+      },
+      {
+        "id": "A5",
+        "name": "A5"
+      },
+      {
+        "id": "A6",
+        "name": "A6"
+      },
+      {
+        "id": "A7",
+        "name": "A7"
+      },
+      {
+        "id": "A8",
+        "name": "A8"
+      },
+      {
+        "id": "A9",
+        "name": "A9"
+      },
+      {
+        "id": "A10",
+        "name": "A10"
+      },
+      {
+        "id": "A11",
+        "name": "A11"
+      },
+      {
+        "id": "A12",
+        "name": "A12"
+      },
+      {
+        "id": "A13",
+        "name": "A13"
+      },
+      {
+        "id": "A14",
+        "name": "A14"
+      },
+      {
+        "id": "A15",
+        "name": "A15"
+      },
+      {
+        "id": "A16",
+        "name": "A16"
+      },
+      {
+        "id": "A17",
+        "name": "A17"
+      }
+    ],
+    "criteria": [
+      {
+        "id": "C1",
+        "name": "C1",
+        "direction": "benefit",
+        "weight": 0.066
+      },
+      {
+        "id": "C2",
+        "name": "C2",
+        "direction": "benefit",
+        "weight": 0.196
+      },
+      {
+        "id": "C3",
+        "name": "C3",
+        "direction": "benefit",
+        "weight": 0.066
+      },
+      {
+        "id": "C4",
+        "name": "C4",
+        "direction": "benefit",
+        "weight": 0.13
+      },
+      {
+        "id": "C5",
+        "name": "C5",
+        "direction": "benefit",
+        "weight": 0.13
+      },
+      {
+        "id": "C6",
+        "name": "C6",
+        "direction": "benefit",
+        "weight": 0.216
+      },
+      {
+        "id": "C7",
+        "name": "C7",
+        "direction": "benefit",
+        "weight": 0.196
+      }
+    ],
+    "values": [
+      [
+        80,
+        70,
+        87,
+        77,
+        76,
+        80,
+        75
+      ],
+      [
+        85,
+        65,
+        76,
+        80,
+        75,
+        65,
+        75
+      ],
+      [
+        78,
+        90,
+        72,
+        80,
+        85,
+        90,
+        85
+      ],
+      [
+        75,
+        84,
+        69,
+        85,
+        65,
+        65,
+        70
+      ],
+      [
+        84,
+        67,
+        60,
+        75,
+        85,
+        75,
+        80
+      ],
+      [
+        85,
+        78,
+        82,
+        81,
+        79,
+        80,
+        80
+      ],
+      [
+        77,
+        83,
+        74,
+        70,
+        71,
+        65,
+        70
+      ],
+      [
+        78,
+        82,
+        72,
+        80,
+        78,
+        70,
+        60
+      ],
+      [
+        85,
+        90,
+        80,
+        88,
+        90,
+        80,
+        85
+      ],
+      [
+        89,
+        75,
+        79,
+        67,
+        77,
+        70,
+        75
+      ],
+      [
+        65,
+        55,
+        68,
+        62,
+        70,
+        50,
+        60
+      ],
+      [
+        70,
+        64,
+        65,
+        65,
+        60,
+        60,
+        65
+      ],
+      [
+        95,
+        80,
+        70,
+        75,
+        70,
+        75,
+        75
+      ],
+      [
+        70,
+        80,
+        79,
+        80,
+        85,
+        80,
+        70
+      ],
+      [
+        60,
+        78,
+        87,
+        70,
+        66,
+        70,
+        65
+      ],
+      [
+        92,
+        85,
+        88,
+        90,
+        85,
+        90,
+        95
+      ],
+      [
+        86,
+        87,
+        80,
+        70,
+        72,
+        80,
+        85
+      ]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      {
+        "alternative": "A16"
+      },
+      {
+        "alternative": "A9"
+      },
+      {
+        "alternative": "A3"
+      },
+      {
+        "alternative": "A6"
+      },
+      {
+        "alternative": "A17"
+      },
+      {
+        "alternative": "A14"
+      },
+      {
+        "alternative": "A1"
+      },
+      {
+        "alternative": "A13"
+      },
+      {
+        "alternative": "A5"
+      },
+      {
+        "alternative": "A10"
+      },
+      {
+        "alternative": "A8"
+      },
+      {
+        "alternative": "A4"
+      },
+      {
+        "alternative": "A2"
+      },
+      {
+        "alternative": "A7"
+      },
+      {
+        "alternative": "A15"
+      },
+      {
+        "alternative": "A12"
+      },
+      {
+        "alternative": "A11"
+      }
+    ],
+    "scores": [
+      {
+        "alternative": "A1",
+        "score": 0.66
+      },
+      {
+        "alternative": "A2",
+        "score": 0.503
+      },
+      {
+        "alternative": "A3",
+        "score": 0.885
+      },
+      {
+        "alternative": "A4",
+        "score": 0.521
+      },
+      {
+        "alternative": "A5",
+        "score": 0.61
+      },
+      {
+        "alternative": "A6",
+        "score": 0.796
+      },
+      {
+        "alternative": "A7",
+        "score": 0.498
+      },
+      {
+        "alternative": "A8",
+        "score": 0.549
+      },
+      {
+        "alternative": "A9",
+        "score": 0.908
+      },
+      {
+        "alternative": "A10",
+        "score": 0.565
+      },
+      {
+        "alternative": "A11",
+        "score": 0.07
+      },
+      {
+        "alternative": "A12",
+        "score": 0.199
+      },
+      {
+        "alternative": "A13",
+        "score": 0.632
+      },
+      {
+        "alternative": "A14",
+        "score": 0.716
+      },
+      {
+        "alternative": "A15",
+        "score": 0.438
+      },
+      {
+        "alternative": "A16",
+        "score": 0.972
+      },
+      {
+        "alternative": "A17",
+        "score": 0.767
+      }
+    ],
+    "tables": [
+      {
+        "id": "ervd-normalized",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": 0.0591
+          },
+          {
+            "row": 8,
+            "column": 6,
+            "value": 0.0643
+          },
+          {
+            "row": 15,
+            "column": 7,
+            "value": 0.0748
+          }
+        ]
+      },
+      {
+        "id": "ervd-relative-performance",
+        "cells": [
+          {
+            "row": 0,
+            "column": 2,
+            "value": -0.0308
+          },
+          {
+            "row": 8,
+            "column": 5,
+            "value": 0.0139
+          },
+          {
+            "row": 15,
+            "column": 7,
+            "value": 0.0201
+          }
+        ]
+      },
+      {
+        "id": "ervd-score",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": 0.0273
+          },
+          {
+            "row": 0,
+            "column": 2,
+            "value": 0.053
+          },
+          {
+            "row": 15,
+            "column": 3,
+            "value": 0.9717
+          }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.0005
+}

@@ -1,0 +1,88 @@
+{
+  "methodId": "mabac",
+  "variant": "crisp-linear-normalization-manual-weights",
+  "source": "Optimizing Cross-Dock Terminal Location Selection: A Multi-Step Approach Based on CI-DEA-IDOCRIW-MABAC for Enhanced Supply Chain Efficiency-A Case Study, Mathematics, 2024, DOI: 10.3390/math12050736, Tables 4-9",
+  "sourceUrl": "https://www.mdpi.com/2227-7390/12/5/736",
+  "doi": "10.3390/math12050736",
+  "config": {
+    "title": "MABAC external validation: cross-dock terminal location selection",
+    "weightingId": "manual",
+    "methodParams": {
+      "normalization": "Linear normalization",
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      { "id": "A1", "name": "City center" },
+      { "id": "A2", "name": "West" },
+      { "id": "A3", "name": "Southeast" },
+      { "id": "A4", "name": "Southwest" }
+    ],
+    "criteria": [
+      { "id": "C1", "name": "C1", "direction": "cost", "weight": 0.034038 },
+      { "id": "C2", "name": "C2", "direction": "benefit", "weight": 0.126583 },
+      { "id": "C3", "name": "C3", "direction": "cost", "weight": 0.064303 },
+      { "id": "C4", "name": "C4", "direction": "cost", "weight": 0.040095 },
+      { "id": "C5", "name": "C5", "direction": "benefit", "weight": 0.205939 },
+      { "id": "C6", "name": "C6", "direction": "benefit", "weight": 0.300525 },
+      { "id": "C7", "name": "C7", "direction": "benefit", "weight": 0.076349 },
+      { "id": "C8", "name": "C8", "direction": "benefit", "weight": 0.135841 },
+      { "id": "C9", "name": "C9", "direction": "cost", "weight": 0.016326 }
+    ],
+    "values": [
+      [3, 4, 2, 6, 3, 2, 4, 2, 4],
+      [3, 2, 3, 3, 4, 3, 5, 3, 5],
+      [5, 5, 4, 4, 7, 7, 7, 4, 4],
+      [4, 3, 5, 6, 10, 9, 6, 5, 3]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      { "alternative": "Southwest", "score": 0.3459 },
+      { "alternative": "Southeast", "score": 0.2594 },
+      { "alternative": "West", "score": -0.1627 },
+      { "alternative": "City center", "score": -0.2319 }
+    ],
+    "tables": [
+      {
+        "id": "normalized",
+        "cells": [
+          { "row": 0, "column": 1, "value": 1 },
+          { "row": 0, "column": 2, "value": 0.6667 },
+          { "row": 1, "column": 4, "value": 1 },
+          { "row": 3, "column": 9, "value": 1 }
+        ]
+      },
+      {
+        "id": "weighted",
+        "cells": [
+          { "row": 0, "column": 1, "value": 0.068076 },
+          { "row": 0, "column": 6, "value": 0.300525 },
+          { "row": 3, "column": 6, "value": 0.60105 },
+          { "row": 3, "column": 9, "value": 0.032652 }
+        ]
+      },
+      {
+        "id": "border-area",
+        "cells": [
+          { "row": 0, "column": 1, "value": 0.053272 },
+          { "row": 0, "column": 2, "value": 0.183793 },
+          { "row": 0, "column": 6, "value": 0.422821 },
+          { "row": 0, "column": 9, "value": 0.023778 }
+        ]
+      },
+      {
+        "id": "distance-border",
+        "cells": [
+          { "row": 0, "column": 1, "value": 0.0148 },
+          { "row": 0, "column": 6, "value": -0.1223 },
+          { "row": 3, "column": 6, "value": 0.1782 },
+          { "row": 3, "column": 9, "value": 0.0089 }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.0015
+}
