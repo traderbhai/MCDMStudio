@@ -41,7 +41,7 @@ Status meanings:
 | QUALIFLEX | Compromise/rank aggregation | Internal coverage only | Needs published-example fixture. |
 | REGIME | Compromise/rank aggregation | Passing external fixture | RMCDA 2025 fixture checks weighted pairwise dominance signs, dominance flow scores, and final ranking for the official REGIME worked example. |
 | EVAMIX | Compromise/rank aggregation | Internal coverage only | Needs published-example fixture. |
-| Lexicographic | Compromise/rank aggregation | Internal coverage only | Needs published-example fixture. |
+| Lexicographic | Compromise/rank aggregation | Passing external fixture | JMCDA 2022 fixture checks strict priority-order comparison, direction-adjusted evidence, decisive criterion, and final non-compensatory ranking. |
 | MARCOS | Ratio/proportional | Passing external fixture | Materia 2026 fixture checks utility normalization, ROC weights, range-scaled K- convention, f(K+) ranking, utility-table cells, and final milling-process ranking. |
 | MAIRCA | Ratio/proportional | Passing external fixture | RMCDA 2026 fixture checks min-max normalization, theoretical assessment matrix, real assessment matrix, gap matrix, total gap values, and final ranking. |
 | PROMETHEE II | Outranking | Passing external fixture | Hand-computed package fixture checks preference-index cells, positive/negative/net flows, and ranking. |
@@ -78,8 +78,8 @@ Status meanings:
 
 Current count:
 
-- Passing external fixtures: 49 methods/variants
+- Passing external fixtures: 50 methods/variants
 - Validation candidates: 4 methods, 9 candidate records
-- Internal coverage only: 12 methods
+- Internal coverage only: 11 methods
 
 This matrix should be updated only when `scripts/external-validation-smoke.mjs` and `npm run verify` pass.

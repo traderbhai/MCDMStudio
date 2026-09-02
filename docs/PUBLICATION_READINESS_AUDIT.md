@@ -27,10 +27,10 @@ Internal smoke tests prove software behavior. External fixtures prove agreement 
 
 ## External Validation Status
 
-- Passing external fixtures: 49 methods/variants.
+- Passing external fixtures: 50 methods/variants.
 - Validation candidate methods: 4.
 - Candidate records needing reconciliation: 5.
-- Internal coverage only: 12 methods.
+- Internal coverage only: 11 methods.
 
 ## Candidate / Discrepancy Fixtures
 
@@ -45,11 +45,10 @@ Internal smoke tests prove software behavior. External fixtures prove agreement 
 5. MACONT (Newer ranking) - Needs published-example fixture.
 6. QUALIFLEX (Compromise/rank aggregation) - Needs published-example fixture.
 7. EVAMIX (Compromise/rank aggregation) - Needs published-example fixture.
-8. Lexicographic (Compromise/rank aggregation) - Needs published-example fixture.
-9. GRP (Grey/relational) - Needs published-example fixture.
-10. ESP-SPOTIS (Distance/reference) - Needs published-example fixture.
-11. DNMA (Compromise/rank aggregation) - Needs published-example fixture.
-12. COBRA (Distance/reference) - Needs published-example fixture.
+8. GRP (Grey/relational) - Needs published-example fixture.
+9. ESP-SPOTIS (Distance/reference) - Needs published-example fixture.
+10. DNMA (Compromise/rank aggregation) - Needs published-example fixture.
+11. COBRA (Distance/reference) - Needs published-example fixture.
 
 ## Candidate Methods And Records Needing Reconciliation
 

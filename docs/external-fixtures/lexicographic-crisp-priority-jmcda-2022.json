@@ -1,0 +1,146 @@
+{
+  "methodId": "lexicographic",
+  "variant": "crisp-two-alternative-priority-example-jmcda-2022",
+  "source": "How do people aggregate value? An experiment with relative importance of criteria and relative goodness of alternatives as inputs, Journal of Multi-Criteria Decision Analysis, 2022",
+  "sourceUrl": "https://doi.org/10.1002/mcda.1773",
+  "doi": "10.1002/mcda.1773",
+  "config": {
+    "title": "Lexicographic validation: two-alternative priority example",
+    "weightingId": "equal",
+    "alternatives": [
+      {
+        "id": "A",
+        "name": "Car A"
+      },
+      {
+        "id": "B",
+        "name": "Car B"
+      }
+    ],
+    "criteria": [
+      {
+        "id": "C1",
+        "name": "Price",
+        "direction": "benefit",
+        "weight": 0.5
+      },
+      {
+        "id": "C2",
+        "name": "Comfort",
+        "direction": "benefit",
+        "weight": 0.5
+      }
+    ],
+    "methodParams": {
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload",
+      "lexicographicOrder": "C1,C2"
+    }
+  },
+  "input": {
+    "alternatives": [
+      {
+        "id": "A",
+        "name": "Car A"
+      },
+      {
+        "id": "B",
+        "name": "Car B"
+      }
+    ],
+    "criteria": [
+      {
+        "id": "C1",
+        "name": "Price",
+        "direction": "benefit",
+        "weight": 0.5
+      },
+      {
+        "id": "C2",
+        "name": "Comfort",
+        "direction": "benefit",
+        "weight": 0.5
+      }
+    ],
+    "values": [
+      [
+        2,
+        1
+      ],
+      [
+        1,
+        5
+      ]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      {
+        "alternative": "Car A",
+        "score": 2
+      },
+      {
+        "alternative": "Car B",
+        "score": 1
+      }
+    ],
+    "scores": [
+      {
+        "alternative": "Car A",
+        "score": 2
+      },
+      {
+        "alternative": "Car B",
+        "score": 1
+      }
+    ],
+    "tables": [
+      {
+        "id": "lexicographic-order",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": "C1"
+          },
+          {
+            "row": 1,
+            "column": 1,
+            "value": "C2"
+          }
+        ]
+      },
+      {
+        "id": "lexicographic-transformed",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": 2
+          },
+          {
+            "row": 1,
+            "column": 2,
+            "value": 5
+          }
+        ]
+      },
+      {
+        "id": "lexicographic-comparisons",
+        "cells": [
+          {
+            "row": 0,
+            "column": 2,
+            "value": "C1"
+          },
+          {
+            "row": 0,
+            "column": 3,
+            "value": "Car A outranks Car B on Price"
+          }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.0001
+}

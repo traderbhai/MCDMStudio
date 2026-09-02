@@ -21,9 +21,9 @@ export const validationEvidence = {
   externalBenchmarks: {
     label: 'External published-example validation',
     status: 'In progress',
-    count: 49 as number,
+    count: 50 as number,
     candidateRecords: 5,
-    scope: 'TOPSIS, AHP, DEMATEL, VIKOR, COPRAS, WASPAS, SAW/WSM, SRP, FUCA, WPM, MOORA, MOOSRA, MULTIMOORA, MABAC, CODAS, CoCoSo, ARAS, EDAS, PROMETHEE II, ELECTRE I, ORESTE, REGIME, SMART, MAUT, SMARTER, MACBETH-style, Pugh Matrix, OCRA, ROV, GRA, MARCOS, MAIRCA, PSI, PIV, WISP, RAM, PROBID, SPROBID, LMAW, RIM, RAFSI, SPOTIS, B-SPOTIS, MARA, TODIM, LoPM, AROMAN, COMET, and ERVD external-example fixtures are registered; TOPSIS, CRADIS, and fuzzy DEMATEL discrepancy fixture records are tracked separately; SECA optimizer-backed reference behavior, RAPS perimeter-similarity published tables, WEDBA fuzzy published tables, and the richer B-SPOTIS used-car published-example candidate are registry-only validation candidates; paper-by-paper comparisons for every crisp, fuzzy, and group-decision variant are not yet complete.',
+    scope: 'TOPSIS, AHP, DEMATEL, VIKOR, COPRAS, WASPAS, SAW/WSM, SRP, FUCA, WPM, MOORA, MOOSRA, MULTIMOORA, MABAC, CODAS, CoCoSo, ARAS, EDAS, PROMETHEE II, ELECTRE I, ORESTE, REGIME, Lexicographic, SMART, MAUT, SMARTER, MACBETH-style, Pugh Matrix, OCRA, ROV, GRA, MARCOS, MAIRCA, PSI, PIV, WISP, RAM, PROBID, SPROBID, LMAW, RIM, RAFSI, SPOTIS, B-SPOTIS, MARA, TODIM, LoPM, AROMAN, COMET, and ERVD external-example fixtures are registered; TOPSIS, CRADIS, and fuzzy DEMATEL discrepancy fixture records are tracked separately; SECA optimizer-backed reference behavior, RAPS perimeter-similarity published tables, WEDBA fuzzy published tables, and the richer B-SPOTIS used-car published-example candidate are registry-only validation candidates; paper-by-paper comparisons for every crisp, fuzzy, and group-decision variant are not yet complete.',
   },
 } as const;
 
@@ -267,6 +267,14 @@ export const externalValidationFixtures = [
     sourceUrl: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC6811789/',
     doi: '10.1155/2019/5614892',
     scope: 'GRA min-max normalization convention, AHP-derived manual weights, weighted grey relational coefficients, grey relational grades, and final supplier ranking.',
+  },
+  {
+    methodId: 'lexicographic',
+    variant: 'crisp-two-alternative-priority-example-jmcda-2022',
+    source: 'How do people aggregate value? An experiment with relative importance of criteria and relative goodness of alternatives as inputs, Journal of Multi-Criteria Decision Analysis, 2022',
+    sourceUrl: 'https://doi.org/10.1002/mcda.1773',
+    doi: '10.1002/mcda.1773',
+    scope: 'Strict lexicographic decision rule for two alternatives and two criteria: Car A is better on the most important criterion, so Car A outranks Car B without compensatory aggregation.',
   },
   {
     methodId: 'marcos',

@@ -1,7 +1,7 @@
 {
   "generatedFrom": "docs/EXTERNAL_VALIDATION_MATRIX.md and docs/external-fixtures/*.json",
   "methodsTracked": 65,
-  "passingExternalFixtures": 49,
+  "passingExternalFixtures": 50,
   "validationCandidateMethods": [
     "SECA",
     "CRADIS",
@@ -17,7 +17,6 @@
     "MACONT",
     "QUALIFLEX",
     "EVAMIX",
-    "Lexicographic",
     "GRP",
     "ESP-SPOTIS",
     "DNMA",
