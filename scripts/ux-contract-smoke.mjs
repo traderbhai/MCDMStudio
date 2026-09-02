@@ -103,6 +103,18 @@ check(
   !configureStep.includes('const nextIndex = config.alternatives.length + 1') &&
   !configureStep.includes('const nextIndex = config.criteria.length + 1'),
 );
+
+check(
+  'Structure edits keep config/input IDs canonical',
+  source.includes('function normalizeUniqueIds') &&
+  source.includes("const criteria = normalizeUniqueIds('C', nextConfig.criteria") &&
+  source.includes("normalizeUniqueIds('A', nextConfig.alternatives") &&
+  configureStep.includes('criteria,') &&
+  configureStep.includes('values: resizeValues(rows, columns, source)') &&
+  configureStep.includes('resizeCriteriaPairwiseById') &&
+  configureStep.includes('resizeAlternativePairwiseById') &&
+  configureStep.includes('return nextGeneratedId(prefix, used, numericMax + 1)'),
+);
 check(
   'Icon remove buttons have accessible labels',
   configureStep.includes('aria-label={`Remove ${alternative.name}`}') &&

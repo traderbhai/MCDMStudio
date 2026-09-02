@@ -77,6 +77,38 @@ function isPreTemplateIssue(issue: ValidationResult['issues'][number]) {
   return issue.severity !== 'info' && !uploadOnlyMessages.some((message) => issue.message.includes(message));
 }
 
+function nextGeneratedId(prefix: string, used: Set<string>, startAt = 1) {
+  let index = Math.max(1, startAt);
+  while (used.has(`${prefix}${index}`)) index += 1;
+  return { id: `${prefix}${index}`, index };
+}
+
+function normalizeUniqueIds<T extends { id: string; name: string }>(
+  prefix: string,
+  items: T[],
+  label: string,
+): T[] {
+  const used = new Set<string>();
+  let nextIndex = 1;
+  return items.map((item) => {
+    const proposed = String(item.id ?? '').trim();
+    if (proposed && !used.has(proposed)) {
+      used.add(proposed);
+      const match = proposed.match(new RegExp(`^${prefix}(\d+)$`, 'i'));
+      if (match) nextIndex = Math.max(nextIndex, Number(match[1]) + 1);
+      return { ...item, id: proposed };
+    }
+    const next = nextGeneratedId(prefix, used, nextIndex);
+    used.add(next.id);
+    nextIndex = next.index + 1;
+    return {
+      ...item,
+      id: next.id,
+      name: item.name?.trim() ? item.name : `${label} ${next.index}`,
+    };
+  });
+}
+
 function App() {
   const [config, setConfig] = useState<StudyConfig>(sampleConfig);
   const [input, setInput] = useState<DecisionMatrix>(sampleMatrix);
@@ -646,6 +678,32 @@ function ConfigureStep({ config, input, method, onChange, onNext }: { config: St
         return 1;
       }),
     );
+  const resizeCriteriaPairwiseById = (criteria: StudyConfig['criteria'], source = config.ahpCriteriaPairwise ?? [], sourceCriteria = config.criteria) =>
+    Array.from({ length: criteria.length }, (_, rowIndex) =>
+      Array.from({ length: criteria.length }, (_, columnIndex) => {
+        if (rowIndex === columnIndex) return 1;
+        const sourceRow = sourceCriteria.findIndex((criterion) => criterion.id === criteria[rowIndex].id);
+        const sourceColumn = sourceCriteria.findIndex((criterion) => criterion.id === criteria[columnIndex].id);
+        const direct = sourceRow >= 0 && sourceColumn >= 0 ? Number(source[sourceRow]?.[sourceColumn]) : NaN;
+        const reciprocal = sourceRow >= 0 && sourceColumn >= 0 ? Number(source[sourceColumn]?.[sourceRow]) : NaN;
+        if (Number.isFinite(direct) && direct > 0) return direct;
+        if (Number.isFinite(reciprocal) && reciprocal > 0) return Number((1 / reciprocal).toFixed(4));
+        return 1;
+      }),
+    );
+  const resizeAlternativePairwiseById = (criterionId: string, alternatives: StudyConfig['alternatives'], source = config.ahpAlternativePairwise?.[criterionId] ?? [], sourceAlternatives = config.alternatives) =>
+    Array.from({ length: alternatives.length }, (_, rowIndex) =>
+      Array.from({ length: alternatives.length }, (_, columnIndex) => {
+        if (rowIndex === columnIndex) return 1;
+        const sourceRow = sourceAlternatives.findIndex((alternative) => alternative.id === alternatives[rowIndex].id);
+        const sourceColumn = sourceAlternatives.findIndex((alternative) => alternative.id === alternatives[columnIndex].id);
+        const direct = sourceRow >= 0 && sourceColumn >= 0 ? Number(source[sourceRow]?.[sourceColumn]) : NaN;
+        const reciprocal = sourceRow >= 0 && sourceColumn >= 0 ? Number(source[sourceColumn]?.[sourceRow]) : NaN;
+        if (Number.isFinite(direct) && direct > 0) return direct;
+        if (Number.isFinite(reciprocal) && reciprocal > 0) return Number((1 / reciprocal).toFixed(4));
+        return 1;
+      }),
+    );
   const parseList = (value: unknown) => String(value ?? '').split(',').map((item) => item.trim()).filter(Boolean);
   const reconcileList = (value: unknown, size: number, fallback: string) => {
     const parsed = parseList(value);
@@ -766,27 +824,34 @@ function ConfigureStep({ config, input, method, onChange, onNext }: { config: St
     return params;
   };
   const applyStructure = (nextConfig: StudyConfig, source = input.values) => {
-    const rows = isDematel ? nextConfig.criteria.length : nextConfig.alternatives.length;
-    const columns = nextConfig.criteria.length;
-    const alternatives = isDematel ? nextConfig.criteria.map((criterion) => ({ id: criterion.id, name: criterion.name })) : nextConfig.alternatives;
-    const sizedConfig = { ...nextConfig, alternatives, methodParams: reconcileWeightingParams(nextConfig), ahpCriteriaPairwise: resizePairwise(nextConfig.criteria.length, nextConfig.ahpCriteriaPairwise) };
-    sizedConfig.ahpAlternativePairwise = nextConfig.criteria.reduce<Record<string, number[][]>>((acc, criterion) => {
-      acc[criterion.id] = resizeAlternativePairwise(criterion.id, alternatives.length, nextConfig.ahpAlternativePairwise?.[criterion.id]);
+    const criteria = normalizeUniqueIds('C', nextConfig.criteria, isDematel ? 'Factor' : 'Criterion');
+    const baseAlternatives = isDematel
+      ? criteria.map((criterion) => ({ id: criterion.id, name: criterion.name }))
+      : normalizeUniqueIds('A', nextConfig.alternatives, 'Alternative');
+    const normalizedConfig = { ...nextConfig, criteria, alternatives: baseAlternatives };
+    const rows = isDematel ? criteria.length : baseAlternatives.length;
+    const columns = criteria.length;
+    const alternatives = isDematel ? criteria.map((criterion) => ({ id: criterion.id, name: criterion.name })) : baseAlternatives;
+    const sizedConfig = { ...normalizedConfig, alternatives, methodParams: reconcileWeightingParams(normalizedConfig), ahpCriteriaPairwise: resizeCriteriaPairwiseById(criteria, normalizedConfig.ahpCriteriaPairwise) };
+    sizedConfig.ahpAlternativePairwise = criteria.reduce<Record<string, number[][]>>((acc, criterion) => {
+      acc[criterion.id] = resizeAlternativePairwiseById(criterion.id, alternatives, normalizedConfig.ahpAlternativePairwise?.[criterion.id]);
       return acc;
     }, {});
     onChange(sizedConfig, {
       ...input,
       alternatives,
-      criteria: nextConfig.criteria,
+      criteria,
       values: resizeValues(rows, columns, source),
     });
   };
   const updateConfig = (nextConfig: StudyConfig) => applyStructure(nextConfig);
   const nextUnusedId = (prefix: string, items: Array<{ id: string }>) => {
-    const used = new Set(items.map((item) => item.id));
-    let nextIndex = items.length + 1;
-    while (used.has(`${prefix}${nextIndex}`)) nextIndex += 1;
-    return { id: `${prefix}${nextIndex}`, index: nextIndex };
+    const used = new Set(items.map((item) => String(item.id ?? '').trim()).filter(Boolean));
+    const numericMax = [...used].reduce((max, id) => {
+      const match = id.match(new RegExp(`^${prefix}(\d+)$`, 'i'));
+      return match ? Math.max(max, Number(match[1])) : max;
+    }, 0);
+    return nextGeneratedId(prefix, used, numericMax + 1);
   };
   const addAlternative = () => {
     const next = nextUnusedId('A', config.alternatives);
