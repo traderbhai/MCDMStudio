@@ -21,9 +21,9 @@ export const validationEvidence = {
   externalBenchmarks: {
     label: 'External published-example validation',
     status: 'In progress',
-    count: 45 as number,
+    count: 46 as number,
     candidateRecords: 5,
-    scope: 'TOPSIS, AHP, DEMATEL, VIKOR, COPRAS, WASPAS, SAW/WSM, SRP, WPM, MOORA, MOOSRA, MULTIMOORA, MABAC, CODAS, CoCoSo, ARAS, EDAS, PROMETHEE II, ELECTRE I, REGIME, SMART, MAUT, SMARTER, Pugh Matrix, OCRA, ROV, GRA, MARCOS, MAIRCA, PSI, PIV, WISP, RAM, PROBID, SPROBID, LMAW, RIM, RAFSI, SPOTIS, B-SPOTIS, MARA, LoPM, AROMAN, COMET, and ERVD external-example fixtures are registered; TOPSIS, CRADIS, fuzzy DEMATEL, and the richer B-SPOTIS used-car published-example candidate are tracked separately; paper-by-paper comparisons for every crisp, fuzzy, and group-decision variant are not yet complete.',
+    scope: 'TOPSIS, AHP, DEMATEL, VIKOR, COPRAS, WASPAS, SAW/WSM, SRP, WPM, MOORA, MOOSRA, MULTIMOORA, MABAC, CODAS, CoCoSo, ARAS, EDAS, PROMETHEE II, ELECTRE I, REGIME, SMART, MAUT, SMARTER, Pugh Matrix, OCRA, ROV, GRA, MARCOS, MAIRCA, PSI, PIV, WISP, RAM, PROBID, SPROBID, LMAW, RIM, RAFSI, SPOTIS, B-SPOTIS, MARA, TODIM, LoPM, AROMAN, COMET, and ERVD external-example fixtures are registered; TOPSIS, CRADIS, fuzzy DEMATEL, and the richer B-SPOTIS used-car published-example candidate are tracked separately; paper-by-paper comparisons for every crisp, fuzzy, and group-decision variant are not yet complete.',
   },
 } as const;
 
@@ -291,6 +291,14 @@ export const externalValidationFixtures = [
     sourceUrl: 'https://pymcdm.readthedocs.io/en/master/pymcdm.methods.html#pymcdm.methods.RAM',
     doi: '10.1016/j.jclepro.2023.138695',
     scope: 'RAM column-sum normalization, weighted normalized matrix, S+/S- utility sums, root assessment RI score, and final ranking.',
+  },
+  {
+    methodId: 'todim',
+    variant: 'crisp-material-selection-rmcda-example-theta-1',
+    source: 'RMCDA 2025 TODIM source implementation example',
+    sourceUrl: 'https://rdrr.io/cran/RMCDA/src/R/TODIM.R',
+    doi: '10.1016/j.simpa.2025.100762',
+    scope: 'TODIM benefit/cost normalization, theta 1 prospect-dominance matrix, normalized dominance scores, and final material-selection ranking.',
   },
   {
     methodId: 'probid',

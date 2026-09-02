@@ -1,7 +1,7 @@
 {
   "generatedFrom": "docs/EXTERNAL_VALIDATION_MATRIX.md and docs/external-fixtures/*.json",
   "methodsTracked": 65,
-  "passingExternalFixtures": 45,
+  "passingExternalFixtures": 46,
   "validationCandidateMethods": [
     "CRADIS"
   ],
@@ -20,7 +20,6 @@
     "EVAMIX",
     "Lexicographic",
     "MACBETH-style",
-    "TODIM",
     "GRP",
     "ESP-SPOTIS",
     "WEDBA",

@@ -27,10 +27,10 @@ Internal smoke tests prove software behavior. External fixtures prove agreement 
 
 ## External Validation Status
 
-- Passing external fixtures: 45 methods/variants.
+- Passing external fixtures: 46 methods/variants.
 - Validation candidate methods: 1.
 - Candidate records needing reconciliation: 5.
-- Internal coverage only: 19 methods.
+- Internal coverage only: 18 methods.
 
 ## Internal-Only Methods Still Blocking Full Publication Certification
 
@@ -47,12 +47,11 @@ Internal smoke tests prove software behavior. External fixtures prove agreement 
 11. EVAMIX (Compromise/rank aggregation) - Needs published-example fixture.
 12. Lexicographic (Compromise/rank aggregation) - Needs published-example fixture.
 13. MACBETH-style (Utility/additive) - Needs published-example fixture for the current categorical-anchor implementation.
-14. TODIM (Newer ranking) - Needs published-example fixture.
-15. GRP (Grey/relational) - Needs published-example fixture.
-16. ESP-SPOTIS (Distance/reference) - Needs published-example fixture.
-17. WEDBA (Distance/reference) - Needs published-example fixture.
-18. DNMA (Compromise/rank aggregation) - Needs published-example fixture.
-19. COBRA (Distance/reference) - Needs published-example fixture.
+14. GRP (Grey/relational) - Needs published-example fixture.
+15. ESP-SPOTIS (Distance/reference) - Needs published-example fixture.
+16. WEDBA (Distance/reference) - Needs published-example fixture.
+17. DNMA (Compromise/rank aggregation) - Needs published-example fixture.
+18. COBRA (Distance/reference) - Needs published-example fixture.
 
 ## Candidate Methods And Records Needing Reconciliation
 

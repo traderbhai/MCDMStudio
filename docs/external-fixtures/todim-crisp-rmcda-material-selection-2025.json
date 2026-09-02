@@ -1,0 +1,252 @@
+{
+  "methodId": "todim",
+  "variant": "crisp-material-selection-rmcda-example-theta-1",
+  "source": "RMCDA apply.TODIM official source implementation and material-selection worked example, RMCDA Software Impacts package paper, 2025, DOI: 10.1016/j.simpa.2025.100762",
+  "sourceUrl": "https://rdrr.io/cran/RMCDA/src/R/TODIM.R",
+  "doi": "10.1016/j.simpa.2025.100762",
+  "config": {
+    "title": "TODIM external validation: material selection with theta 1",
+    "weightingId": "manual",
+    "methodParams": {
+      "todimTheta": 1,
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      {
+        "id": "A1",
+        "name": "AI 2024-T6"
+      },
+      {
+        "id": "A2",
+        "name": "AI 5052-O"
+      },
+      {
+        "id": "A3",
+        "name": "SS 301 FH"
+      },
+      {
+        "id": "A4",
+        "name": "SS 310-3AH"
+      },
+      {
+        "id": "A5",
+        "name": "Ti-6AI-4V"
+      },
+      {
+        "id": "A6",
+        "name": "Inconel 718"
+      },
+      {
+        "id": "A7",
+        "name": "70Cu-30Zn"
+      }
+    ],
+    "criteria": [
+      {
+        "id": "C1",
+        "name": "Toughness Index",
+        "direction": "benefit",
+        "weight": 0.28
+      },
+      {
+        "id": "C2",
+        "name": "Yield Strength",
+        "direction": "benefit",
+        "weight": 0.14
+      },
+      {
+        "id": "C3",
+        "name": "Young's Modulus",
+        "direction": "benefit",
+        "weight": 0.05
+      },
+      {
+        "id": "C4",
+        "name": "Density",
+        "direction": "cost",
+        "weight": 0.24
+      },
+      {
+        "id": "C5",
+        "name": "Thermal Expansion",
+        "direction": "cost",
+        "weight": 0.19
+      },
+      {
+        "id": "C6",
+        "name": "Thermal Conductivity",
+        "direction": "cost",
+        "weight": 0.05
+      },
+      {
+        "id": "C7",
+        "name": "Specific Heat",
+        "direction": "cost",
+        "weight": 0.05
+      }
+    ],
+    "values": [
+      [
+        75.5,
+        420,
+        74.2,
+        2.8,
+        21.4,
+        0.37,
+        0.16
+      ],
+      [
+        95,
+        91,
+        70,
+        2.68,
+        22.1,
+        0.33,
+        0.16
+      ],
+      [
+        770,
+        1365,
+        189,
+        7.9,
+        16.9,
+        0.04,
+        0.08
+      ],
+      [
+        187,
+        1120,
+        210,
+        7.9,
+        14.4,
+        0.03,
+        0.08
+      ],
+      [
+        179,
+        875,
+        112,
+        4.43,
+        9.4,
+        0.016,
+        0.09
+      ],
+      [
+        239,
+        1190,
+        217,
+        8.51,
+        11.5,
+        0.31,
+        0.07
+      ],
+      [
+        237,
+        200,
+        112,
+        8.53,
+        19.9,
+        0.29,
+        0.06
+      ]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      {
+        "alternative": "SS 301 FH",
+        "score": 1
+      },
+      {
+        "alternative": "SS 310-3AH",
+        "score": 0.974
+      },
+      {
+        "alternative": "Inconel 718",
+        "score": 0.9383
+      },
+      {
+        "alternative": "Ti-6AI-4V",
+        "score": 0.8586
+      },
+      {
+        "alternative": "70Cu-30Zn",
+        "score": 0.4696
+      },
+      {
+        "alternative": "AI 2024-T6",
+        "score": 0.078
+      },
+      {
+        "alternative": "AI 5052-O",
+        "score": 0
+      }
+    ],
+    "tables": [
+      {
+        "id": "normalized",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": 0.0981
+          },
+          {
+            "row": 2,
+            "column": 2,
+            "value": 1
+          },
+          {
+            "row": 6,
+            "column": 7,
+            "value": 1
+          }
+        ]
+      },
+      {
+        "id": "todim-dominance-matrix",
+        "cells": [
+          {
+            "row": 0,
+            "column": 2,
+            "value": -0.7809
+          },
+          {
+            "row": 2,
+            "column": 4,
+            "value": -3.1182
+          },
+          {
+            "row": 5,
+            "column": 3,
+            "value": -5.108
+          }
+        ]
+      },
+      {
+        "id": "todim-dominance-score",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": -56.5649
+          },
+          {
+            "row": 2,
+            "column": 2,
+            "value": 1
+          },
+          {
+            "row": 6,
+            "column": 2,
+            "value": 0.4696
+          }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.0006
+}

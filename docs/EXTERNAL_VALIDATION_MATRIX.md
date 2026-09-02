@@ -57,7 +57,7 @@ Status meanings:
 | PIV | Distance/reference | Passing external fixture | Journal of Applied Engineering Science 2025 fixture checks vector normalization, combined weights, weighted proximity matrix, overall proximity scores, and final electric-vehicle ranking. |
 | ROV | Utility/additive | Passing external fixture | Gazi University Journal of Science 2021 fixture checks linear max-min normalization, best/worst utility functions, average utility scores, and final Fortune 500 ranking. |
 | WISP | Utility/additive | Passing external fixture | RMCDA 2025 fixture checks max normalization, weighted matrix, WISP utility components, recalculated utilities, and final material-selection ranking. |
-| TODIM | Newer ranking | Internal coverage only | Needs published-example fixture. |
+| TODIM | Newer ranking | Passing external fixture | RMCDA 2025 fixture checks benefit/cost normalization, theta 1 pairwise prospect-dominance cells, normalized dominance scores, and final material-selection ranking. |
 | RAM | Utility/additive | Passing external fixture | pymcdm 2026 fixture checks column-sum normalization, weighted matrix, S+/S- utility sums, root assessment RI score, and final ranking. |
 | GRA | Grey/relational | Passing external fixture | Journal of Healthcare Engineering 2019 fixture checks grey relational coefficients, grey relational grades, and supplier ranking. |
 | GRP | Grey/relational | Internal coverage only | Needs published-example fixture. |
@@ -78,8 +78,8 @@ Status meanings:
 
 Current count:
 
-- Passing external fixtures: 45 methods/variants
+- Passing external fixtures: 46 methods/variants
 - Validation candidates: 1 methods, 6 candidate records
-- Internal coverage only: 19 methods
+- Internal coverage only: 18 methods
 
 This matrix should be updated only when `scripts/external-validation-smoke.mjs` and `npm run verify` pass.
