@@ -71,6 +71,17 @@ Build command: npm run build
 Output directory: dist
 ```
 
+
+## Subfolder Hosting
+
+The included shared-hosting package is built with relative asset paths, so it works from a subfolder such as:
+
+```text
+https://mohdnaved.com/MCDMStudio/
+```
+
+If you see a blank page after upload, check the browser network tab. Asset files should load from `/MCDMStudio/assets/...`, not `/assets/...`.
+
 ## Test After Upload
 
 Check these flows on the live URL:
