@@ -96,6 +96,19 @@ check(
   configureStep.includes('addCriterion') && configureStep.includes('removeCriterion') && configureStep.includes('Add {isDematel ? \'factor\' : \'criterion\'}'),
 );
 check(
+  'Added rows always use unused IDs after deletions',
+  configureStep.includes('nextUnusedId') &&
+  configureStep.includes("const next = nextUnusedId('A', config.alternatives)") &&
+  configureStep.includes("const next = nextUnusedId('C', config.criteria)") &&
+  !configureStep.includes('const nextIndex = config.alternatives.length + 1') &&
+  !configureStep.includes('const nextIndex = config.criteria.length + 1'),
+);
+check(
+  'Icon remove buttons have accessible labels',
+  configureStep.includes('aria-label={`Remove ${alternative.name}`}') &&
+  configureStep.includes('aria-label={`Remove ${criterion.name}`}'),
+);
+check(
   'Configure step supports add/remove alternatives where relevant',
   configureStep.includes('addAlternative') && configureStep.includes('removeAlternative') && configureStep.includes('{!isDematel ? (') && configureStep.includes('Add {alternativeLabel.toLowerCase()}'),
 );

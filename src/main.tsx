@@ -782,11 +782,17 @@ function ConfigureStep({ config, input, method, onChange, onNext }: { config: St
     });
   };
   const updateConfig = (nextConfig: StudyConfig) => applyStructure(nextConfig);
+  const nextUnusedId = (prefix: string, items: Array<{ id: string }>) => {
+    const used = new Set(items.map((item) => item.id));
+    let nextIndex = items.length + 1;
+    while (used.has(`${prefix}${nextIndex}`)) nextIndex += 1;
+    return { id: `${prefix}${nextIndex}`, index: nextIndex };
+  };
   const addAlternative = () => {
-    const nextIndex = config.alternatives.length + 1;
+    const next = nextUnusedId('A', config.alternatives);
     applyStructure({
       ...config,
-      alternatives: [...config.alternatives, { id: `A${nextIndex}`, name: `Alternative ${nextIndex}` }],
+      alternatives: [...config.alternatives, { id: next.id, name: `Alternative ${next.index}` }],
     });
   };
   const removeAlternative = (index: number) => {
@@ -800,10 +806,10 @@ function ConfigureStep({ config, input, method, onChange, onNext }: { config: St
     applyStructure({ ...config, alternatives });
   };
   const addCriterion = () => {
-    const nextIndex = config.criteria.length + 1;
+    const next = nextUnusedId('C', config.criteria);
     const criteria = [
       ...config.criteria,
-      { id: `C${nextIndex}`, name: isDematel ? `Factor ${nextIndex}` : `Criterion ${nextIndex}`, direction: 'benefit' as const, weight: 0 },
+      { id: next.id, name: isDematel ? `Factor ${next.index}` : `Criterion ${next.index}`, direction: 'benefit' as const, weight: 0 },
     ];
     applyStructure({ ...config, criteria });
   };
@@ -1105,7 +1111,7 @@ function ConfigureStep({ config, input, method, onChange, onNext }: { config: St
               <tr key={alternative.id}>
                 <td>{alternative.id}</td>
                 <td><input value={alternative.name} onChange={(event) => updateAlternative(index, event.target.value)} /></td>
-                <td><button className="iconAction" onClick={() => removeAlternative(index)} disabled={config.alternatives.length <= 1} title={`Remove ${alternative.name}`}><Trash2 size={14} /></button></td>
+                <td><button className="iconAction" onClick={() => removeAlternative(index)} disabled={config.alternatives.length <= 1} title={`Remove ${alternative.name}`} aria-label={`Remove ${alternative.name}`}><Trash2 size={14} /></button></td>
               </tr>
             ))}</tbody>
           </table>
@@ -1128,7 +1134,7 @@ function ConfigureStep({ config, input, method, onChange, onNext }: { config: St
               <td><input value={criterion.name} onChange={(event) => updateCriterion(index, 'name', event.target.value)} /></td>
               {!isDematel ? <td><select value={criterion.direction} onChange={(event) => updateCriterion(index, 'direction', event.target.value)}><option value="benefit">Benefit</option><option value="cost">Cost</option></select></td> : null}
               {usesManualWeights ? <td><input type="number" step="0.01" value={criterion.weight} onChange={(event) => updateCriterion(index, 'weight', event.target.value)} /></td> : null}
-              <td><button className="iconAction" onClick={() => removeCriterion(index)} disabled={config.criteria.length <= 1} title={`Remove ${criterion.name}`}><Trash2 size={14} /></button></td>
+              <td><button className="iconAction" onClick={() => removeCriterion(index)} disabled={config.criteria.length <= 1} title={`Remove ${criterion.name}`} aria-label={`Remove ${criterion.name}`}><Trash2 size={14} /></button></td>
             </tr>
           ))}</tbody>
         </table>
