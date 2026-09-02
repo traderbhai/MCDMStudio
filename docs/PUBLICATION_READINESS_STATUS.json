@@ -5,7 +5,8 @@
   "validationCandidateMethods": [
     "SECA",
     "CRADIS",
-    "RAPS"
+    "RAPS",
+    "WEDBA"
   ],
   "candidateRecordsNeedingReconciliation": 5,
   "internalOnlyMethods": [
@@ -19,7 +20,6 @@
     "Lexicographic",
     "GRP",
     "ESP-SPOTIS",
-    "WEDBA",
     "DNMA",
     "COBRA"
   ],

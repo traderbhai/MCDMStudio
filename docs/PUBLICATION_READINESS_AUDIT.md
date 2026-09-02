@@ -28,9 +28,9 @@ Internal smoke tests prove software behavior. External fixtures prove agreement 
 ## External Validation Status
 
 - Passing external fixtures: 49 methods/variants.
-- Validation candidate methods: 3.
+- Validation candidate methods: 4.
 - Candidate records needing reconciliation: 5.
-- Internal coverage only: 13 methods.
+- Internal coverage only: 12 methods.
 
 ## Candidate / Discrepancy Fixtures
 
@@ -48,14 +48,14 @@ Internal smoke tests prove software behavior. External fixtures prove agreement 
 8. Lexicographic (Compromise/rank aggregation) - Needs published-example fixture.
 9. GRP (Grey/relational) - Needs published-example fixture.
 10. ESP-SPOTIS (Distance/reference) - Needs published-example fixture.
-11. WEDBA (Distance/reference) - Needs published-example fixture.
-12. DNMA (Compromise/rank aggregation) - Needs published-example fixture.
-13. COBRA (Distance/reference) - Needs published-example fixture.
+11. DNMA (Compromise/rank aggregation) - Needs published-example fixture.
+12. COBRA (Distance/reference) - Needs published-example fixture.
 
 ## Candidate Methods And Records Needing Reconciliation
 
 1. CRADIS (Distance/reference) - Journal of Applied Engineering Science 2025 fixture reproduces the combined-weight CRADIS ranking, but published score magnitudes need reconciliation before promotion.
 2. RAPS registry-only candidate - MDPI Mathematics 2021 publishes RAPS perimeter-similarity and ranking tables; the complete decision matrix/weights still need extraction and audit before promotion.
+3. WEDBA registry-only candidate - IJCAT 2019 publishes fuzzy WEDBA examples with distance/ranking evidence in available previews; the complete tuple matrix, weights, and intermediate checks still need extraction before promotion.
 
 Candidate-discrepancy records also remain for TOPSIS variant comparisons, fuzzy DEMATEL convention matching, and a richer B-SPOTIS used-car example. These records are intentionally excluded from passing fixture counts until their data extraction and method conventions are resolved.
 

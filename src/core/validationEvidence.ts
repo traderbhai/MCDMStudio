@@ -23,7 +23,7 @@ export const validationEvidence = {
     status: 'In progress',
     count: 49 as number,
     candidateRecords: 5,
-    scope: 'TOPSIS, AHP, DEMATEL, VIKOR, COPRAS, WASPAS, SAW/WSM, SRP, FUCA, WPM, MOORA, MOOSRA, MULTIMOORA, MABAC, CODAS, CoCoSo, ARAS, EDAS, PROMETHEE II, ELECTRE I, ORESTE, REGIME, SMART, MAUT, SMARTER, MACBETH-style, Pugh Matrix, OCRA, ROV, GRA, MARCOS, MAIRCA, PSI, PIV, WISP, RAM, PROBID, SPROBID, LMAW, RIM, RAFSI, SPOTIS, B-SPOTIS, MARA, TODIM, LoPM, AROMAN, COMET, and ERVD external-example fixtures are registered; TOPSIS, CRADIS, and fuzzy DEMATEL discrepancy fixture records are tracked separately; SECA optimizer-backed reference behavior, RAPS perimeter-similarity published tables, and the richer B-SPOTIS used-car published-example candidate are registry-only validation candidates; paper-by-paper comparisons for every crisp, fuzzy, and group-decision variant are not yet complete.',
+    scope: 'TOPSIS, AHP, DEMATEL, VIKOR, COPRAS, WASPAS, SAW/WSM, SRP, FUCA, WPM, MOORA, MOOSRA, MULTIMOORA, MABAC, CODAS, CoCoSo, ARAS, EDAS, PROMETHEE II, ELECTRE I, ORESTE, REGIME, SMART, MAUT, SMARTER, MACBETH-style, Pugh Matrix, OCRA, ROV, GRA, MARCOS, MAIRCA, PSI, PIV, WISP, RAM, PROBID, SPROBID, LMAW, RIM, RAFSI, SPOTIS, B-SPOTIS, MARA, TODIM, LoPM, AROMAN, COMET, and ERVD external-example fixtures are registered; TOPSIS, CRADIS, and fuzzy DEMATEL discrepancy fixture records are tracked separately; SECA optimizer-backed reference behavior, RAPS perimeter-similarity published tables, WEDBA fuzzy published tables, and the richer B-SPOTIS used-car published-example candidate are registry-only validation candidates; paper-by-paper comparisons for every crisp, fuzzy, and group-decision variant are not yet complete.',
   },
 } as const;
 
@@ -478,6 +478,14 @@ export const externalValidationCandidates = [
     sourceUrl: 'https://www.mdpi.com/2071-1050/15/4/3864',
     doi: '10.3390/su15043864',
     scope: 'Published triangular fuzzy DEMATEL input and final cause/effect table are tracked, but the final D/R magnitudes appear to use a defuzzified or scaled convention different from the app native fuzzy component-wise pipeline.',
+  },
+  {
+    methodId: 'wedba',
+    variant: 'fuzzy-wedba-supplier-contractor-ijcat-2019',
+    source: 'Extending the WEDBA to the fuzzy multi-criteria decision-making environment, International Journal of Computer Applications in Technology, 2019',
+    sourceUrl: 'https://www.inderscience.com/info/inarticle.php?artid=99199',
+    doi: '10.1504/IJCAT.2019.099199',
+    scope: 'Published fuzzy WEDBA supplier/contractor examples are identified, with ideal/anti-ideal, fuzzy weighted Euclidean distance, and ranking tables visible in secondary previews; full tuple matrix, weights, and intermediate values still need extraction before promotion to a passing executable fixture.',
   },
   {
     methodId: 'balancedSpotis',

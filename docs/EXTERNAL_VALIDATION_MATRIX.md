@@ -64,7 +64,7 @@ Status meanings:
 | SPOTIS | Distance/reference | Passing external fixture | Original SPOTIS rank-reversal example checks manual bounds, ideal solution point, normalized distance matrix, weighted distance scores, and final distance ranking. |
 | ESP-SPOTIS | Distance/reference | Internal coverage only | Needs published-example fixture. |
 | B-SPOTIS | Distance/reference | Passing external fixture | pymcdm 2026 fixture checks manual criterion bounds, ideal solution point, expected solution point, alpha-blended ESP/ISP distances, balanced distance scores, and final lower-is-better ranking; the richer SciTePress used-car case remains tracked separately as a candidate needing full table extraction. |
-| WEDBA | Distance/reference | Internal coverage only | Needs published-example fixture. |
+| WEDBA | Distance/reference | Validation candidate | IJCAT 2019 fuzzy WEDBA examples are tracked, but the complete tuple matrix/weights/intermediate values still need extraction before a passing executable fixture can be added. |
 | LMAW | Utility/additive | Passing external fixture | JMcDM 2025 fixture checks positive standardization, logarithmic normalization, nonlinear Q utility matrix, final scores, and best logistics alternative. |
 | DNMA | Compromise/rank aggregation | Internal coverage only | Needs published-example fixture. |
 | PROBID | Distance/reference | Passing external fixture | pymcdm 2026 fixture checks vector normalization, weighted matrix, ideal/average reference distance aggregation, preference index, and final ranking. |
@@ -79,7 +79,7 @@ Status meanings:
 Current count:
 
 - Passing external fixtures: 49 methods/variants
-- Validation candidates: 3 methods, 8 candidate records
-- Internal coverage only: 13 methods
+- Validation candidates: 4 methods, 9 candidate records
+- Internal coverage only: 12 methods
 
 This matrix should be updated only when `scripts/external-validation-smoke.mjs` and `npm run verify` pass.

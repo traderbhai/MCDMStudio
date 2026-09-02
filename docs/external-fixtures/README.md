@@ -75,5 +75,6 @@ Additional validation candidates:
 
 - B-SPOTIS used-car example from SciTePress 2025, DOI: 10.5220/0013119800003890. B-SPOTIS now has a passing pymcdm reference fixture; this richer used-car case remains tracked in the app evidence registry until the full criteria/weight table can be extracted and audited.
 - RAPS perimeter-similarity mining example from MDPI Mathematics 2021, DOI: 10.3390/math9161980. The published perimeter and ranking tables are tracked, but the full decision matrix/weights need extraction before a passing executable fixture can be added.
+- WEDBA fuzzy supplier/contractor examples from IJCAT 2019, DOI: 10.1504/IJCAT.2019.099199. Available previews expose final distance/ranking evidence, but the full tuple matrix, weights, and required intermediate checks still need extraction before a passing executable fixture can be added.
 
 External published-example fixtures must be sourced; do not invent examples.
