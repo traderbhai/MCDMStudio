@@ -36,7 +36,7 @@ Status meanings:
 | CoCoSo | Compromise/rank aggregation | Passing external fixture | Buildings 2022 fixture checks S/P comparability sequences, appraisal coefficients, and ranking. |
 | CRADIS | Distance/reference | Validation candidate | Journal of Applied Engineering Science 2025 fixture reproduces the combined-weight CRADIS ranking, but published score magnitudes need reconciliation before promotion. |
 | MARA | Newer ranking | Passing external fixture | RMCDA 2025 fixture checks benefit/cost normalization, weighted normalized matrix, optimal alternative, area intensities, lower-is-better MARA gap scores, and final ranking. |
-| RAPS | Newer ranking | Internal coverage only | Needs published-example fixture. |
+| RAPS | Newer ranking | Validation candidate | MDPI Mathematics 2021 RAPS perimeter-similarity tables and final ranking are tracked, but the complete decision matrix/weights still need extraction before a passing executable fixture can be added. |
 | ORESTE | Compromise/rank aggregation | Passing external fixture | RMCDA 2025 fixture checks beneficial/cost alternative ranks, criterion ranks, alpha-blended rank indexes, global rank scores, and final ranking. |
 | QUALIFLEX | Compromise/rank aggregation | Internal coverage only | Needs published-example fixture. |
 | REGIME | Compromise/rank aggregation | Passing external fixture | RMCDA 2025 fixture checks weighted pairwise dominance signs, dominance flow scores, and final ranking for the official REGIME worked example. |
@@ -79,7 +79,7 @@ Status meanings:
 Current count:
 
 - Passing external fixtures: 49 methods/variants
-- Validation candidates: 2 methods, 7 candidate records
-- Internal coverage only: 14 methods
+- Validation candidates: 3 methods, 8 candidate records
+- Internal coverage only: 13 methods
 
 This matrix should be updated only when `scripts/external-validation-smoke.mjs` and `npm run verify` pass.

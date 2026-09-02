@@ -4,7 +4,8 @@
   "passingExternalFixtures": 49,
   "validationCandidateMethods": [
     "SECA",
-    "CRADIS"
+    "CRADIS",
+    "RAPS"
   ],
   "candidateRecordsNeedingReconciliation": 5,
   "internalOnlyMethods": [
@@ -13,7 +14,6 @@
     "RAWEC",
     "ARLON",
     "MACONT",
-    "RAPS",
     "QUALIFLEX",
     "EVAMIX",
     "Lexicographic",

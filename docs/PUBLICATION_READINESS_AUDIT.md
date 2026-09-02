@@ -28,9 +28,9 @@ Internal smoke tests prove software behavior. External fixtures prove agreement 
 ## External Validation Status
 
 - Passing external fixtures: 49 methods/variants.
-- Validation candidate methods: 2.
+- Validation candidate methods: 3.
 - Candidate records needing reconciliation: 5.
-- Internal coverage only: 14 methods.
+- Internal coverage only: 13 methods.
 
 ## Candidate / Discrepancy Fixtures
 
@@ -43,19 +43,19 @@ Internal smoke tests prove software behavior. External fixtures prove agreement 
 3. RAWEC (Newer ranking) - Needs published-example fixture.
 4. ARLON (Newer ranking) - Needs published-example fixture.
 5. MACONT (Newer ranking) - Needs published-example fixture.
-6. RAPS (Newer ranking) - Needs published-example fixture.
-7. QUALIFLEX (Compromise/rank aggregation) - Needs published-example fixture.
-8. EVAMIX (Compromise/rank aggregation) - Needs published-example fixture.
-9. Lexicographic (Compromise/rank aggregation) - Needs published-example fixture.
-10. GRP (Grey/relational) - Needs published-example fixture.
-11. ESP-SPOTIS (Distance/reference) - Needs published-example fixture.
-12. WEDBA (Distance/reference) - Needs published-example fixture.
-13. DNMA (Compromise/rank aggregation) - Needs published-example fixture.
-14. COBRA (Distance/reference) - Needs published-example fixture.
+6. QUALIFLEX (Compromise/rank aggregation) - Needs published-example fixture.
+7. EVAMIX (Compromise/rank aggregation) - Needs published-example fixture.
+8. Lexicographic (Compromise/rank aggregation) - Needs published-example fixture.
+9. GRP (Grey/relational) - Needs published-example fixture.
+10. ESP-SPOTIS (Distance/reference) - Needs published-example fixture.
+11. WEDBA (Distance/reference) - Needs published-example fixture.
+12. DNMA (Compromise/rank aggregation) - Needs published-example fixture.
+13. COBRA (Distance/reference) - Needs published-example fixture.
 
 ## Candidate Methods And Records Needing Reconciliation
 
 1. CRADIS (Distance/reference) - Journal of Applied Engineering Science 2025 fixture reproduces the combined-weight CRADIS ranking, but published score magnitudes need reconciliation before promotion.
+2. RAPS registry-only candidate - MDPI Mathematics 2021 publishes RAPS perimeter-similarity and ranking tables; the complete decision matrix/weights still need extraction and audit before promotion.
 
 Candidate-discrepancy records also remain for TOPSIS variant comparisons, fuzzy DEMATEL convention matching, and a richer B-SPOTIS used-car example. These records are intentionally excluded from passing fixture counts until their data extraction and method conventions are resolved.
 

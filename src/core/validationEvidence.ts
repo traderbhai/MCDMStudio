@@ -23,7 +23,7 @@ export const validationEvidence = {
     status: 'In progress',
     count: 49 as number,
     candidateRecords: 5,
-    scope: 'TOPSIS, AHP, DEMATEL, VIKOR, COPRAS, WASPAS, SAW/WSM, SRP, FUCA, WPM, MOORA, MOOSRA, MULTIMOORA, MABAC, CODAS, CoCoSo, ARAS, EDAS, PROMETHEE II, ELECTRE I, ORESTE, REGIME, SMART, MAUT, SMARTER, MACBETH-style, Pugh Matrix, OCRA, ROV, GRA, MARCOS, MAIRCA, PSI, PIV, WISP, RAM, PROBID, SPROBID, LMAW, RIM, RAFSI, SPOTIS, B-SPOTIS, MARA, TODIM, LoPM, AROMAN, COMET, and ERVD external-example fixtures are registered; TOPSIS, CRADIS, and fuzzy DEMATEL discrepancy fixture records are tracked separately; SECA optimizer-backed reference behavior and the richer B-SPOTIS used-car published-example candidate are registry-only validation candidates; paper-by-paper comparisons for every crisp, fuzzy, and group-decision variant are not yet complete.',
+    scope: 'TOPSIS, AHP, DEMATEL, VIKOR, COPRAS, WASPAS, SAW/WSM, SRP, FUCA, WPM, MOORA, MOOSRA, MULTIMOORA, MABAC, CODAS, CoCoSo, ARAS, EDAS, PROMETHEE II, ELECTRE I, ORESTE, REGIME, SMART, MAUT, SMARTER, MACBETH-style, Pugh Matrix, OCRA, ROV, GRA, MARCOS, MAIRCA, PSI, PIV, WISP, RAM, PROBID, SPROBID, LMAW, RIM, RAFSI, SPOTIS, B-SPOTIS, MARA, TODIM, LoPM, AROMAN, COMET, and ERVD external-example fixtures are registered; TOPSIS, CRADIS, and fuzzy DEMATEL discrepancy fixture records are tracked separately; SECA optimizer-backed reference behavior, RAPS perimeter-similarity published tables, and the richer B-SPOTIS used-car published-example candidate are registry-only validation candidates; paper-by-paper comparisons for every crisp, fuzzy, and group-decision variant are not yet complete.',
   },
 } as const;
 
@@ -462,6 +462,14 @@ export const externalValidationCandidates = [
     sourceUrl: 'https://rdrr.io/cran/RMCDA/src/R/SECA.R',
     doi: '10.1016/j.simpa.2025.100762',
     scope: 'RMCDA apply.SECA solves a constrained nonlinear optimization and returns criterion weights; the app currently uses a deterministic reference-balance approximation with alternative ranking, so this needs an optimizer-backed SECA variant or matching published output before promotion.',
+  },
+  {
+    methodId: 'raps',
+    variant: 'crisp-perimeter-similarity-mining-mdpi-2021',
+    source: 'Novel Methods in Multiple Criteria Decision-Making Process (MCRAT and RAPS)-Application in the Mining Industry, Mathematics, 2021',
+    sourceUrl: 'https://www.mdpi.com/2227-7390/9/16/1980',
+    doi: '10.3390/math9161980',
+    scope: 'Published RAPS perimeter-similarity tables and ranking are available, but the complete decision matrix/weights must be extracted and audited before this can become a passing executable fixture.',
   },
   {
     methodId: 'dematel',
