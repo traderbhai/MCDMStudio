@@ -16,7 +16,7 @@ Status meanings:
 | VIKOR | Compromise/rank aggregation | Passing external fixture | Scientific Reports 2023 fixture checks regret matrix, S/R/Q values, acceptable advantage/stability, and final ranking. |
 | COPRAS | Ratio/proportional | Passing external fixture | Sustainability 2022 fixture checks normalized matrix, beneficial/non-beneficial sums, relative significance, utility degree, and ranking. |
 | SAW/WSM | Utility/additive | Passing external fixture | Sage Open 2021 WSM component fixture checks normalization, weighted matrix, additive score, and ranking. |
-| SRP | Newer ranking | Internal coverage only | Needs published-example fixture. |
+| SRP | Newer ranking | Passing external fixture | Scientific Reports 2023 fixture checks criterion-wise dense ranks, VIMM-derived weights, weighted rank matrix, final preference scores, and material-selection ranking. |
 | FUCA | Newer ranking | Internal coverage only | Needs published-example fixture. |
 | SECA | Newer ranking | Internal coverage only | Needs published-example fixture. |
 | DEAR | Newer ranking | Internal coverage only | Needs published-example fixture. |
@@ -78,8 +78,8 @@ Status meanings:
 
 Current count:
 
-- Passing external fixtures: 43 methods/variants
+- Passing external fixtures: 44 methods/variants
 - Validation candidates: 1 methods, 6 candidate records
-- Internal coverage only: 21 methods
+- Internal coverage only: 20 methods
 
 This matrix should be updated only when `scripts/external-validation-smoke.mjs` and `npm run verify` pass.

@@ -27,34 +27,33 @@ Internal smoke tests prove software behavior. External fixtures prove agreement 
 
 ## External Validation Status
 
-- Passing external fixtures: 43 methods/variants.
+- Passing external fixtures: 44 methods/variants.
 - Validation candidate methods: 1.
 - Candidate records needing reconciliation: 5.
-- Internal coverage only: 21 methods.
+- Internal coverage only: 20 methods.
 
 ## Internal-Only Methods Still Blocking Full Publication Certification
 
-1. SRP (Newer ranking) - Needs published-example fixture.
-2. FUCA (Newer ranking) - Needs published-example fixture.
-3. SECA (Newer ranking) - Needs published-example fixture.
-4. DEAR (Newer ranking) - Needs published-example fixture.
-5. EAMR (Newer ranking) - Needs published-example fixture.
-6. RAWEC (Newer ranking) - Needs published-example fixture.
-7. ARLON (Newer ranking) - Needs published-example fixture.
-8. MACONT (Newer ranking) - Needs published-example fixture.
-9. RAPS (Newer ranking) - Needs published-example fixture.
-10. ORESTE (Compromise/rank aggregation) - Needs published-example fixture.
-11. QUALIFLEX (Compromise/rank aggregation) - Needs published-example fixture.
-12. REGIME (Compromise/rank aggregation) - Needs published-example fixture.
-13. EVAMIX (Compromise/rank aggregation) - Needs published-example fixture.
-14. Lexicographic (Compromise/rank aggregation) - Needs published-example fixture.
-15. MACBETH-style (Utility/additive) - Needs published-example fixture for the current categorical-anchor implementation.
-16. TODIM (Newer ranking) - Needs published-example fixture.
-17. GRP (Grey/relational) - Needs published-example fixture.
-18. ESP-SPOTIS (Distance/reference) - Needs published-example fixture.
-19. WEDBA (Distance/reference) - Needs published-example fixture.
-20. DNMA (Compromise/rank aggregation) - Needs published-example fixture.
-21. COBRA (Distance/reference) - Needs published-example fixture.
+1. FUCA (Newer ranking) - Needs published-example fixture.
+2. SECA (Newer ranking) - Needs published-example fixture.
+3. DEAR (Newer ranking) - Needs published-example fixture.
+4. EAMR (Newer ranking) - Needs published-example fixture.
+5. RAWEC (Newer ranking) - Needs published-example fixture.
+6. ARLON (Newer ranking) - Needs published-example fixture.
+7. MACONT (Newer ranking) - Needs published-example fixture.
+8. RAPS (Newer ranking) - Needs published-example fixture.
+9. ORESTE (Compromise/rank aggregation) - Needs published-example fixture.
+10. QUALIFLEX (Compromise/rank aggregation) - Needs published-example fixture.
+11. REGIME (Compromise/rank aggregation) - Needs published-example fixture.
+12. EVAMIX (Compromise/rank aggregation) - Needs published-example fixture.
+13. Lexicographic (Compromise/rank aggregation) - Needs published-example fixture.
+14. MACBETH-style (Utility/additive) - Needs published-example fixture for the current categorical-anchor implementation.
+15. TODIM (Newer ranking) - Needs published-example fixture.
+16. GRP (Grey/relational) - Needs published-example fixture.
+17. ESP-SPOTIS (Distance/reference) - Needs published-example fixture.
+18. WEDBA (Distance/reference) - Needs published-example fixture.
+19. DNMA (Compromise/rank aggregation) - Needs published-example fixture.
+20. COBRA (Distance/reference) - Needs published-example fixture.
 
 ## Candidate Methods And Records Needing Reconciliation
 

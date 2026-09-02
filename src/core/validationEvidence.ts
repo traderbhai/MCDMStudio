@@ -21,9 +21,9 @@ export const validationEvidence = {
   externalBenchmarks: {
     label: 'External published-example validation',
     status: 'In progress',
-    count: 43 as number,
+    count: 44 as number,
     candidateRecords: 5,
-    scope: 'TOPSIS, AHP, DEMATEL, VIKOR, COPRAS, WASPAS, SAW/WSM, WPM, MOORA, MOOSRA, MULTIMOORA, MABAC, CODAS, CoCoSo, ARAS, EDAS, PROMETHEE II, ELECTRE I, SMART, MAUT, SMARTER, Pugh Matrix, OCRA, ROV, GRA, MARCOS, MAIRCA, PSI, PIV, WISP, RAM, PROBID, SPROBID, LMAW, RIM, RAFSI, SPOTIS, B-SPOTIS, MARA, LoPM, AROMAN, COMET, and ERVD external-example fixtures are registered; TOPSIS, CRADIS, fuzzy DEMATEL, and the richer B-SPOTIS used-car published-example candidate are tracked separately; paper-by-paper comparisons for every crisp, fuzzy, and group-decision variant are not yet complete.',
+    scope: 'TOPSIS, AHP, DEMATEL, VIKOR, COPRAS, WASPAS, SAW/WSM, SRP, WPM, MOORA, MOOSRA, MULTIMOORA, MABAC, CODAS, CoCoSo, ARAS, EDAS, PROMETHEE II, ELECTRE I, SMART, MAUT, SMARTER, Pugh Matrix, OCRA, ROV, GRA, MARCOS, MAIRCA, PSI, PIV, WISP, RAM, PROBID, SPROBID, LMAW, RIM, RAFSI, SPOTIS, B-SPOTIS, MARA, LoPM, AROMAN, COMET, and ERVD external-example fixtures are registered; TOPSIS, CRADIS, fuzzy DEMATEL, and the richer B-SPOTIS used-car published-example candidate are tracked separately; paper-by-paper comparisons for every crisp, fuzzy, and group-decision variant are not yet complete.',
   },
 } as const;
 
@@ -67,6 +67,14 @@ export const externalValidationFixtures = [
     sourceUrl: 'https://journals.sagepub.com/doi/10.1177/21582440211040115',
     doi: '10.1177/21582440211040115',
     scope: 'SAW/WSM benefit/cost linear normalization, manual weights, weighted normalized matrix, additive utility score, and final ranking.',
+  },
+  {
+    methodId: 'srp',
+    variant: 'crisp-dense-rank-vimm-weights-material-selection',
+    source: 'Scientific Reports 2023 SRP material-selection example',
+    sourceUrl: 'https://www.nature.com/articles/s41598-023-35405-z',
+    doi: '10.1038/s41598-023-35405-z',
+    scope: 'SRP criterion-wise dense ranking, VIMM-derived manual weights, weighted ranking matrix, total ranking scores, and final material ranking.',
   },
   {
     methodId: 'wpm',

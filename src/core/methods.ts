@@ -2337,7 +2337,7 @@ function runSrp(input: DecisionMatrix, config: StudyConfig, method: MethodDefini
   if (config.methodParams.fuzzyInputMode === 'Native fuzzy SRP') return runFuzzySrp(input, config, method);
   const criteria = resolveCriteria(input, config);
   const rankMatrixByCriterion = criteria.map((criterion, column) =>
-    averageRanks(input.values.map((row) => row[column]), criterion.direction === 'benefit'),
+    denseRanks(input.values.map((row) => row[column]), criterion.direction === 'benefit'),
   );
   const rankMatrix = input.alternatives.map((_, alternativeIndex) =>
     criteria.map((__, column) => rankMatrixByCriterion[column][alternativeIndex]),
@@ -3769,6 +3769,25 @@ function averageRanks(values: number[], higherIsBetter: boolean): number[] {
     sorted.slice(cursor, end).forEach((item) => {
       ranks[item.index] = averageRank;
     });
+    cursor = end;
+  }
+  return ranks;
+}
+
+function denseRanks(values: number[], higherIsBetter: boolean): number[] {
+  const sorted = values
+    .map((value, index) => ({ value, index }))
+    .sort((a, b) => higherIsBetter ? b.value - a.value : a.value - b.value);
+  const ranks = Array.from({ length: values.length }, () => 0);
+  let cursor = 0;
+  let rank = 1;
+  while (cursor < sorted.length) {
+    let end = cursor + 1;
+    while (end < sorted.length && Math.abs(sorted[end].value - sorted[cursor].value) <= 1e-12) end += 1;
+    sorted.slice(cursor, end).forEach((item) => {
+      ranks[item.index] = rank;
+    });
+    rank += 1;
     cursor = end;
   }
   return ranks;
