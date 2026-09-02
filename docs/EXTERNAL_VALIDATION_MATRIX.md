@@ -37,7 +37,7 @@ Status meanings:
 | CRADIS | Distance/reference | Validation candidate | Journal of Applied Engineering Science 2025 fixture reproduces the combined-weight CRADIS ranking, but published score magnitudes need reconciliation before promotion. |
 | MARA | Newer ranking | Passing external fixture | RMCDA 2025 fixture checks benefit/cost normalization, weighted normalized matrix, optimal alternative, area intensities, lower-is-better MARA gap scores, and final ranking. |
 | RAPS | Newer ranking | Internal coverage only | Needs published-example fixture. |
-| ORESTE | Compromise/rank aggregation | Internal coverage only | Needs published-example fixture. |
+| ORESTE | Compromise/rank aggregation | Passing external fixture | RMCDA 2025 fixture checks beneficial/cost alternative ranks, criterion ranks, alpha-blended rank indexes, global rank scores, and final ranking. |
 | QUALIFLEX | Compromise/rank aggregation | Internal coverage only | Needs published-example fixture. |
 | REGIME | Compromise/rank aggregation | Passing external fixture | RMCDA 2025 fixture checks weighted pairwise dominance signs, dominance flow scores, and final ranking for the official REGIME worked example. |
 | EVAMIX | Compromise/rank aggregation | Internal coverage only | Needs published-example fixture. |
@@ -78,8 +78,8 @@ Status meanings:
 
 Current count:
 
-- Passing external fixtures: 46 methods/variants
+- Passing external fixtures: 47 methods/variants
 - Validation candidates: 1 methods, 6 candidate records
-- Internal coverage only: 18 methods
+- Internal coverage only: 17 methods
 
 This matrix should be updated only when `scripts/external-validation-smoke.mjs` and `npm run verify` pass.

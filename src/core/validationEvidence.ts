@@ -21,9 +21,9 @@ export const validationEvidence = {
   externalBenchmarks: {
     label: 'External published-example validation',
     status: 'In progress',
-    count: 46 as number,
+    count: 47 as number,
     candidateRecords: 5,
-    scope: 'TOPSIS, AHP, DEMATEL, VIKOR, COPRAS, WASPAS, SAW/WSM, SRP, WPM, MOORA, MOOSRA, MULTIMOORA, MABAC, CODAS, CoCoSo, ARAS, EDAS, PROMETHEE II, ELECTRE I, REGIME, SMART, MAUT, SMARTER, Pugh Matrix, OCRA, ROV, GRA, MARCOS, MAIRCA, PSI, PIV, WISP, RAM, PROBID, SPROBID, LMAW, RIM, RAFSI, SPOTIS, B-SPOTIS, MARA, TODIM, LoPM, AROMAN, COMET, and ERVD external-example fixtures are registered; TOPSIS, CRADIS, fuzzy DEMATEL, and the richer B-SPOTIS used-car published-example candidate are tracked separately; paper-by-paper comparisons for every crisp, fuzzy, and group-decision variant are not yet complete.',
+    scope: 'TOPSIS, AHP, DEMATEL, VIKOR, COPRAS, WASPAS, SAW/WSM, SRP, WPM, MOORA, MOOSRA, MULTIMOORA, MABAC, CODAS, CoCoSo, ARAS, EDAS, PROMETHEE II, ELECTRE I, ORESTE, REGIME, SMART, MAUT, SMARTER, Pugh Matrix, OCRA, ROV, GRA, MARCOS, MAIRCA, PSI, PIV, WISP, RAM, PROBID, SPROBID, LMAW, RIM, RAFSI, SPOTIS, B-SPOTIS, MARA, TODIM, LoPM, AROMAN, COMET, and ERVD external-example fixtures are registered; TOPSIS, CRADIS, fuzzy DEMATEL, and the richer B-SPOTIS used-car published-example candidate are tracked separately; paper-by-paper comparisons for every crisp, fuzzy, and group-decision variant are not yet complete.',
   },
 } as const;
 
@@ -171,6 +171,14 @@ export const externalValidationFixtures = [
     sourceUrl: 'https://rdrr.io/cran/surveyframe/src/tests/testthat/test-decision-preference.R',
     doi: '10.1007/978-1-4939-3094-4_6',
     scope: 'PROMETHEE II usual preference function, weighted pairwise preference index, positive flow, negative flow, net flow, and final ranking from a complete hand-computed package test case.',
+  },
+  {
+    methodId: 'oreste',
+    variant: 'crisp-alpha-rank-rmcda-example',
+    source: 'RMCDA 2025 ORESTE source implementation example',
+    sourceUrl: 'https://rdrr.io/cran/RMCDA/src/R/ORESTE.R',
+    doi: '10.1016/j.simpa.2025.100762',
+    scope: 'ORESTE beneficial/cost alternative ranks, criterion ranks, alpha blended rank indexes, global rank scores, and final ranking.',
   },
   {
     methodId: 'regime',

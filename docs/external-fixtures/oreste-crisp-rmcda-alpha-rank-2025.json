@@ -1,0 +1,179 @@
+{
+  "methodId": "oreste",
+  "variant": "crisp-alpha-rank-rmcda-example",
+  "source": "RMCDA apply.ORESTE official source implementation and worked example, RMCDA Software Impacts package paper, 2025, DOI: 10.1016/j.simpa.2025.100762",
+  "sourceUrl": "https://rdrr.io/cran/RMCDA/src/R/ORESTE.R",
+  "doi": "10.1016/j.simpa.2025.100762",
+  "config": {
+    "title": "ORESTE external validation: alpha rank blending example",
+    "weightingId": "manual",
+    "methodParams": {
+      "oresteAlpha": 0.4,
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      {
+        "id": "A1",
+        "name": "A1"
+      },
+      {
+        "id": "A2",
+        "name": "A2"
+      },
+      {
+        "id": "A3",
+        "name": "A3"
+      }
+    ],
+    "criteria": [
+      {
+        "id": "C1",
+        "name": "Benefit criterion",
+        "direction": "benefit",
+        "weight": 0.7
+      },
+      {
+        "id": "C2",
+        "name": "Cost criterion",
+        "direction": "cost",
+        "weight": 0.3
+      }
+    ],
+    "values": [
+      [
+        10,
+        2
+      ],
+      [
+        20,
+        4
+      ],
+      [
+        15,
+        5
+      ]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      {
+        "alternative": "A2",
+        "score": 6
+      },
+      {
+        "alternative": "A1",
+        "score": 7
+      },
+      {
+        "alternative": "A3",
+        "score": 8
+      }
+    ],
+    "tables": [
+      {
+        "id": "oreste-criterion-ranks",
+        "cells": [
+          {
+            "row": 0,
+            "column": 3,
+            "value": 1
+          },
+          {
+            "row": 1,
+            "column": 3,
+            "value": 2
+          }
+        ]
+      },
+      {
+        "id": "oreste-alternative-ranks",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": 3
+          },
+          {
+            "row": 0,
+            "column": 2,
+            "value": 1
+          },
+          {
+            "row": 1,
+            "column": 1,
+            "value": 1
+          },
+          {
+            "row": 2,
+            "column": 2,
+            "value": 3
+          }
+        ]
+      },
+      {
+        "id": "oreste-individual-rank-index",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": 1.8
+          },
+          {
+            "row": 1,
+            "column": 1,
+            "value": 1
+          },
+          {
+            "row": 2,
+            "column": 2,
+            "value": 2.4
+          }
+        ]
+      },
+      {
+        "id": "oreste-global-projection-ranks",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": 4
+          },
+          {
+            "row": 1,
+            "column": 1,
+            "value": 1
+          },
+          {
+            "row": 2,
+            "column": 2,
+            "value": 6
+          }
+        ]
+      },
+      {
+        "id": "oreste-score",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": 7
+          },
+          {
+            "row": 1,
+            "column": 1,
+            "value": 6
+          },
+          {
+            "row": 2,
+            "column": 1,
+            "value": 8
+          }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.0005
+}

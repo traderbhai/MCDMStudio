@@ -3796,58 +3796,51 @@ function denseRanks(values: number[], higherIsBetter: boolean): number[] {
 function runOreste(input: DecisionMatrix, config: StudyConfig, method: MethodDefinition): AnalysisResult {
   if (config.methodParams.fuzzyInputMode === 'Native fuzzy ORESTE') return runFuzzyOreste(input, config, method);
   const criteria = resolveCriteria(input, config);
-  const criterionRanks = averageRanks(criteria.map((criterion) => criterion.weight), true);
+  const alpha = Math.min(1, Math.max(0, Number(config.methodParams.oresteAlpha ?? 0.4)));
+  const criterionRanks = denseRanks(criteria.map((criterion) => criterion.weight), true);
   const alternativeRanksByCriterion = criteria.map((criterion, column) =>
-    averageRanks(input.values.map((row) => row[column]), criterion.direction === 'benefit'),
+    denseRanks(input.values.map((row) => row[column]), criterion.direction === 'benefit'),
   );
-  const projectionDistances = input.alternatives.map((_, alternativeIndex) =>
-    criteria.map((__, column) => Math.sqrt((criterionRanks[column] ** 2 + alternativeRanksByCriterion[column][alternativeIndex] ** 2) / 2)),
+  const individualRankIndex = input.alternatives.map((_, alternativeIndex) =>
+    criteria.map((__, column) => alpha * alternativeRanksByCriterion[column][alternativeIndex] + (1 - alpha) * criterionRanks[column]),
   );
-  const projectionRankValues = projectionDistances.flatMap((row) => row);
-  const projectionRanksFlat = averageRanks(projectionRankValues, false);
-  const projectionRanks = projectionDistances.map((row, rowIndex) =>
-    row.map((_, column) => projectionRanksFlat[rowIndex * criteria.length + column]),
+  const flattened = individualRankIndex.flat();
+  const globalRanksFlat = denseRanks(flattened, false);
+  const globalRanks = individualRankIndex.map((row, rowIndex) =>
+    row.map((_, column) => globalRanksFlat[rowIndex * criteria.length + column]),
   );
-  const scores = projectionRanks.map((row) => row.reduce((sum, value) => sum + value, 0) / Math.max(criteria.length, 1));
+  const scores = globalRanks.map((row) => row.reduce((sum, value) => sum + value, 0));
   return result(method, { ...input, criteria }, [
     {
       id: 'oreste-criterion-ranks',
       title: 'ORESTE Criterion Preference Ranks',
-      columns: ['Criterion', 'Name', 'Weight', 'Preference rank'],
-      rows: criteria.map((criterion, index) => [criterion.id, criterion.name, round(criterion.weight), round(criterionRanks[index])]),
+      columns: ['Criterion', 'Name', 'Weight', 'Criterion rank'],
+      rows: criteria.map((criterion, index) => [criterion.id, criterion.name, round(criterion.weight), criterionRanks[index]]),
     },
-    {
-      id: 'oreste-alternative-ranks',
-      title: 'ORESTE Alternative Ranks By Criterion',
-      columns: ['Alternative', ...criteria.map((criterion) => criterion.id)],
-      rows: input.alternatives.map((alternative, index) => [
-        alternative.name,
-        ...criteria.map((_, column) => round(alternativeRanksByCriterion[column][index])),
-      ]),
-    },
-    tableFromMatrix('oreste-projection-distances', 'ORESTE Projection Distances', projectionDistances, input),
-    tableFromMatrix('oreste-global-projection-ranks', 'ORESTE Global Projection Ranks', projectionRanks, input),
+    tableFromMatrix('oreste-alternative-ranks', 'ORESTE Alternative Ranks By Criterion', input.alternatives.map((_, alternativeIndex) => criteria.map((__, column) => alternativeRanksByCriterion[column][alternativeIndex])), input),
+    tableFromMatrix('oreste-individual-rank-index', 'ORESTE Individual Rank Index', individualRankIndex, { ...input, criteria }),
+    tableFromMatrix('oreste-global-projection-ranks', 'ORESTE Global Projection Ranks', globalRanks, { ...input, criteria }),
     {
       id: 'oreste-score',
       title: 'ORESTE Final Rank Scores',
-      columns: ['Alternative', 'Average global projection rank'],
-      rows: input.alternatives.map((alternative, index) => [alternative.name, round(scores[index])]),
+      columns: ['Alternative', 'Summed global rank score', 'Alpha'],
+      rows: input.alternatives.map((alternative, index) => [alternative.name, round(scores[index]), alpha]),
     },
-  ], scores, 'ORESTE ranks alternatives from criterion preference ranks and within-criterion alternative ranks; lower average global projection rank indicates stronger preference.', false);
+  ], scores, 'ORESTE ranks criteria and alternatives, blends alternative and criterion ranks with alpha, globally ranks the blended indexes, and prefers the smallest summed global rank score.', false);
 }
 
 function permutations(values: number[], limit: number): number[][] {
-  const output: number[][] = [];
+  const results: number[][] = [];
   const used = Array.from({ length: values.length }, () => false);
   const current: number[] = [];
   const visit = () => {
-    if (output.length >= limit) return;
+    if (results.length >= limit) return;
     if (current.length === values.length) {
-      output.push([...current]);
+      results.push(current.slice());
       return;
     }
     values.forEach((value, index) => {
-      if (used[index] || output.length >= limit) return;
+      if (used[index] || results.length >= limit) return;
       used[index] = true;
       current.push(value);
       visit();
@@ -3856,7 +3849,7 @@ function permutations(values: number[], limit: number): number[][] {
     });
   };
   visit();
-  return output;
+  return results;
 }
 
 function runQualiflex(input: DecisionMatrix, config: StudyConfig, method: MethodDefinition): AnalysisResult {

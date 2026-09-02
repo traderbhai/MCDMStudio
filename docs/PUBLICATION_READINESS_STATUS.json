@@ -1,7 +1,7 @@
 {
   "generatedFrom": "docs/EXTERNAL_VALIDATION_MATRIX.md and docs/external-fixtures/*.json",
   "methodsTracked": 65,
-  "passingExternalFixtures": 46,
+  "passingExternalFixtures": 47,
   "validationCandidateMethods": [
     "CRADIS"
   ],
@@ -15,7 +15,6 @@
     "ARLON",
     "MACONT",
     "RAPS",
-    "ORESTE",
     "QUALIFLEX",
     "EVAMIX",
     "Lexicographic",
