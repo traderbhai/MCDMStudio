@@ -1,0 +1,33 @@
+{
+  "generatedFrom": "docs/EXTERNAL_VALIDATION_MATRIX.md and docs/external-fixtures/*.json",
+  "methodsTracked": 65,
+  "passingExternalFixtures": 43,
+  "validationCandidateMethods": [
+    "CRADIS"
+  ],
+  "candidateRecordsNeedingReconciliation": 5,
+  "internalOnlyMethods": [
+    "SRP",
+    "FUCA",
+    "SECA",
+    "DEAR",
+    "EAMR",
+    "RAWEC",
+    "ARLON",
+    "MACONT",
+    "RAPS",
+    "ORESTE",
+    "QUALIFLEX",
+    "REGIME",
+    "EVAMIX",
+    "Lexicographic",
+    "MACBETH-style",
+    "TODIM",
+    "GRP",
+    "ESP-SPOTIS",
+    "WEDBA",
+    "DNMA",
+    "COBRA"
+  ],
+  "strictPublicationCertificationComplete": false
+}

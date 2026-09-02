@@ -4,9 +4,10 @@
     "build": "vite build",
     "typecheck": "tsc --noEmit",
     "check:demo-uploads": "node scripts/demo-upload-smoke.mjs",
-    "check:algorithms": "node scripts/benchmark-tests.mjs && node scripts/algorithm-smokecheck.mjs && node scripts/workflow-smoke.mjs && node scripts/ux-contract-smoke.mjs && node scripts/external-validation-smoke.mjs && node scripts/docs-inventory-smoke.mjs",
+    "check:algorithms": "node scripts/benchmark-tests.mjs && node scripts/algorithm-smokecheck.mjs && node scripts/workflow-smoke.mjs && node scripts/ux-contract-smoke.mjs && node scripts/external-validation-smoke.mjs && node scripts/docs-inventory-smoke.mjs && npm run check:publication-readiness",
     "verify": "npm run typecheck && npm run check:algorithms && npm run check:demo-uploads && npm run build",
-    "preview": "vite preview --host 127.0.0.1"
+    "preview": "vite preview --host 127.0.0.1",
+    "check:publication-readiness": "node scripts/publication-readiness-smoke.mjs"
   },
   "dependencies": {
     "@vitejs/plugin-react": "latest",

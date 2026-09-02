@@ -28,7 +28,8 @@ Internal smoke tests prove software behavior. External fixtures prove agreement 
 ## External Validation Status
 
 - Passing external fixtures: 43 methods/variants.
-- Validation candidates needing reconciliation: 1 methods.
+- Validation candidate methods: 1.
+- Candidate records needing reconciliation: 5.
 - Internal coverage only: 21 methods.
 
 ## Internal-Only Methods Still Blocking Full Publication Certification
@@ -55,9 +56,11 @@ Internal smoke tests prove software behavior. External fixtures prove agreement 
 20. DNMA (Compromise/rank aggregation) - Needs published-example fixture.
 21. COBRA (Distance/reference) - Needs published-example fixture.
 
-## Candidate Methods Needing Reconciliation
+## Candidate Methods And Records Needing Reconciliation
 
 1. CRADIS (Distance/reference) - Journal of Applied Engineering Science 2025 fixture reproduces the combined-weight CRADIS ranking, but published score magnitudes need reconciliation before promotion.
+
+Candidate-discrepancy records also remain for TOPSIS variant comparisons, fuzzy DEMATEL convention matching, and a richer B-SPOTIS used-car example. These records are intentionally excluded from passing fixture counts until their data extraction and method conventions are resolved.
 
 ## Next Completion Sequence
 
