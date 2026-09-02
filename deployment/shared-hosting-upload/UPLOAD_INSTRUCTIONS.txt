@@ -1,0 +1,17 @@
+MCDM Studio - Shared Hosting Upload Package
+
+Upload every file and folder inside this directory to your web server public folder, for example public_html.
+
+Important:
+- index.html must be directly inside public_html or your selected domain folder.
+- Keep the assets folder beside index.html.
+- Upload .htaccess too if your hosting panel shows hidden files. It helps single-page app routing on Apache hosting.
+- This package is static. No database, backend, Node server, or login service is required.
+
+After upload, open your domain and verify:
+1. MCDM Studio loads.
+2. Help opens.
+3. A method-specific template downloads.
+4. A filled workbook uploads and results appear.
+
+Generated from npm run build.
