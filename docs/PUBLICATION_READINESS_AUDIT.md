@@ -27,10 +27,10 @@ Internal smoke tests prove software behavior. External fixtures prove agreement 
 
 ## External Validation Status
 
-- Passing external fixtures: 44 methods/variants.
+- Passing external fixtures: 45 methods/variants.
 - Validation candidate methods: 1.
 - Candidate records needing reconciliation: 5.
-- Internal coverage only: 20 methods.
+- Internal coverage only: 19 methods.
 
 ## Internal-Only Methods Still Blocking Full Publication Certification
 
@@ -44,16 +44,15 @@ Internal smoke tests prove software behavior. External fixtures prove agreement 
 8. RAPS (Newer ranking) - Needs published-example fixture.
 9. ORESTE (Compromise/rank aggregation) - Needs published-example fixture.
 10. QUALIFLEX (Compromise/rank aggregation) - Needs published-example fixture.
-11. REGIME (Compromise/rank aggregation) - Needs published-example fixture.
-12. EVAMIX (Compromise/rank aggregation) - Needs published-example fixture.
-13. Lexicographic (Compromise/rank aggregation) - Needs published-example fixture.
-14. MACBETH-style (Utility/additive) - Needs published-example fixture for the current categorical-anchor implementation.
-15. TODIM (Newer ranking) - Needs published-example fixture.
-16. GRP (Grey/relational) - Needs published-example fixture.
-17. ESP-SPOTIS (Distance/reference) - Needs published-example fixture.
-18. WEDBA (Distance/reference) - Needs published-example fixture.
-19. DNMA (Compromise/rank aggregation) - Needs published-example fixture.
-20. COBRA (Distance/reference) - Needs published-example fixture.
+11. EVAMIX (Compromise/rank aggregation) - Needs published-example fixture.
+12. Lexicographic (Compromise/rank aggregation) - Needs published-example fixture.
+13. MACBETH-style (Utility/additive) - Needs published-example fixture for the current categorical-anchor implementation.
+14. TODIM (Newer ranking) - Needs published-example fixture.
+15. GRP (Grey/relational) - Needs published-example fixture.
+16. ESP-SPOTIS (Distance/reference) - Needs published-example fixture.
+17. WEDBA (Distance/reference) - Needs published-example fixture.
+18. DNMA (Compromise/rank aggregation) - Needs published-example fixture.
+19. COBRA (Distance/reference) - Needs published-example fixture.
 
 ## Candidate Methods And Records Needing Reconciliation
 

@@ -39,7 +39,7 @@ Status meanings:
 | RAPS | Newer ranking | Internal coverage only | Needs published-example fixture. |
 | ORESTE | Compromise/rank aggregation | Internal coverage only | Needs published-example fixture. |
 | QUALIFLEX | Compromise/rank aggregation | Internal coverage only | Needs published-example fixture. |
-| REGIME | Compromise/rank aggregation | Internal coverage only | Needs published-example fixture. |
+| REGIME | Compromise/rank aggregation | Passing external fixture | RMCDA 2025 fixture checks weighted pairwise dominance signs, dominance flow scores, and final ranking for the official REGIME worked example. |
 | EVAMIX | Compromise/rank aggregation | Internal coverage only | Needs published-example fixture. |
 | Lexicographic | Compromise/rank aggregation | Internal coverage only | Needs published-example fixture. |
 | MARCOS | Ratio/proportional | Passing external fixture | Materia 2026 fixture checks utility normalization, ROC weights, range-scaled K- convention, f(K+) ranking, utility-table cells, and final milling-process ranking. |
@@ -78,8 +78,8 @@ Status meanings:
 
 Current count:
 
-- Passing external fixtures: 44 methods/variants
+- Passing external fixtures: 45 methods/variants
 - Validation candidates: 1 methods, 6 candidate records
-- Internal coverage only: 20 methods
+- Internal coverage only: 19 methods
 
 This matrix should be updated only when `scripts/external-validation-smoke.mjs` and `npm run verify` pass.

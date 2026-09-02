@@ -1851,7 +1851,7 @@ function runMacont(input: DecisionMatrix, config: StudyConfig, method: MethodDef
       id: 'macont-reference',
       title: 'MACONT Virtual Reference Alternative',
       columns: ['Reference', ...criteria.map((criterion) => criterion.id)],
-      rows: [['Average reference', ...reference.map(round)]],
+      rows: [['Average reference', ...reference.map((value) => round(value))]],
     },
     tableFromMatrix('macont-weighted-deviation', 'MACONT Weighted Distance From Reference', weightedDeviation, input),
     {
@@ -3584,8 +3584,8 @@ function runCradis(input: DecisionMatrix, config: StudyConfig, method: MethodDef
       title: 'CRADIS Ideal and Anti-Ideal References',
       columns: ['Reference', ...criteria.map((criterion) => criterion.id)],
       rows: [
-        ['Ideal', ...ideal.map(round)],
-        ['Anti-ideal', ...antiIdeal.map(round)],
+        ['Ideal', ...ideal.map((value) => round(value))],
+        ['Anti-ideal', ...antiIdeal.map((value) => round(value))],
       ],
     },
     tableFromMatrix('cradis-ideal-deviation', 'CRADIS Deviation from Ideal Matrix', deviationFromIdeal, input),
@@ -3689,7 +3689,7 @@ function runMara(input: DecisionMatrix, config: StudyConfig, method: MethodDefin
       id: 'mara-optimal-alternative',
       title: 'MARA Optimal Alternative',
       columns: ['Reference', ...criteria.map((criterion) => criterion.id)],
-      rows: [['Optimal', ...optimal.map(round)]],
+      rows: [['Optimal', ...optimal.map((value) => round(value))]],
     },
     {
       id: 'mara-intensity',
@@ -3896,7 +3896,7 @@ function runQualiflex(input: DecisionMatrix, config: StudyConfig, method: Method
       id: 'qualiflex-pairwise',
       title: 'QUALIFLEX Weighted Concordance/Discordance Matrix',
       columns: ['Alternative', ...input.alternatives.map((alternative) => alternative.id)],
-      rows: input.alternatives.map((alternative, index) => [alternative.name, ...pairwise[index].map(round)]),
+      rows: input.alternatives.map((alternative, index) => [alternative.name, ...pairwise[index].map((value) => round(value))]),
     },
     {
       id: 'qualiflex-permutation-summary',
@@ -3937,7 +3937,7 @@ function runRegime(input: DecisionMatrix, config: StudyConfig, method: MethodDef
       id: 'regime-dominance',
       title: 'REGIME Weighted Dominance Matrix',
       columns: ['Alternative', ...input.alternatives.map((alternative) => alternative.id)],
-      rows: input.alternatives.map((alternative, index) => [alternative.name, ...dominance[index].map(round)]),
+      rows: input.alternatives.map((alternative, index) => [alternative.name, ...dominance[index].map((value) => round(value))]),
     },
     {
       id: 'regime-flows',
@@ -3979,13 +3979,13 @@ function runEvamix(input: DecisionMatrix, config: StudyConfig, method: MethodDef
       id: 'evamix-raw-dominance',
       title: 'EVAMIX Weighted Cardinal Dominance Matrix',
       columns: ['Alternative', ...input.alternatives.map((alternative) => alternative.id)],
-      rows: input.alternatives.map((alternative, index) => [alternative.name, ...rawDominance[index].map(round)]),
+      rows: input.alternatives.map((alternative, index) => [alternative.name, ...rawDominance[index].map((value) => round(value))]),
     },
     {
       id: 'evamix-standardized-dominance',
       title: 'EVAMIX Standardized Dominance Matrix',
       columns: ['Alternative', ...input.alternatives.map((alternative) => alternative.id)],
-      rows: input.alternatives.map((alternative, index) => [alternative.name, ...standardized[index].map(round)]),
+      rows: input.alternatives.map((alternative, index) => [alternative.name, ...standardized[index].map((value) => round(value))]),
     },
     {
       id: 'evamix-appraisal',
@@ -4151,7 +4151,7 @@ function runFuzzyQualiflex(input: DecisionMatrix, config: StudyConfig, method: M
   const scores = rankingPosition.map((position) => alternativeCount - position + 1);
   const analysis = result(method, { ...input, criteria, fuzzyValues: fuzzyMatrix }, [
     fuzzyDecisionMatrixRows('Fuzzy QUALIFLEX Input Matrix', 'fuzzy-qualiflex-input', fuzzyMatrix, input),
-    { id: 'fuzzy-qualiflex-pairwise', title: 'Fuzzy QUALIFLEX Weighted Concordance/Discordance Matrix', columns: ['Alternative', ...input.alternatives.map((alternative) => alternative.id)], rows: input.alternatives.map((alternative, index) => [alternative.name, ...pairwise[index].map(round)]) },
+    { id: 'fuzzy-qualiflex-pairwise', title: 'Fuzzy QUALIFLEX Weighted Concordance/Discordance Matrix', columns: ['Alternative', ...input.alternatives.map((alternative) => alternative.id)], rows: input.alternatives.map((alternative, index) => [alternative.name, ...pairwise[index].map((value) => round(value))]) },
     { id: 'fuzzy-qualiflex-permutation-summary', title: 'Fuzzy QUALIFLEX Permutation Summary', columns: ['Mode', 'Evaluated rankings', 'Best comprehensive index', 'Selected order'], rows: [[exact ? 'Exact enumeration' : 'Pairwise net fallback', scoredOrders.length, round(best.score), best.order.map((index) => input.alternatives[index].name).join(' > ')]] },
     { id: 'fuzzy-qualiflex-final-order', title: 'Fuzzy QUALIFLEX Final Order', columns: ['Rank', 'Alternative', 'Position score'], rows: best.order.map((alternativeIndex, position) => [position + 1, input.alternatives[alternativeIndex].name, scores[alternativeIndex]]) },
   ], scores, 'Native fuzzy QUALIFLEX evaluates ranking orders using weighted fuzzy pairwise concordance/discordance evidence.');
@@ -4172,7 +4172,7 @@ function runFuzzyRegime(input: DecisionMatrix, config: StudyConfig, method: Meth
   const scores = positiveFlow.map((value, index) => value - negativeFlow[index]);
   const analysis = result(method, { ...input, criteria, fuzzyValues: fuzzyMatrix }, [
     fuzzyDecisionMatrixRows('Fuzzy REGIME Input Matrix', 'fuzzy-regime-input', fuzzyMatrix, input),
-    { id: 'fuzzy-regime-dominance', title: 'Fuzzy REGIME Weighted Dominance Matrix', columns: ['Alternative', ...input.alternatives.map((alternative) => alternative.id)], rows: input.alternatives.map((alternative, index) => [alternative.name, ...dominance[index].map(round)]) },
+    { id: 'fuzzy-regime-dominance', title: 'Fuzzy REGIME Weighted Dominance Matrix', columns: ['Alternative', ...input.alternatives.map((alternative) => alternative.id)], rows: input.alternatives.map((alternative, index) => [alternative.name, ...dominance[index].map((value) => round(value))]) },
     { id: 'fuzzy-regime-flows', title: 'Fuzzy REGIME Net Dominance Flows', columns: ['Alternative', 'Positive dominance flow', 'Negative dominance flow', 'Net dominance'], rows: input.alternatives.map((alternative, index) => [alternative.name, round(positiveFlow[index]), round(negativeFlow[index]), round(scores[index])]) },
   ], scores, 'Native fuzzy REGIME ranks alternatives by weighted fuzzy sign-dominance flows across criteria.');
   return fuzzyStandardDiagnostic(method, analysis, 'Fuzzy weighted sign-dominance flows generated.');
@@ -4204,8 +4204,8 @@ function runFuzzyEvamix(input: DecisionMatrix, config: StudyConfig, method: Meth
   const scores = positiveDominance.map((value, index) => value - negativeDominance[index]);
   const analysis = result(method, { ...input, criteria, fuzzyValues: fuzzyMatrix }, [
     fuzzyDecisionMatrixRows('Fuzzy EVAMIX Normalized Matrix', 'fuzzy-evamix-normalized', normalized, input),
-    { id: 'fuzzy-evamix-raw-dominance', title: 'Fuzzy EVAMIX Weighted Cardinal Dominance Matrix', columns: ['Alternative', ...input.alternatives.map((alternative) => alternative.id)], rows: input.alternatives.map((alternative, index) => [alternative.name, ...rawDominance[index].map(round)]) },
-    { id: 'fuzzy-evamix-standardized-dominance', title: 'Fuzzy EVAMIX Standardized Dominance Matrix', columns: ['Alternative', ...input.alternatives.map((alternative) => alternative.id)], rows: input.alternatives.map((alternative, index) => [alternative.name, ...standardized[index].map(round)]) },
+    { id: 'fuzzy-evamix-raw-dominance', title: 'Fuzzy EVAMIX Weighted Cardinal Dominance Matrix', columns: ['Alternative', ...input.alternatives.map((alternative) => alternative.id)], rows: input.alternatives.map((alternative, index) => [alternative.name, ...rawDominance[index].map((value) => round(value))]) },
+    { id: 'fuzzy-evamix-standardized-dominance', title: 'Fuzzy EVAMIX Standardized Dominance Matrix', columns: ['Alternative', ...input.alternatives.map((alternative) => alternative.id)], rows: input.alternatives.map((alternative, index) => [alternative.name, ...standardized[index].map((value) => round(value))]) },
     { id: 'fuzzy-evamix-appraisal', title: 'Fuzzy EVAMIX Appraisal Scores', columns: ['Alternative', 'Outgoing dominance', 'Incoming dominance', 'Net appraisal'], rows: input.alternatives.map((alternative, index) => [alternative.name, round(positiveDominance[index]), round(negativeDominance[index]), round(scores[index])]) },
   ], scores, 'Native fuzzy EVAMIX evaluates alternatives through fuzzy normalized pairwise dominance, then reports standardized dominance and net appraisal scores.');
   return fuzzyStandardDiagnostic(method, analysis, 'Fuzzy normalized cardinal dominance matrix generated.');

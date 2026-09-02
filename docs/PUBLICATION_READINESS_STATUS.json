@@ -1,7 +1,7 @@
 {
   "generatedFrom": "docs/EXTERNAL_VALIDATION_MATRIX.md and docs/external-fixtures/*.json",
   "methodsTracked": 65,
-  "passingExternalFixtures": 44,
+  "passingExternalFixtures": 45,
   "validationCandidateMethods": [
     "CRADIS"
   ],
@@ -17,7 +17,6 @@
     "RAPS",
     "ORESTE",
     "QUALIFLEX",
-    "REGIME",
     "EVAMIX",
     "Lexicographic",
     "MACBETH-style",
