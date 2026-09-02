@@ -49,7 +49,7 @@ Status meanings:
 | SMART | Utility/additive | Passing external fixture | Journal of Physics: Conference Series 2017 fixture checks positive-ratio utility scaling, relative weights, weighted utilities, and final ranking. |
 | MAUT | Utility/additive | Passing external fixture | Computer-Aided Civil and Infrastructure Engineering 2009 fixture checks published utility inputs, weighted utilities, and final ranking. |
 | SMARTER | Utility/additive | Passing external fixture | Patient 2010 clinical decision-support fixture checks ROC weights, utility-score inputs, weighted utilities, normalized total scores, and final ranking. |
-| MACBETH-style | Utility/additive | Internal coverage only | Needs published-example fixture for the current categorical-anchor implementation. |
+| MACBETH-style | Utility/additive | Passing external fixture | RMCDA 2025 fixture checks continuous value scoring, weighted value matrix, final additive scores, and ranking; categorical-anchor mode remains an additional transparent app convention. |
 | Pugh Matrix | Utility/additive | Passing external fixture | Public travel-selection worked example fixture checks uploaded Pugh score matrix, global 0-1 rescale, intuition weights, weighted scores, and final ranking; fixture cites Mistree, Lewis, and Stonis 1994 qualitative scoring. |
 | OCRA | Newer ranking | Passing external fixture | JMcDM tablet-selection fixture checks relative-distance benefit/cost preference terms, shifted OCRA scores, and final ranking; fixture cites Parkan 1994 OCRA foundations. |
 | MULTIMOORA | Compromise/rank aggregation | Passing external fixture | Journal of Industrial Engineering International 2017 fixture checks ratio-system, reference-point, multiplicative-form components, dominance aggregation, and ranking. |
@@ -78,8 +78,8 @@ Status meanings:
 
 Current count:
 
-- Passing external fixtures: 48 methods/variants
+- Passing external fixtures: 49 methods/variants
 - Validation candidates: 2 methods, 7 candidate records
-- Internal coverage only: 15 methods
+- Internal coverage only: 14 methods
 
 This matrix should be updated only when `scripts/external-validation-smoke.mjs` and `npm run verify` pass.

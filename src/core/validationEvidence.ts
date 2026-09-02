@@ -21,9 +21,9 @@ export const validationEvidence = {
   externalBenchmarks: {
     label: 'External published-example validation',
     status: 'In progress',
-    count: 48 as number,
+    count: 49 as number,
     candidateRecords: 5,
-    scope: 'TOPSIS, AHP, DEMATEL, VIKOR, COPRAS, WASPAS, SAW/WSM, SRP, FUCA, WPM, MOORA, MOOSRA, MULTIMOORA, MABAC, CODAS, CoCoSo, ARAS, EDAS, PROMETHEE II, ELECTRE I, ORESTE, REGIME, SMART, MAUT, SMARTER, Pugh Matrix, OCRA, ROV, GRA, MARCOS, MAIRCA, PSI, PIV, WISP, RAM, PROBID, SPROBID, LMAW, RIM, RAFSI, SPOTIS, B-SPOTIS, MARA, TODIM, LoPM, AROMAN, COMET, and ERVD external-example fixtures are registered; TOPSIS, CRADIS, and fuzzy DEMATEL discrepancy fixture records are tracked separately; SECA optimizer-backed reference behavior and the richer B-SPOTIS used-car published-example candidate are registry-only validation candidates; paper-by-paper comparisons for every crisp, fuzzy, and group-decision variant are not yet complete.',
+    scope: 'TOPSIS, AHP, DEMATEL, VIKOR, COPRAS, WASPAS, SAW/WSM, SRP, FUCA, WPM, MOORA, MOOSRA, MULTIMOORA, MABAC, CODAS, CoCoSo, ARAS, EDAS, PROMETHEE II, ELECTRE I, ORESTE, REGIME, SMART, MAUT, SMARTER, MACBETH-style, Pugh Matrix, OCRA, ROV, GRA, MARCOS, MAIRCA, PSI, PIV, WISP, RAM, PROBID, SPROBID, LMAW, RIM, RAFSI, SPOTIS, B-SPOTIS, MARA, TODIM, LoPM, AROMAN, COMET, and ERVD external-example fixtures are registered; TOPSIS, CRADIS, and fuzzy DEMATEL discrepancy fixture records are tracked separately; SECA optimizer-backed reference behavior and the richer B-SPOTIS used-car published-example candidate are registry-only validation candidates; paper-by-paper comparisons for every crisp, fuzzy, and group-decision variant are not yet complete.',
   },
 } as const;
 
@@ -227,6 +227,14 @@ export const externalValidationFixtures = [
     sourceUrl: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC3049911/',
     doi: '10.2165/11539470-000000000-00000',
     scope: 'SMARTER rank-order centroid weights, published utility-score inputs, ROC-weighted utilities, normalized total scores, and final treatment ranking.',
+  },
+  {
+    methodId: 'macbeth',
+    variant: 'crisp-continuous-value-rmcda-simple-example',
+    source: 'RMCDA apply.MACBETH documentation/source example for weighted continuous value scoring, RMCDA Software Impacts package paper, 2025',
+    sourceUrl: 'https://rdrr.io/cran/RMCDA/man/apply.MACBETH.html',
+    doi: '10.1016/j.simpa.2025.100762',
+    scope: 'MACBETH-style continuous value scoring using observed best/worst criterion values, manual criterion weights, weighted additive value scores, and final ranking.',
   },
   {
     methodId: 'pugh',

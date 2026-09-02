@@ -1,0 +1,182 @@
+{
+  "methodId": "macbeth",
+  "variant": "crisp-continuous-value-rmcda-simple-example",
+  "source": "RMCDA apply.MACBETH documentation/source example for weighted continuous value scoring, RMCDA Software Impacts package paper, 2025",
+  "sourceUrl": "https://rdrr.io/cran/RMCDA/man/apply.MACBETH.html",
+  "doi": "10.1016/j.simpa.2025.100762",
+  "config": {
+    "title": "MACBETH validation: RMCDA continuous value example",
+    "weightingId": "manual",
+    "alternatives": [
+      {
+        "id": "A1",
+        "name": "A1"
+      },
+      {
+        "id": "A2",
+        "name": "A2"
+      },
+      {
+        "id": "A3",
+        "name": "A3"
+      }
+    ],
+    "criteria": [
+      {
+        "id": "C1",
+        "name": "Criterion 1",
+        "direction": "benefit",
+        "weight": 0.6
+      },
+      {
+        "id": "C2",
+        "name": "Criterion 2",
+        "direction": "cost",
+        "weight": 0.4
+      }
+    ],
+    "methodParams": {
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload",
+      "macbethScoringMode": "Continuous value scoring",
+      "macbethCategoryScale": "0,1,2,3,4,5,6"
+    }
+  },
+  "input": {
+    "alternatives": [
+      {
+        "id": "A1",
+        "name": "A1"
+      },
+      {
+        "id": "A2",
+        "name": "A2"
+      },
+      {
+        "id": "A3",
+        "name": "A3"
+      }
+    ],
+    "criteria": [
+      {
+        "id": "C1",
+        "name": "Criterion 1",
+        "direction": "benefit",
+        "weight": 0.6
+      },
+      {
+        "id": "C2",
+        "name": "Criterion 2",
+        "direction": "cost",
+        "weight": 0.4
+      }
+    ],
+    "values": [
+      [
+        10,
+        5
+      ],
+      [
+        12,
+        4
+      ],
+      [
+        11,
+        6
+      ]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      {
+        "alternative": "A2",
+        "score": 1
+      },
+      {
+        "alternative": "A3",
+        "score": 0.3
+      },
+      {
+        "alternative": "A1",
+        "score": 0.2
+      }
+    ],
+    "scores": [
+      {
+        "alternative": "A1",
+        "score": 0.2
+      },
+      {
+        "alternative": "A2",
+        "score": 1
+      },
+      {
+        "alternative": "A3",
+        "score": 0.3
+      }
+    ],
+    "tables": [
+      {
+        "id": "macbeth-continuous-value-matrix",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": 0
+          },
+          {
+            "row": 0,
+            "column": 2,
+            "value": 0.5
+          },
+          {
+            "row": 1,
+            "column": 1,
+            "value": 1
+          },
+          {
+            "row": 2,
+            "column": 2,
+            "value": 0
+          }
+        ]
+      },
+      {
+        "id": "macbeth-weighted-values",
+        "cells": [
+          {
+            "row": 0,
+            "column": 2,
+            "value": 0.2
+          },
+          {
+            "row": 1,
+            "column": 1,
+            "value": 0.6
+          },
+          {
+            "row": 2,
+            "column": 1,
+            "value": 0.3
+          }
+        ]
+      },
+      {
+        "id": "applied-criteria-weights",
+        "cells": [
+          {
+            "row": 0,
+            "column": 3,
+            "value": 0.6
+          },
+          {
+            "row": 1,
+            "column": 3,
+            "value": 0.4
+          }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.0002
+}

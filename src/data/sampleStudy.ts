@@ -34,6 +34,7 @@ export const sampleConfig: StudyConfig = {
     electreDiscordance: 0.4,
     lexicographicOrder: 'C1,C2,C3,C4,C5,C6,C7',
     smarterOrder: 'C2,C4,C3,C6,C5,C1,C7',
+    macbethScoringMode: 'Categorical anchors',
     macbethCategoryScale: '0,1,2,3,4,5,6',
     pughScoringMode: 'Compare performance to baseline',
     pughBaselineAlternative: 'S1',

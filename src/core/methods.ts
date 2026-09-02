@@ -4716,9 +4716,35 @@ function runFuzzySmarter(input: DecisionMatrix, config: StudyConfig, method: Met
   return analysis;
 }
 
+function macbethContinuousValueNormalize(input: DecisionMatrix, criteria: Criterion[]) {
+  return input.values.map((row) => row.map((value, column) => {
+    const values = input.values.map((item) => item[column]);
+    const best = criteria[column].direction === 'cost' ? Math.min(...values) : Math.max(...values);
+    const worst = criteria[column].direction === 'cost' ? Math.max(...values) : Math.min(...values);
+    const denominator = best - worst;
+    return Math.abs(denominator) < 1e-12 ? 1 : (value - worst) / denominator;
+  }));
+}
+
 function runMacbeth(input: DecisionMatrix, config: StudyConfig, method: MethodDefinition): AnalysisResult {
   if (config.methodParams.fuzzyInputMode === 'Native fuzzy MACBETH-style') return runFuzzyMacbeth(input, config, method);
   const criteria = resolveCriteria(input, config);
+  const scoringMode = String(config.methodParams.macbethScoringMode ?? 'Categorical anchors');
+  if (scoringMode === 'Continuous value scoring') {
+    const normalized = macbethContinuousValueNormalize(input, criteria);
+    const weightedValueMatrix = weighted(normalized, criteria);
+    const scores = weightedValueMatrix.map((row) => row.reduce((sum, value) => sum + value, 0));
+    return result(method, { ...input, criteria }, [
+      tableFromMatrix('macbeth-continuous-value-matrix', 'MACBETH Continuous Value Matrix', normalized, input),
+      tableFromMatrix('macbeth-weighted-values', 'MACBETH Weighted Value Matrix', weightedValueMatrix, input),
+      {
+        id: 'macbeth-scores',
+        title: 'MACBETH Overall Value Scores',
+        columns: ['Alternative', 'Overall additive value'],
+        rows: input.alternatives.map((alternative, index) => [alternative.name, round(scores[index])]),
+      },
+    ], scores, 'MACBETH-style continuous value scoring normalizes each criterion between observed worst and best values and aggregates weighted additive value scores. Full interactive MACBETH linear-programming elicitation remains a future extension.');
+  }
   const scale = parseNumberList(config.methodParams.macbethCategoryScale, 7, 0)
     .map((value) => Math.max(0, value));
   const monotoneScale = scale.map((value, index) => Math.max(value, index ? scale[index - 1] : 0));
@@ -7710,7 +7736,7 @@ export const methodRegistry: MethodDefinition[] = [
   withBase({ id: 'smart', name: 'SMART', fullName: 'Simple Multi-Attribute Rating Technique', description: 'Normalized utility and swing-weight aggregation.', parameters: ['normalization'], specificationFields: [{ key: 'normalization', label: 'Utility scaling', type: 'select', defaultValue: 'Linear utility', options: ['Linear utility'] }], outputs: ['Utility matrix', 'Weighted utilities', 'Final rank'], supportsWeights: true, runAnalysis: (input, config) => runSmart(input, config, getMethod('smart')) }),
   withBase({ id: 'maut', name: 'MAUT', fullName: 'Multi-Attribute Utility Theory', description: 'Single-attribute utility aggregation.', parameters: ['normalization', 'mautUtilityShape'], specificationFields: [{ key: 'normalization', label: 'Utility scaling', type: 'select', defaultValue: 'Linear utility', options: ['Linear utility', 'Input values are utilities'] }, { key: 'mautUtilityShape', label: 'Utility shape', type: 'select', defaultValue: 'Linear', options: ['Linear', 'Concave', 'Convex'] }], outputs: ['Utility matrix', 'Weighted utility matrix', 'Final rank'], supportsWeights: true, runAnalysis: (input, config) => runMaut(input, config, getMethod('maut')) }),
   withBase({ id: 'smarter', name: 'SMARTER', fullName: 'Simple Multi-Attribute Rating Technique Exploiting Ranks', description: 'Ranked swing-weight utility scoring using rank-order centroid weights.', parameters: ['smarterOrder', 'smarterUtilityMode', 'smarterScoreMode'], specificationFields: [{ key: 'smarterOrder', label: 'Ranked swing-weight order', type: 'text', defaultValue: 'C1,C2,C3,C4,C5,C6,C7' }, { key: 'smarterUtilityMode', label: 'Utility input', type: 'select', defaultValue: 'Normalize performances', options: ['Normalize performances', 'Input values are utilities'] }, { key: 'smarterScoreMode', label: 'Reported score', type: 'select', defaultValue: 'Raw additive utility', options: ['Raw additive utility', 'Normalize total scores'] }], outputs: ['Rank-order centroid weights', 'Single-attribute utilities', 'ROC-weighted utilities', 'Final rank'], supportsWeights: false, runAnalysis: (input, config) => runSmarter(input, config, getMethod('smarter')) }),
-  withBase({ id: 'macbeth', name: 'MACBETH-style', fullName: 'Measuring Attractiveness by a Categorical Based Evaluation Technique', description: 'Categorical value-anchor scoring for additive attractiveness models.', parameters: ['macbethCategoryScale'], specificationFields: [{ key: 'macbethCategoryScale', label: 'Category value anchors', type: 'text', defaultValue: '0,1,2,3,4,5,6' }], outputs: ['Categorical value anchors', 'Assigned attractiveness categories', 'Value matrix', 'Weighted value matrix', 'Final rank'], supportsWeights: true, runAnalysis: (input, config) => runMacbeth(input, config, getMethod('macbeth')) }),
+  withBase({ id: 'macbeth', name: 'MACBETH-style', fullName: 'Measuring Attractiveness by a Categorical Based Evaluation Technique', description: 'Categorical or continuous value scoring for additive attractiveness models.', parameters: ['macbethScoringMode', 'macbethCategoryScale'], specificationFields: [{ key: 'macbethScoringMode', label: 'Scoring convention', type: 'select', defaultValue: 'Categorical anchors', options: ['Categorical anchors', 'Continuous value scoring'] }, { key: 'macbethCategoryScale', label: 'Category value anchors', type: 'text', defaultValue: '0,1,2,3,4,5,6' }], outputs: ['Value scale', 'Value matrix', 'Weighted value matrix', 'Final rank'], supportsWeights: true, runAnalysis: (input, config) => runMacbeth(input, config, getMethod('macbeth')) }),
   withBase({ id: 'pugh', name: 'Pugh Matrix', fullName: 'Pugh Concept Selection Matrix', description: 'Baseline concept comparison or uploaded score aggregation for design selection.', parameters: ['pughScoringMode', 'pughBaselineAlternative', 'pughIndifferenceTolerance', 'pughScoreTransform'], specificationFields: [{ key: 'pughScoringMode', label: 'Scoring mode', type: 'select', defaultValue: 'Compare performance to baseline', options: ['Compare performance to baseline', 'Use uploaded Pugh scores'] }, { key: 'pughBaselineAlternative', label: 'Baseline alternative ID', type: 'text', defaultValue: 'S1' }, { key: 'pughIndifferenceTolerance', label: 'Same-as-baseline tolerance', type: 'number', defaultValue: 0 }, { key: 'pughScoreTransform', label: 'Uploaded score transform', type: 'select', defaultValue: 'Raw uploaded scores', options: ['Raw uploaded scores', 'Global 0-1 rescale'] }], outputs: ['Baseline or uploaded score settings', 'Relative score matrix', 'Transformed score matrix', 'Weighted score matrix', 'Plus/minus summary', 'Final rank'], supportsWeights: true, runAnalysis: (input, config) => runPugh(input, config, getMethod('pugh')) }),
   withBase({ id: 'ocra', name: 'OCRA', fullName: 'Operational Competitiveness Rating Analysis', description: 'Benefit and cost competitiveness rating.', parameters: ['normalization'], specificationFields: [{ key: 'normalization', label: 'Normalization', type: 'select', defaultValue: 'Linear normalization', options: ['Linear normalization'] }], outputs: ['Weighted matrix', 'Preference components', 'Final rank'], supportsWeights: true, runAnalysis: (input, config) => runOcra(input, config, getMethod('ocra')) }),
   withBase({ id: 'multimoora', name: 'MULTIMOORA', fullName: 'Multi-Objective Optimization by Ratio Analysis plus Multiplicative Form', description: 'Ratio, reference point, and multiplicative aggregation.', parameters: ['normalization', 'multimooraAggregation'], specificationFields: [{ key: 'normalization', label: 'Normalization', type: 'select', defaultValue: 'Ratio normalization', options: ['Ratio normalization'] }, { key: 'multimooraAggregation', label: 'Aggregation', type: 'select', defaultValue: 'Dominance theory', options: ['Dominance theory', 'Rank sum'] }], outputs: ['Ratio system', 'Reference point', 'Multiplicative form', 'Dominance rank'], supportsWeights: true, runAnalysis: (input, config) => runMultimoora(input, config, getMethod('multimoora')) }),
