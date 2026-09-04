@@ -5919,6 +5919,170 @@ body {
     min-width: 0;
   }
 }
+
+/* Keep the opening title confident on desktop, like the supplied reference. */
+.methodWorkbench .compactTitle > div:first-child {
+  width: 100%;
+  min-width: 0;
+}
+
+.methodWorkbench .compactTitle h1 {
+  max-width: none;
+  white-space: nowrap;
+}
+
+@media (max-width: 520px) {
+  .methodWorkbench .compactTitle h1 {
+    white-space: normal;
+  }
+}
+
+/* Final launch polish: keep the selected method evidence and process visible while browsing. */
+.methodChooser.proChooser {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 340px);
+  gap: 18px;
+  align-items: start;
+}
+
+.methodIndexPanel {
+  min-width: 0;
+}
+
+.methodList {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.evidencePane {
+  position: sticky;
+  top: 92px;
+  margin-top: 32px;
+}
+
+.methodPath.methodSignal {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  padding: 8px 0;
+}
+
+.methodPath.methodSignal::before {
+  content: "";
+  position: absolute;
+  top: 28px;
+  bottom: 28px;
+  left: 21px;
+  width: 1px;
+  background: #b8dcd8;
+}
+
+.methodPath.methodSignal div {
+  position: relative;
+  min-height: 62px;
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  grid-template-areas:
+    "icon title"
+    "icon note";
+  justify-items: start;
+  align-items: center;
+  gap: 0 10px;
+  padding: 8px 0;
+  text-align: left;
+}
+
+.methodPath.methodSignal .signalGlyph {
+  grid-area: icon;
+  z-index: 1;
+}
+
+.methodPath.methodSignal strong {
+  grid-area: title;
+}
+
+.methodPath.methodSignal em {
+  grid-area: note;
+  margin: 2px 0 0;
+}
+
+@media (min-width: 1440px) {
+  .methodList {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1080px) {
+  .methodChooser.proChooser {
+    grid-template-columns: 1fr;
+  }
+
+  .evidencePane {
+    position: static;
+    margin-top: 16px;
+  }
+}
+
+/* Final alignment against the supplied sample screenshot. */
+.methodWorkbench .compactTitle {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.methodWorkbench .compactTitle h1 {
+  font-size: clamp(42px, 4.7vw, 58px);
+}
+
+.methodWorkbench .titleEvidence {
+  width: min(100%, 640px);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.methodWorkbench .titleEvidence span + span {
+  border-top: 0;
+  border-left: 1px solid var(--launch-line-soft);
+}
+
+@media (max-width: 920px) {
+  .methodWorkbench .titleEvidence {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .studioHeader {
+    display: grid;
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: 0;
+  }
+
+  .headerActions {
+    position: static;
+    display: flex;
+    justify-content: flex-start;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .ghostButton,
+  .projectMenu summary {
+    color: #233642;
+    background: transparent;
+  }
+
+  .methodWorkbench .compactTitle h1 {
+    font-size: 36px;
+  }
+
+  .methodWorkbench .titleEvidence {
+    grid-template-columns: 1fr;
+  }
+
+  .methodWorkbench .titleEvidence span + span {
+    border-top: 1px solid var(--launch-line-soft);
+    border-left: 0;
+  }
+}
 @media (max-width: 680px) {
   .wizardShell {
     padding: 10px 12px 24px;
@@ -6035,5 +6199,1581 @@ body {
   }
   .methodPath.methodSignal div {
     min-height: 62px;
+  }
+}
+
+/* Launch reference pass: calm research-instrument layout, minimal chrome. */
+:root {
+  --launch-page: #f4f6f5;
+  --launch-paper: #ffffff;
+  --launch-panel: #fbfcfb;
+  --launch-ink: #092436;
+  --launch-muted: #61707a;
+  --launch-line: #dce5e8;
+  --launch-line-soft: #edf2f3;
+  --launch-teal: #007a78;
+  --launch-teal-dark: #005f60;
+  --launch-gold: #9a6a16;
+  --launch-gold-soft: #fff6df;
+}
+
+body {
+  background:
+    linear-gradient(90deg, rgba(0, 122, 120, .035) 0 1px, transparent 1px 80px),
+    var(--launch-page);
+  color: var(--launch-ink);
+}
+
+.studioHeader {
+  height: 56px;
+  padding: 0 28px;
+  border-bottom: 1px solid var(--launch-line);
+  background: rgba(255, 255, 255, .97);
+  backdrop-filter: blur(14px);
+}
+
+.studioBrand {
+  gap: 12px;
+}
+
+.studioMark {
+  width: 34px;
+  height: 34px;
+  border-radius: 2px;
+  color: var(--launch-teal);
+  border-color: rgba(0, 122, 120, .26);
+  background: #fff;
+}
+
+.brandText strong {
+  color: var(--launch-ink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: .04em;
+}
+
+.brandText span {
+  margin-top: 1px;
+  color: var(--launch-muted);
+  font-size: 10px;
+  font-weight: 740;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+
+.headerActions {
+  align-items: center;
+  gap: 6px;
+}
+
+.ghostButton,
+.projectMenu summary {
+  height: 34px;
+  min-height: 34px;
+  border: 0;
+  border-radius: 2px;
+  background: transparent;
+  color: #233642;
+  padding: 0 9px;
+  font-size: 12px;
+  font-weight: 760;
+}
+
+.ghostButton:hover,
+.projectMenu summary:hover {
+  color: var(--launch-teal-dark);
+  background: #eef5f4;
+}
+
+.projectMenu {
+  position: relative;
+}
+
+.projectMenu summary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  list-style: none;
+  cursor: pointer;
+}
+
+.projectMenu summary::-webkit-details-marker {
+  display: none;
+}
+
+.projectMenuPanel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 20;
+  width: 244px;
+  border: 1px solid var(--launch-line);
+  background: #fff;
+  box-shadow: 0 18px 45px rgba(9, 36, 54, .13);
+  padding: 6px;
+}
+
+.projectMenuPanel button,
+.projectMenuPanel label {
+  position: relative;
+  width: 100%;
+  min-height: 54px;
+  border: 0;
+  border-radius: 2px;
+  background: transparent;
+  color: var(--launch-ink);
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  text-align: left;
+}
+
+.projectMenuPanel button:hover,
+.projectMenuPanel label:hover {
+  background: #f3f8f7;
+}
+
+.projectMenuPanel input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.projectMenuPanel strong,
+.projectMenuPanel em {
+  display: block;
+}
+
+.projectMenuPanel strong {
+  font-size: 12px;
+  font-style: normal;
+}
+
+.projectMenuPanel em {
+  margin-top: 2px;
+  color: var(--launch-muted);
+  font-size: 11px;
+  font-style: normal;
+  line-height: 1.25;
+}
+
+.wizardShell {
+  max-width: none;
+  padding: 0;
+}
+
+.appWorkspace {
+  display: grid;
+  grid-template-columns: 154px minmax(0, 1fr);
+  min-height: calc(100vh - 106px);
+}
+
+.wizardStepper {
+  position: sticky;
+  top: 56px;
+  align-self: start;
+  display: grid;
+  grid-template-columns: 1fr;
+  width: auto;
+  max-width: none;
+  margin: 0;
+  padding: 30px 18px 22px 24px;
+  border: 0;
+  border-right: 1px solid var(--launch-line);
+  background: rgba(255, 255, 255, .82);
+}
+
+.wizardStepper button {
+  min-width: 0;
+  min-height: 68px;
+  grid-template-columns: 27px minmax(0, 1fr);
+  justify-content: start;
+  align-items: start;
+  gap: 10px;
+  padding: 0;
+  color: #7c8790;
+  text-align: left;
+}
+
+.wizardStepper button::before {
+  top: 27px;
+  left: 13px;
+  width: 1px;
+  height: calc(100% - 22px);
+  background: var(--launch-line);
+}
+
+.wizardStepper button:first-child::before {
+  display: block;
+}
+
+.wizardStepper button:last-child::before {
+  display: none;
+}
+
+.wizardStepper span {
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  border-color: #cbd6db;
+  background: #fff;
+  color: #68747d;
+  font-size: 11px;
+  font-weight: 780;
+}
+
+.wizardStepper em {
+  padding-top: 4px;
+  color: inherit;
+  font-size: 12px;
+  font-weight: 780;
+}
+
+.wizardStepper .active {
+  color: var(--launch-teal-dark);
+}
+
+.wizardStepper .active span,
+.wizardStepper .done span {
+  border-color: var(--launch-teal);
+  background: var(--launch-teal);
+  color: #fff;
+  box-shadow: 0 0 0 5px rgba(0, 122, 120, .08);
+}
+
+.workflowCanvas {
+  min-width: 0;
+  padding: 24px 30px 28px;
+  background: transparent;
+}
+
+.singlePanel.methodWorkbench {
+  min-height: calc(100vh - 158px);
+  border: 0;
+  background: var(--launch-paper);
+  box-shadow: 0 1px 0 var(--launch-line);
+  overflow: hidden;
+}
+
+.methodWorkbench .compactTitle {
+  min-height: 132px;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 340px);
+  align-items: end;
+  gap: 28px;
+  padding: 26px 30px 22px;
+  border-bottom: 1px solid var(--launch-line);
+  background:
+    linear-gradient(90deg, rgba(0, 122, 120, .075), transparent 34%),
+    #fff;
+}
+
+.stageKicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 13px;
+  color: var(--launch-teal-dark);
+  font-size: 10px;
+  font-weight: 820;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+
+.stageKicker::before {
+  content: "";
+  width: 30px;
+  height: 1px;
+  background: var(--launch-teal);
+}
+
+.methodWorkbench .compactTitle h1 {
+  color: var(--launch-ink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(30px, 3.2vw, 42px);
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.methodWorkbench .compactTitle p {
+  max-width: 620px;
+  margin-top: 12px;
+  color: #4f606b;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.methodWorkbench .titleEvidence {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  border: 1px solid var(--launch-line);
+  background: #fff;
+}
+
+.methodWorkbench .titleEvidence span {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  align-items: baseline;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 0;
+  color: var(--launch-muted);
+  font-size: 11px;
+  line-height: 1.25;
+  text-align: left;
+}
+
+.methodWorkbench .titleEvidence span + span {
+  border-top: 1px solid var(--launch-line-soft);
+}
+
+.methodWorkbench .titleEvidence strong {
+  color: var(--launch-teal-dark);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 23px;
+  line-height: .9;
+  font-weight: 700;
+}
+
+.methodChooser.proChooser {
+  display: grid;
+  grid-template-columns: minmax(560px, 1fr) minmax(360px, 410px);
+  min-height: calc(100vh - 290px);
+  border: 0;
+  background: #fff;
+}
+
+.methodIndexPanel {
+  padding: 24px 24px 26px 30px;
+  border-right: 1px solid var(--launch-line);
+  background: #fff;
+}
+
+.methodFilters {
+  grid-template-columns: minmax(230px, 1fr) 160px 152px;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.methodFilters .searchBox,
+.methodFilters select {
+  height: 38px;
+  border-color: #cfdbdf;
+  border-radius: 2px;
+  background: #fff;
+}
+
+.methodFilters .searchBox:focus-within,
+.methodFilters select:focus {
+  border-color: var(--launch-teal);
+  box-shadow: 0 0 0 3px rgba(0, 122, 120, .08);
+}
+
+.methodSelectLabel span,
+.methodListHeader span {
+  color: #65727b;
+  font-size: 9px;
+  font-weight: 840;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+
+.methodListHeader {
+  grid-template-columns: minmax(0, 1fr) 132px 82px;
+  padding: 0 12px 9px;
+  border-bottom: 1px solid var(--launch-line);
+}
+
+.methodList {
+  max-height: min(600px, calc(100vh - 354px));
+  scrollbar-width: thin;
+}
+
+.methodList button {
+  min-height: 46px;
+  grid-template-columns: minmax(0, 1fr) 132px 82px;
+  gap: 12px;
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--launch-line-soft);
+  background: #fff;
+}
+
+.methodList button:hover,
+.methodList button.active {
+  background: linear-gradient(90deg, rgba(0, 122, 120, .075), transparent 72%);
+}
+
+.methodList button.active {
+  box-shadow: inset 2px 0 0 var(--launch-teal);
+}
+
+.methodListName strong {
+  color: var(--launch-ink);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.methodListFamily {
+  color: #687681;
+  font-size: 11px;
+}
+
+.methodList .catalogValidation {
+  min-width: 70px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  justify-self: end;
+  padding: 4px 7px;
+  font-size: 9px;
+}
+
+.methodList .catalogValidation.validated {
+  border-color: #cce6e2;
+  color: var(--launch-teal-dark);
+  background: #edf8f6;
+}
+
+.methodList .catalogValidation.candidate {
+  border-color: #eedda9;
+  color: #75510b;
+  background: var(--launch-gold-soft);
+}
+
+.evidencePane {
+  position: relative;
+  padding: 30px 30px 26px;
+  gap: 18px;
+  border: 0;
+  background:
+    linear-gradient(180deg, #fbfcfb, #fff),
+    var(--launch-panel);
+}
+
+.evidencePane::before {
+  content: "";
+  position: absolute;
+  top: 30px;
+  bottom: 28px;
+  left: 0;
+  width: 1px;
+  background: linear-gradient(180deg, var(--launch-teal), var(--launch-line) 42%, transparent);
+}
+
+.methodDetailHeader > span {
+  color: var(--launch-teal-dark);
+  font-size: 10px;
+  font-weight: 840;
+  letter-spacing: .12em;
+}
+
+.evidencePane h2 {
+  margin-top: 4px;
+  color: var(--launch-ink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(34px, 4vw, 52px);
+  line-height: .9;
+  font-weight: 700;
+}
+
+.methodDetailHeader p {
+  max-width: 34ch;
+  margin-top: 8px;
+  color: #52636f;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.inspectorFacts {
+  border-top: 1px solid var(--launch-line);
+  border-bottom: 1px solid var(--launch-line);
+}
+
+.inspectorFacts div {
+  grid-template-columns: 68px minmax(0, 1fr);
+  padding: 10px 0;
+}
+
+.inspectorFacts div:not(:last-child) {
+  border-bottom: 1px solid var(--launch-line-soft);
+}
+
+.inspectorFacts span {
+  color: #71808a;
+  font-size: 9px;
+  letter-spacing: .12em;
+}
+
+.inspectorFacts strong {
+  color: #172d3b;
+  font-size: 12px;
+  font-weight: 710;
+}
+
+.evidencePane .compactEvidence {
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding: 0 0 14px;
+  border: 0;
+  border-bottom: 1px solid var(--launch-line);
+  background: transparent;
+}
+
+.evidencePane .compactEvidence::before {
+  display: none;
+}
+
+.evidencePane .compactEvidence strong {
+  color: var(--launch-ink);
+  font-size: 13px;
+}
+
+.evidencePane .compactEvidence span {
+  color: #65737d;
+  font-size: 11px;
+  white-space: normal;
+}
+
+.evidenceLinks {
+  grid-column: 1 / -1;
+  justify-content: flex-start;
+}
+
+.evidenceLinks a {
+  border-radius: 2px;
+  border-color: #cfe2e1;
+  color: var(--launch-teal-dark);
+  background: #fff;
+}
+
+.methodPath.methodSignal {
+  grid-template-columns: 1fr;
+  gap: 0;
+  margin-top: 0;
+  padding: 0;
+  border: 1px solid var(--launch-line);
+  background: #fff;
+}
+
+.methodPath.methodSignal::before,
+.methodPath.methodSignal::after {
+  display: none;
+}
+
+.methodPath.methodSignal div {
+  min-height: 44px;
+  grid-template-columns: 34px 76px minmax(0, 1fr);
+  grid-template-rows: 1fr;
+  align-items: center;
+  justify-items: start;
+  gap: 10px;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.methodPath.methodSignal div + div {
+  border-top: 1px solid var(--launch-line-soft);
+}
+
+.methodPath.methodSignal .signalGlyph {
+  position: static;
+  width: 26px;
+  min-width: 26px;
+  height: 26px;
+  transform: none;
+  border-radius: 50%;
+  box-shadow: none;
+  font-size: 9px;
+}
+
+.methodPath.methodSignal strong {
+  color: var(--launch-ink);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.methodPath.methodSignal em {
+  color: var(--launch-muted);
+  font-size: 10px;
+}
+
+.methodPrimaryActions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+}
+
+.methodPrimaryActions .methodContinue,
+.methodPrimaryActions .methodGuideAction {
+  width: 100%;
+  justify-self: stretch;
+}
+
+.methodPrimaryActions .methodContinue {
+  height: 40px;
+}
+
+.methodPrimaryActions .methodGuideAction {
+  height: 34px;
+  color: var(--launch-teal-dark);
+}
+
+.studioFooter {
+  min-height: 50px;
+  padding: 10px 28px;
+  border-top: 1px solid var(--launch-line);
+  background: #fff;
+}
+
+@media (max-width: 1040px) {
+  .appWorkspace {
+    grid-template-columns: 1fr;
+  }
+
+  .wizardStepper {
+    position: relative;
+    top: auto;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    padding: 12px 18px 10px;
+    border-right: 0;
+    border-bottom: 1px solid var(--launch-line);
+  }
+
+  .wizardStepper button {
+    min-height: 34px;
+    grid-template-columns: 24px auto;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+    text-align: center;
+  }
+
+  .wizardStepper button::before {
+    top: 16px;
+    left: -50%;
+    width: 100%;
+    height: 1px;
+  }
+
+  .wizardStepper button:first-child::before {
+    display: none;
+  }
+
+  .workflowCanvas {
+    padding: 16px;
+  }
+
+  .methodChooser.proChooser {
+    grid-template-columns: 1fr;
+  }
+
+  .methodIndexPanel {
+    border-right: 0;
+    border-bottom: 1px solid var(--launch-line);
+  }
+
+  .evidencePane::before {
+    display: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .studioHeader {
+    height: auto;
+    grid-template-columns: 1fr;
+    align-items: start;
+    padding: 10px 12px;
+  }
+
+  .headerActions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .projectMenuPanel {
+    left: 0;
+    right: auto;
+  }
+
+  .wizardStepper {
+    overflow-x: visible;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    padding-inline: 12px;
+  }
+
+  .wizardStepper button {
+    min-width: 0;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 4px;
+  }
+
+  .wizardStepper button::before {
+    top: 13px;
+  }
+
+  .wizardStepper span {
+    width: 25px;
+    height: 25px;
+  }
+
+  .wizardStepper em {
+    max-width: 100%;
+    padding-top: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 10px;
+  }
+
+  .workflowCanvas {
+    padding: 10px;
+  }
+
+  .methodWorkbench .compactTitle {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    gap: 16px;
+    padding: 20px 16px 18px;
+  }
+
+  .methodWorkbench .compactTitle h1 {
+    font-size: 30px;
+  }
+
+  .methodWorkbench .compactTitle p {
+    font-size: 13px;
+  }
+
+  .methodFilters {
+    grid-template-columns: 1fr;
+  }
+
+  .methodIndexPanel,
+  .evidencePane {
+    padding: 18px 16px;
+  }
+
+  .methodListHeader {
+    grid-template-columns: minmax(0, 1fr) 78px;
+  }
+
+  .methodListHeader span:nth-child(2),
+  .methodListFamily {
+    display: none;
+  }
+
+  .methodList button {
+    grid-template-columns: minmax(0, 1fr) 78px;
+  }
+
+  .methodPath.methodSignal div {
+    grid-template-columns: 30px 66px minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .studioFooter {
+    padding-inline: 14px;
+  }
+}
+
+/* Sample-guided full-app redesign: dark pipeline rail, card catalog, paper canvas. */
+body {
+  background: #eeede8;
+}
+
+.studioHeader {
+  height: 66px;
+  padding: 0 32px;
+  box-shadow: 0 10px 24px rgba(9, 36, 54, .08);
+}
+
+.studioMark {
+  width: 40px;
+  height: 40px;
+  color: #e3b94d;
+  background: #0e314f;
+  border-color: #0e314f;
+}
+
+.brandText strong {
+  font-size: 18px;
+  letter-spacing: .12em;
+}
+
+.brandText span {
+  letter-spacing: .22em;
+}
+
+.appWorkspace {
+  grid-template-columns: 268px minmax(0, 1fr);
+  min-height: calc(100vh - 116px);
+}
+
+.workflowCanvas {
+  padding: 38px 32px 34px 40px;
+  background: #eeede8;
+  border-left: 0;
+}
+
+.wizardStepper {
+  top: 66px;
+  min-height: calc(100vh - 116px);
+  padding: 34px 20px 28px 52px;
+  border-right: 0;
+  background: #123453;
+  color: #eaf6f6;
+}
+
+.pipelineLabel {
+  margin-bottom: 28px;
+  color: #b7cad5;
+  font-size: 10px;
+  font-weight: 760;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+}
+
+.wizardStepper button {
+  position: relative;
+  min-height: 63px;
+  grid-template-columns: 36px minmax(0, 1fr);
+  grid-template-areas:
+    "step label"
+    "step note";
+  align-items: start;
+  gap: 0 12px;
+  color: #b9cbd5;
+}
+
+.wizardStepper button::before {
+  display: none;
+}
+
+.wizardStepper span {
+  grid-area: step;
+  width: 24px;
+  height: 24px;
+  border-radius: 0;
+  border-color: rgba(184, 216, 225, .7);
+  background: transparent;
+  color: #d8e8ed;
+  font-size: 10px;
+  box-shadow: none;
+}
+
+.wizardStepper em {
+  grid-area: label;
+  padding: 0;
+  color: inherit;
+  font-size: 12px;
+  font-weight: 780;
+}
+
+.wizardStepper small {
+  grid-area: note;
+  margin-top: 5px;
+  color: #8eabb9;
+  font-size: 10px;
+  line-height: 1.25;
+}
+
+.wizardStepper button.active,
+.wizardStepper button.done {
+  color: #fff;
+}
+
+.wizardStepper .active span,
+.wizardStepper .done span {
+  border-color: #9bd4d1;
+  background: transparent;
+  color: #fff;
+  box-shadow: none;
+}
+
+.wizardStepper button.active::after {
+  content: "";
+  position: absolute;
+  inset: -13px 0 auto -18px;
+  height: 58px;
+  background: rgba(42, 91, 132, .75);
+  border-right: 3px solid #e4b545;
+  z-index: -1;
+}
+
+.pipelineStudy {
+  margin-top: 30px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(184, 216, 225, .28);
+}
+
+.pipelineStudy span {
+  display: block;
+  color: #9fb7c4;
+  font-size: 10px;
+  font-weight: 760;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+}
+
+.pipelineStudy strong {
+  display: block;
+  margin-top: 12px;
+  color: #fff;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.pipelineStudy p {
+  margin: 9px 0 0;
+  color: #b8c8d1;
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.singlePanel.methodWorkbench,
+.resultsPanel,
+.methodGuidePage,
+.helpPage {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.methodWorkbench .compactTitle,
+.methodWorkbench > .sectionTitle:not(.compactTitle),
+.resultsHeader,
+.guideHero,
+.helpHero {
+  min-height: 168px;
+  align-items: end;
+  padding: 34px 0 36px;
+  border-bottom: 1px solid #d7d2c9;
+  background: transparent;
+}
+
+.methodWorkbench .compactTitle {
+  grid-template-columns: minmax(0, 1fr) minmax(250px, 320px);
+}
+
+.stageKicker {
+  color: #006f72;
+  letter-spacing: .25em;
+}
+
+.methodWorkbench .compactTitle h1,
+.methodWorkbench > .sectionTitle:not(.compactTitle) h1,
+.resultsHeader h1,
+.guideHero h1,
+.helpHero h1 {
+  color: #102b46;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(40px, 5.1vw, 64px);
+  line-height: .95;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.methodWorkbench > .sectionTitle:not(.compactTitle) p,
+.methodWorkbench .compactTitle p,
+.resultsHeader p,
+.guideHero p,
+.helpHero p {
+  max-width: 680px;
+  color: #5b7180;
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.methodWorkbench .titleEvidence {
+  align-self: end;
+  border-color: #d8d4cc;
+}
+
+.methodChooser.proChooser {
+  display: block;
+  min-height: 0;
+  background: transparent;
+}
+
+.methodIndexPanel {
+  padding: 32px 0 0;
+  border: 0;
+  background: transparent;
+}
+
+.methodFilters {
+  grid-template-columns: minmax(220px, .9fr) 170px 170px;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.methodFilters .searchBox,
+.methodFilters select {
+  height: 44px;
+  border-color: #d2cec5;
+  background: #fbfaf7;
+}
+
+.methodListHeader {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 0 16px;
+  border: 0;
+}
+
+.methodListHeader span {
+  color: #7b817f;
+  font-size: 10px;
+  letter-spacing: .16em;
+}
+
+.methodList {
+  max-height: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  overflow: visible;
+}
+
+.methodList button {
+  min-height: 288px;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto 1fr auto;
+  align-content: start;
+  gap: 18px;
+  padding: 22px 20px 20px;
+  border: 1px solid #d6d2ca;
+  background: #fbfaf7;
+  color: #102b46;
+  text-align: left;
+}
+
+.methodList button:hover {
+  background: #fff;
+  border-color: #8acbc8;
+  transform: translateY(-2px);
+}
+
+.methodList button.active {
+  background: #fff;
+  border-color: #00908d;
+  box-shadow: inset 0 0 0 1px #00908d;
+}
+
+.methodCardTop {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.methodCardTop em {
+  max-width: 168px;
+  border: 1px solid #b8dcd8;
+  background: #eef8f6;
+  color: #00706f;
+  padding: 5px 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 9px;
+  font-style: normal;
+  font-weight: 820;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.methodList .catalogValidation {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #596d78;
+  font-size: 10px;
+  font-weight: 740;
+}
+
+.methodList .catalogValidation.validated {
+  color: #00706f;
+  background: transparent;
+  border: 0;
+}
+
+.methodList .catalogValidation.candidate {
+  color: #9a6a16;
+  background: transparent;
+  border: 0;
+}
+
+.methodListName {
+  display: grid;
+  gap: 8px;
+}
+
+.methodListName strong {
+  color: #102b46;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.05;
+}
+
+.methodListName em {
+  min-height: 38px;
+  color: #71808d;
+  font-size: 12px;
+  line-height: 1.55;
+  font-style: normal;
+}
+
+.methodFormulaLine {
+  display: block;
+  min-height: 46px;
+  padding-top: 16px;
+  border-top: 1px solid #dedad2;
+  color: #244964;
+  font-family: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
+  font-size: 11px;
+  line-height: 1.45;
+  white-space: normal;
+}
+
+.methodPurposeLine {
+  display: -webkit-box;
+  overflow: hidden;
+  color: #6a7a84;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.evidencePane {
+  margin-top: 18px;
+  padding: 24px 26px;
+  border: 1px solid #d6d2ca;
+  background: #fbfaf7;
+}
+
+.evidencePane::before {
+  display: none;
+}
+
+.evidencePane h2 {
+  font-size: clamp(34px, 4vw, 48px);
+}
+
+.inspectorFacts,
+.evidencePane .compactEvidence,
+.methodPath.methodSignal {
+  border-color: #d9d5cd;
+  background: #fff;
+}
+
+.methodPath.methodSignal {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.methodPath.methodSignal div {
+  min-height: 76px;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  gap: 5px;
+  text-align: center;
+}
+
+.methodPrimaryActions {
+  grid-template-columns: minmax(180px, auto) auto;
+  justify-content: start;
+}
+
+.methodPrimaryActions .methodContinue,
+.methodPrimaryActions .methodGuideAction {
+  width: auto;
+}
+
+.setupReadiness,
+.configGrid,
+.workflowNote,
+.cleanTableWrap,
+.templateHandoff,
+.samplePanel,
+.uploadZone,
+.validationItem,
+.readyNote,
+.resultStatusStrip,
+.outcomeLine,
+.rankingBars,
+.readinessPanel,
+.externalEvidencePanel,
+.guideSection,
+.helpCard,
+.templateSpecs div,
+.capabilityStrip div,
+.summaryGrid .metric,
+.diagnostics div {
+  border-radius: 0;
+  border-color: #d8d4cc;
+  background: #fbfaf7;
+  box-shadow: none;
+}
+
+.setupReadiness,
+.templateHandoff,
+.resultStatusStrip,
+.outcomeLine,
+.capabilityStrip,
+.templateSpecs,
+.configurationSummary,
+.summaryGrid,
+.diagnostics {
+  gap: 12px;
+}
+
+.configGrid {
+  padding: 18px;
+}
+
+.tableToolbar {
+  background: #f5f3ee;
+  border-color: #d8d4cc;
+}
+
+table {
+  font-size: 12px;
+}
+
+th {
+  background: #f5f3ee;
+  color: #334756;
+}
+
+td input,
+td select,
+.configGrid input,
+.configGrid select {
+  border-radius: 0;
+  border-color: #d4d0c8;
+  background: #fff;
+}
+
+.templateHero {
+  min-height: 210px;
+  padding: 42px 0 34px;
+  border-bottom: 1px solid #d7d2c9;
+}
+
+.templateHero h1 {
+  color: #102b46;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(38px, 4.8vw, 58px);
+  font-weight: 500;
+}
+
+.uploadZone {
+  height: 190px;
+  border-style: solid;
+  background: #f8fbfa;
+}
+
+.resultsPanel {
+  padding: 0;
+}
+
+.resultsHeader {
+  margin: 0;
+}
+
+.exportActions .secondaryAction,
+.exportActions .primaryAction {
+  height: 34px;
+}
+
+.resultTabs {
+  margin: 18px 0 16px;
+  border-color: #d8d4cc;
+}
+
+.resultTabs button {
+  height: 38px;
+}
+
+.guideGrid,
+.helpGrid {
+  gap: 16px;
+}
+
+.guideHero,
+.helpHero {
+  margin: 0;
+}
+
+.studioFooter {
+  background: #fbfaf7;
+}
+
+@media (max-width: 1180px) {
+  .methodList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .methodFilters {
+    grid-template-columns: minmax(220px, 1fr) 170px;
+  }
+}
+
+@media (max-width: 920px) {
+  .appWorkspace {
+    grid-template-columns: 1fr;
+  }
+
+  .workflowCanvas {
+    padding: 22px 18px;
+  }
+
+  .wizardStepper {
+    position: relative;
+    top: auto;
+    min-height: 0;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    padding: 14px 16px 12px;
+  }
+
+  .pipelineLabel,
+  .pipelineStudy,
+  .wizardStepper small {
+    display: none;
+  }
+
+  .wizardStepper button {
+    min-height: 42px;
+    grid-template-columns: 1fr;
+    grid-template-areas: "step" "label";
+    justify-items: center;
+    text-align: center;
+  }
+
+  .wizardStepper button.active::after {
+    display: none;
+  }
+
+  .methodWorkbench .compactTitle,
+  .methodWorkbench > .sectionTitle:not(.compactTitle),
+  .resultsHeader,
+  .guideHero,
+  .helpHero {
+    min-height: 0;
+    grid-template-columns: 1fr;
+    padding: 28px 0 26px;
+  }
+
+  .methodWorkbench .titleEvidence {
+    width: 100%;
+  }
+
+  .methodPath.methodSignal {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .studioHeader {
+    padding: 10px 14px;
+  }
+
+  .brandText strong {
+    font-size: 16px;
+  }
+
+  .brandText span {
+    font-size: 9px;
+    letter-spacing: .12em;
+  }
+
+  .workflowCanvas {
+    padding: 16px 10px 22px;
+  }
+
+  .methodWorkbench .compactTitle h1,
+  .methodWorkbench > .sectionTitle:not(.compactTitle) h1,
+  .resultsHeader h1,
+  .guideHero h1,
+  .helpHero h1 {
+    font-size: 36px;
+  }
+
+  .methodWorkbench .compactTitle p,
+  .methodWorkbench > .sectionTitle:not(.compactTitle) p,
+  .resultsHeader p,
+  .guideHero p,
+  .helpHero p {
+    font-size: 13px;
+  }
+
+  .methodFilters,
+  .methodList,
+  .methodPrimaryActions {
+    grid-template-columns: 1fr;
+  }
+
+  .methodListHeader {
+    display: grid;
+    gap: 5px;
+  }
+
+  .methodList button {
+    min-height: 238px;
+  }
+
+  .methodPath.methodSignal {
+    grid-template-columns: 1fr;
+  }
+
+  .templateSpecs,
+  .capabilityStrip,
+  .resultStatusStrip,
+  .outcomeLine,
+  .resultsGridSimple,
+  .guideGrid,
+  .helpGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Final launch polish: keep selected evidence and the source-to-result path visible. */
+.methodChooser.proChooser {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 340px);
+  gap: 18px;
+  align-items: start;
+}
+
+.methodIndexPanel {
+  min-width: 0;
+}
+
+.methodList {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.evidencePane {
+  position: sticky;
+  top: 92px;
+  margin-top: 32px;
+}
+
+.methodPath.methodSignal {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  padding: 8px 0;
+}
+
+.methodPath.methodSignal::before {
+  content: "";
+  position: absolute;
+  top: 28px;
+  bottom: 28px;
+  left: 21px;
+  width: 1px;
+  background: #b8dcd8;
+}
+
+.methodPath.methodSignal div {
+  position: relative;
+  min-height: 62px;
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  grid-template-areas:
+    "icon title"
+    "icon note";
+  justify-items: start;
+  align-items: center;
+  gap: 0 10px;
+  padding: 8px 0;
+  text-align: left;
+}
+
+.methodPath.methodSignal .signalGlyph {
+  grid-area: icon;
+  z-index: 1;
+}
+
+.methodPath.methodSignal strong {
+  grid-area: title;
+}
+
+.methodPath.methodSignal em {
+  grid-area: note;
+  margin: 2px 0 0;
+}
+
+@media (min-width: 1440px) {
+  .methodList {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1080px) {
+  .methodChooser.proChooser {
+    grid-template-columns: 1fr;
+  }
+
+  .evidencePane {
+    position: static;
+    margin-top: 16px;
+  }
+}
+
+@media (max-width: 680px) {
+  .studioHeader {
+    height: auto;
+    min-height: 92px;
+    grid-template-columns: 1fr;
+    justify-items: start;
+    gap: 10px;
+    padding: 10px 14px 12px;
+  }
+
+  .studioBrand {
+    min-width: 0;
+  }
+
+  .headerActions {
+    position: static;
+    width: 100%;
+    justify-self: stretch;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .headerActions .ghostButton,
+  .projectMenu summary {
+    width: auto;
+    min-height: 32px;
+    height: 32px;
+    padding: 0 10px;
+    white-space: nowrap;
+  }
+
+  .projectMenuPanel {
+    right: 0;
+    left: auto;
+  }
+
+  .wizardStepper {
+    top: auto;
+  }
+
+  .methodList {
+    grid-template-columns: 1fr;
   }
 }

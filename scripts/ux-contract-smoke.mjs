@@ -33,7 +33,7 @@ const compareMethods = functionBlock('CompareMethods');
 
 check(
   'Method selection is focused',
-  methodStep.includes('proChooser') && methodStep.includes('methodList') && methodStep.includes('evidencePane') && methodStep.includes('MethodProcessGraphic') && methodProcessGraphic.includes('methodPath methodSignal') && methodStep.includes('Method library') && methodStep.includes('methods matched') && methodStep.includes('need DOI match') && !methodStep.includes('Academic names stay unchanged') && methodStep.includes('>Use {selectedMethod.name}') && methodStep.includes('>Math and sample '),
+  methodStep.includes('proChooser') && methodStep.includes('methodList') && methodStep.includes('evidencePane') && methodStep.includes('MethodProcessGraphic') && methodProcessGraphic.includes('methodPath methodSignal') && methodStep.includes('Method catalog') && methodStep.includes('paper-matched methods') && methodStep.includes('awaiting first match') && !methodStep.includes('Academic names stay unchanged') && methodStep.includes('>Use {selectedMethod.name}') && methodStep.includes('>View math and sample '),
 );
 check(
   'Method selection supports family filtering',
@@ -64,11 +64,11 @@ check(
 );
 check(
   'Method list is compact and primary',
-  methodStep.includes('methodListHeader') && methodStep.includes('role="listbox"') && methodStep.includes('role="option"') && methodStep.includes('methodRadio'),
+  methodStep.includes('methodListHeader') && methodStep.includes('role="listbox"') && methodStep.includes('role="option"') && methodStep.includes('methodCardTop') && methodStep.includes('methodFormulaLine'),
 );
 check(
   'Method actions are accessible and specific',
-  methodStep.includes('aria-label="Matching MCDM methods"') && methodProcessGraphic.includes('aria-label="Reproducible method path"') && methodProcessGraphic.includes('signalGlyph') && methodStep.includes('Method library') && methodStep.includes('methods matched') && methodStep.includes('need DOI match') && !methodStep.includes('Academic names stay unchanged') && methodStep.includes('>Use {selectedMethod.name}') && methodStep.includes('>Math and sample '),
+  methodStep.includes('aria-label="Matching MCDM methods"') && methodProcessGraphic.includes('aria-label="Reproducible method path"') && methodProcessGraphic.includes('signalGlyph') && methodStep.includes('Method catalog') && methodStep.includes('paper-matched methods') && methodStep.includes('awaiting first match') && !methodStep.includes('Academic names stay unchanged') && methodStep.includes('>Use {selectedMethod.name}') && methodStep.includes('>View math and sample '),
 );
 check(
   'Method process graphic has restrained motion',
@@ -86,8 +86,8 @@ check(
   source.includes('externalValidationStatusFor') &&
   source.includes('externalValidationSummaryFor') &&
   methodStep.includes('evidenceCounts') &&
-  methodStep.includes('methods matched') &&
-  methodStep.includes('need DOI match') &&
+  methodStep.includes('paper-matched methods') &&
+  methodStep.includes('awaiting first match') &&
   methodStep.includes('Published evidence status') &&
   methodStep.includes('evidenceFilter') &&
   methodStep.includes('Evidence') &&
@@ -346,7 +346,7 @@ check(
   source.includes('const nextValidation = method.validateWorkbook(input, config)') &&
   source.includes('nextValidation.ok') &&
   source.includes('onSample={runConfiguredAnalysis}') &&
-  uploadStep.includes('Try with example data') &&
+  uploadStep.includes('Run paper-matched sample') &&
   !uploadStep.includes('Run sample analysis'),
 );
 check(

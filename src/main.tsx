@@ -290,6 +290,7 @@ function App() {
       setStep(nextStep);
       setMaxStep((current) => Math.max(current, nextStep) as WizardStep);
       setLoadingLabel('');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }, 520);
   };
 
@@ -355,6 +356,7 @@ function App() {
       }
     }
     setStep(nextStep);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const openTemplateStep = () => {
@@ -496,16 +498,21 @@ function App() {
       <header className="studioHeader">
         <div className="studioBrand">
           <div className="studioMark"><FileSpreadsheet size={20} /></div>
-          <div className="brandText"><strong>MCDM Studio</strong><span>Decision analysis workspace</span></div>
+          <div className="brandText"><strong>MCDM Studio</strong><span>Research decision workspace</span></div>
         </div>
         <div className="headerActions">
           <button className="ghostButton" onClick={() => setHelpOpen((current) => !current)} title="Open workflow help"><HelpCircle size={16} />Help</button>
-          <button className="ghostButton" onClick={saveProject} title="Save this study as a project file"><Save size={16} />Save project</button>
-          <label className="ghostButton fileButton" title="Open a saved MCDM Studio project"><Upload size={16} />Open project<input type="file" accept=".json" onChange={(event) => {
-            const file = event.target.files?.[0];
-            event.currentTarget.value = '';
-            if (file) void handleImportProject(file);
-          }} /></label>
+          <details className="projectMenu">
+            <summary className="ghostButton"><FileText size={16} />Project</summary>
+            <div className="projectMenuPanel">
+              <button onClick={saveProject} title="Save this study as a project file"><Save size={16} /><span><strong>Save study</strong><em>Keep your setup and results</em></span></button>
+              <label title="Open a saved MCDM Studio project"><Upload size={16} /><span><strong>Open study</strong><em>Continue from a saved file</em></span><input type="file" accept=".json" onChange={(event) => {
+                const file = event.target.files?.[0];
+                event.currentTarget.value = '';
+                if (file) void handleImportProject(file);
+              }} /></label>
+            </div>
+          </details>
         </div>
       </header>
 
@@ -862,8 +869,10 @@ function MethodGuidePage({ methodId, onBack, onUse, onDownloadSample }: { method
 }
 
 function Stepper({ activeStep, maxStep, onStep }: { activeStep: WizardStep; maxStep: WizardStep; onStep: (step: WizardStep) => void }) {
+  const stepNotes = ['Choose a lens', 'Shape the model', 'Prepare workbook', 'Check your matrix', 'Build the paper'];
   return (
     <nav className="wizardStepper">
+      <div className="pipelineLabel">Research pipeline / 01-05</div>
       {steps.map((label, index) => {
         const number = (index + 1) as WizardStep;
         const locked = number > maxStep;
@@ -871,9 +880,15 @@ function Stepper({ activeStep, maxStep, onStep }: { activeStep: WizardStep; maxS
           <button key={label} className={activeStep === number ? 'active' : activeStep > number ? 'done' : locked ? 'locked' : ''} onClick={() => !locked && onStep(number)} disabled={locked} title={locked ? 'Complete the previous step first' : label}>
             <span>{activeStep > number ? <Check size={14} /> : number}</span>
             <em>{label}</em>
+            <small>{stepNotes[index]}</small>
           </button>
         );
       })}
+      <div className="pipelineStudy">
+        <span>Evidence boundary</span>
+        <strong>60 / 65 methods</strong>
+        <p>Matched to a DOI or official worked example; remaining methods stay in review.</p>
+      </div>
     </nav>
   );
 }
@@ -925,12 +940,13 @@ function MethodStep({ query, family, onQuery, onFamily, methods, onSelect, onGui
     <section className="singlePanel methodWorkbench">
       <div className="sectionTitle compactTitle">
         <div>
-          <h1>Method library</h1>
-          <p>Choose the method, review its evidence, and build the Excel template.</p>
+          <span className="stageKicker">01 / Choose your method</span>
+          <h1>Method catalog</h1>
+          <p>Find the decision method that fits your study, then open a matched sample or build your Excel template.</p>
         </div>
         <div className="titleEvidence" aria-label={`${evidenceCounts.validated} methods have matched DOI examples; ${evidenceCounts.candidates} methods need a first DOI match; ${validationEvidence.externalBenchmarks.count} DOI examples reproduced`}>
-          <span><strong>{evidenceCounts.validated}</strong> methods matched</span>
-          <span><strong>{evidenceCounts.candidates}</strong> need DOI match</span>
+          <span><strong>{evidenceCounts.validated}</strong> paper-matched methods</span>
+          <span><strong>{evidenceCounts.candidates}</strong> awaiting first match</span>
         </div>
       </div>
       <div className="methodChooser proChooser">
@@ -947,26 +963,29 @@ function MethodStep({ query, family, onQuery, onFamily, methods, onSelect, onGui
               <span>Evidence</span>
               <select aria-label="Published evidence status" value={evidenceFilter} onChange={(event) => setEvidenceFilter(event.target.value as typeof evidenceFilter)}>
                 <option value="all">All methods ({methods.length})</option>
-                <option value="validated">Published match ({methods.filter((method) => externalValidationStatusFor(method.id).tone === 'validated').length})</option>
-                <option value="candidate">Needs match ({reviewMethodCount})</option>
+                <option value="validated">Paper matched ({methods.filter((method) => externalValidationStatusFor(method.id).tone === 'validated').length})</option>
+                <option value="candidate">Awaiting match ({reviewMethodCount})</option>
               </select>
             </label>
           </div>
           <div className="methodListHeader">
-            <span>Method</span>
-            <span>Family</span>
-            <span>Evidence</span>
+            <span>{filteredMethods.length} methods in view</span>
+            <span>Selected / {selectedMethod.name}</span>
           </div>
           <div className="methodList" role="listbox" aria-label="Matching MCDM methods">
             {filteredMethods.length ? filteredMethods.map((method) => {
               const status = externalValidationStatusFor(method.id);
-              const shortStatus = status.tone === 'validated' ? 'Matched' : status.tone === 'candidate' ? 'Needs match' : 'Awaiting';
+              const formula = methodFormulaFor(method);
+              const shortStatus = status.tone === 'validated' ? 'Matched' : status.tone === 'candidate' ? 'In review' : 'Internal';
               return (
                 <button key={method.id} role="option" aria-selected={method.id === selectedMethod.id} className={method.id === selectedMethod.id ? 'active' : ''} onClick={() => setSelectedId(method.id)} title={`${method.name}: ${method.fullName}`} aria-label={`${method.name}, ${method.fullName}, ${status.label}`}>
-                  <span className="methodRadio" aria-hidden="true" />
-                  <span className="methodListName"><strong>{method.name}</strong></span>
-                  <span className="methodListFamily">{methodFamilies[methodFamilyById[method.id]]}</span>
-                  <span className={`catalogValidation ${status.tone}`} title={status.label}>{shortStatus}</span>
+                  <span className="methodCardTop">
+                    <em>{methodFamilies[methodFamilyById[method.id]]}</em>
+                    <span className={`catalogValidation ${status.tone}`} title={status.label}>{shortStatus}</span>
+                  </span>
+                  <span className="methodListName"><strong>{method.name}</strong><em>{compactUiText(method.fullName, 76)}</em></span>
+                  <code className="methodFormulaLine">{formula.score}</code>
+                  <span className="methodPurposeLine">{compactUiText(methodPurpose[method.id], 92)}</span>
                 </button>
               );
             }) : <p className="emptyMethodState">No methods match these filters.</p>}
@@ -981,7 +1000,7 @@ function MethodStep({ query, family, onQuery, onFamily, methods, onSelect, onGui
                 <p>{selectedMethod.fullName}</p>
               </div>
               <div className="inspectorFacts">
-                <div><span>Best for</span><strong>{compactUiText(methodPurpose[selectedMethod.id], 88)}</strong></div>
+                <div><span>Use when</span><strong>{compactUiText(methodPurpose[selectedMethod.id], 88)}</strong></div>
                 <div><span>Inputs</span><strong>{selectedInputSummary}</strong></div>
                 <div><span>Sample</span><strong>{selectedFixtureSample ? 'Matched data' : 'Demo data'}</strong></div>
               </div>
@@ -1006,7 +1025,7 @@ function MethodStep({ query, family, onQuery, onFamily, methods, onSelect, onGui
               <MethodProcessGraphic method={selectedMethod} evidenceLead={evidenceLead} hasMatchedSample={Boolean(selectedFixtureSample)} />
               <div className="methodPrimaryActions">
                 <button className="primaryAction methodContinue" onClick={() => onSelect(selectedMethod.id)}>Use {selectedMethod.name}<ArrowRight size={16} /></button>
-                <button className="textAction methodGuideAction" onClick={() => onGuide(selectedMethod.id)}>Math and sample <ArrowRight size={16} /></button>
+                <button className="textAction methodGuideAction" onClick={() => onGuide(selectedMethod.id)}>View math and sample <ArrowRight size={16} /></button>
               </div>
             </>
           ) : (
@@ -1393,8 +1412,8 @@ function ConfigureStep({ config, input, method, onChange, onNext }: { config: St
   return (
     <section className="singlePanel methodWorkbench">
       <div className="sectionTitle">
-        <h1>Set up {method.name}</h1>
-        <p>Set the data shape. Keep method terms unchanged.</p>
+        <h1>Configure {method.name}</h1>
+        <p>Choose the input type, weights, and calculation settings for this study.</p>
       </div>
       <SetupReadinessLine config={config} method={method} canGenerateTemplate={canGenerateTemplate} issueCount={preTemplateIssues.length} />
       <div className="specSection">
@@ -2209,7 +2228,7 @@ function UploadStep({ config, methodName, validation, uploadAttempted, onUpload,
       </div>
       <div className="flowActions uploadActions">
         <button className="secondaryAction" onClick={onBack}>Back to Excel file</button>
-        <button className="textAction" onClick={onSample}>Try with example data <ArrowRight size={16} /></button>
+        <button className="textAction" onClick={onSample}>Run paper-matched sample <ArrowRight size={16} /></button>
       </div>
     </section>
   );
