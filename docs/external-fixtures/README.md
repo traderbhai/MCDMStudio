@@ -56,9 +56,16 @@ Current registered fixtures:
 - `ervd-crisp-pymcdm-relative-value-distances-2026.json`: ERVD relative-value-distance example from pymcdm documentation, with normalized reference point, relative performance matrix, weighted separation measures, preference scores, and final ranking.
 - `spotis-crisp-rank-reversal-original-2020.json`: SPOTIS original rank-reversal example with manual criterion bounds, ideal solution point, normalized distance matrix, weighted distance scores, and final ordering from the original SPOTIS paper.
 - `balanced-spotis-crisp-pymcdm-2026.json`: B-SPOTIS reference example from pymcdm documentation, with manual criterion bounds, expected solution point, alpha 0.5, normalized ESP/ISP distances, balanced distance scores, and final lower-is-better ranking; fixture metadata cites the SciTePress 2025 B-SPOTIS paper.
+- `balanced-spotis-crisp-used-car-icaart-2025.json`: B-SPOTIS used-car example from ICAART 2025, with manual criterion bounds, ideal and expected solution points, RANCOM-derived weights, alpha 0.5 balanced ISP/ESP distance scores, and final lower-is-better ranking.
+- `esp-spotis-crisp-used-car-icaart-2025.json`: ESP-SPOTIS used-car example from ICAART 2025, with manual criterion bounds, expected solution point, RANCOM-derived weights, ESP-only distance scores, and final lower-is-better ranking.
+- `eamr-crisp-dressing-process-machines-2022.json`: EAMR internal-grinding dressing-process example from Machines 2022, with normalized n_ij values, weighted v_ij values, G+ and G- components, appraisal scores, and final trial ranking.
+- `macont-crisp-sustainable-3prlp-informatica-2020.json`: MACONT sustainable third-party reverse logistics provider example from Informatica 2020, with comprehensive normalization, virtual reference aggregation, mixed aggregation scores, and final provider ranking.
 - `mara-crisp-rmcda-area-ranking-2025.json`: MARA area-gap example from RMCDA source documentation, with benefit/cost normalization, weighted normalized matrix, optimal alternative, benefit/cost intensities, lower-is-better gap scores, and final ranking; fixture metadata cites the RMCDA software paper.
 - `ocra-crisp-tablet-selection-jmcdm-2017.json`: OCRA tablet-computer selection example from the JMcDM official worked example, citing Parkan 1994 OCRA foundations, with relative-distance benefit/cost preference terms, shifted total preference scores, and final ranking.
 - `gra-crisp-hospital-supplier-pmc-2019.json`: GRA hospital supplier-selection example with raw AHP decision matrix, AHP-derived manual weights, benefit/cost criterion directions, weighted grey relational coefficients, grey relational grades, and final ranking from a Journal of Healthcare Engineering 2019 paper.
+- `evamix-crisp-composite-reinforcement-ajor-2013.json`: EVAMIX composite-reinforcement example from American Journal of Operations Research 2013, with range-normalized matrix cells, ordinal/cardinal dominance matrices, overall dominance cells, appraisal scores, and final ranking.
+- `grp-crisp-hr-manager-ajbm-2012.json`: GRP human-resources manager competency example from African Journal of Business Management 2012, with comparable linguistic values, grey relational coefficient cells, squared-weight projection values, relative closeness, and final candidate ranking.
+- `dnma-crisp-company-performance-serbia-2023.json`: DNMA Serbian company-performance example from Business Systems Research 2023, with LMAW-derived manual weights, adjusted weights, linear/vector target normalization, CCM/UCM/ICM utilities, integrated scores, and final ranking.
 
 Discrepancy candidates:
 
@@ -73,8 +80,8 @@ When a candidate includes `appObserved.tables`, the fixture runner also checks t
 
 Additional validation candidates:
 
-- B-SPOTIS used-car example from SciTePress 2025, DOI: 10.5220/0013119800003890. B-SPOTIS now has a passing pymcdm reference fixture; this richer used-car case remains tracked in the app evidence registry until the full criteria/weight table can be extracted and audited.
 - RAPS perimeter-similarity mining example from MDPI Mathematics 2021, DOI: 10.3390/math9161980. The published perimeter and ranking tables are tracked, but the full decision matrix/weights need extraction before a passing executable fixture can be added.
 - WEDBA fuzzy supplier/contractor examples from IJCAT 2019, DOI: 10.1504/IJCAT.2019.099199. Available previews expose final distance/ranking evidence, but the full tuple matrix, weights, and required intermediate checks still need extraction before a passing executable fixture can be added.
+- COBRA financial-performance example from Financial Innovation 2025, DOI: 10.1186/s40854-024-00704-5. The open article exposes COBRA normalized and weighted-normalized table evidence plus final ranking context, but the transformed input matrix, criteria weights, and direction convention need extraction before a passing executable fixture can be added.
 
 External published-example fixtures must be sourced; do not invent examples.

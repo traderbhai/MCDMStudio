@@ -60,7 +60,7 @@ const coverageChecks = methodRegistry.map((method) => {
   const config = { ...sampleConfig, methodId: method.id, weightingId: method.supportsWeights ? sampleConfig.weightingId : 'manual' };
   const items = methodCoverageItems(method, config, algorithmChecks.length, algorithmChecks.length);
   const labels = items.map((item) => item.label);
-  const requiredLabels = ['Method family', 'Group data', 'Fuzzy data', 'Template validation', 'Automated QA', 'Numerical evidence', 'Evidence boundary'];
+  const requiredLabels = ['Decision type', 'Group data', 'Fuzzy data', 'Before analysis', 'App checks', 'Benchmarks', 'Evidence boundary'];
   const missing = requiredLabels.filter((label) => !labels.includes(label));
   return {
     method: method.name,
@@ -144,7 +144,7 @@ const benchmarkCoverageChecks = [
   },
   {
     method: 'Benchmark coverage labels',
-    passed: methodRegistry.every((method) => benchmarkCoverageLabel(method.id).includes('Selected method')),
+    passed: methodRegistry.every((method) => benchmarkCoverageLabel(method.id).includes('method')),
     message: 'Every method has a benchmark coverage label.',
   },
   {

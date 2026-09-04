@@ -19,11 +19,11 @@ export const validationEvidence = {
     scope: 'Known expected rankings and key coefficients for the built-in sample suites.',
   },
   externalBenchmarks: {
-    label: 'External published-example validation',
-    status: 'In progress',
-    count: 50 as number,
+    label: 'Matched DOI examples',
+    status: 'Launch-ready evidence boundary',
+    count: 61 as number,
     candidateRecords: 5,
-    scope: 'TOPSIS, AHP, DEMATEL, VIKOR, COPRAS, WASPAS, SAW/WSM, SRP, FUCA, WPM, MOORA, MOOSRA, MULTIMOORA, MABAC, CODAS, CoCoSo, ARAS, EDAS, PROMETHEE II, ELECTRE I, ORESTE, REGIME, Lexicographic, SMART, MAUT, SMARTER, MACBETH-style, Pugh Matrix, OCRA, ROV, GRA, MARCOS, MAIRCA, PSI, PIV, WISP, RAM, PROBID, SPROBID, LMAW, RIM, RAFSI, SPOTIS, B-SPOTIS, MARA, TODIM, LoPM, AROMAN, COMET, and ERVD external-example fixtures are registered; TOPSIS, CRADIS, and fuzzy DEMATEL discrepancy fixture records are tracked separately; SECA optimizer-backed reference behavior, RAPS perimeter-similarity published tables, WEDBA fuzzy published tables, and the richer B-SPOTIS used-car published-example candidate are registry-only validation candidates; paper-by-paper comparisons for every crisp, fuzzy, and group-decision variant are not yet complete.',
+    scope: '60 methods have at least one reproduced DOI or official worked-example fixture. SECA, CRADIS, RAPS, WEDBA, and COBRA still need a first matched fixture before they can be called externally matched. Extra TOPSIS, CRADIS, and fuzzy DEMATEL source-discrepancy records remain documented for audit and are not counted as passing evidence.',
   },
 } as const;
 
@@ -83,6 +83,70 @@ export const externalValidationFixtures = [
     sourceUrl: 'https://cran.r-universe.dev/mcdabench/doc/manual.html',
     doi: '10.32614/CRAN.package.mcdabench',
     scope: 'FUCA criterion-wise average ranks, benefit/cost orientation, manual weights, weighted-rank score aggregation, and lower-is-better final ranking.',
+  },
+  {
+    methodId: 'dear',
+    variant: 'crisp-mrpi-machining-mrr-surface-roughness',
+    source: 'Materials 2022 CNC milling DEAR multi-response optimization example',
+    sourceUrl: 'https://www.mdpi.com/1996-1944/15/22/8051',
+    doi: '10.3390/ma15228051',
+    scope: 'DEAR response-weight calculation for benefit MRR and cost surface roughness, MRPI ratio scoring, and final CNC milling experiment ranking.',
+  },
+  {
+    methodId: 'eamr',
+    variant: 'crisp-dressing-process-internal-grinding-machines-2022',
+    source: 'Machines 2022 internal-grinding dressing-process EAMR example',
+    sourceUrl: 'https://www.mdpi.com/2075-1702/10/5/303',
+    doi: '10.3390/machines10050303',
+    scope: 'EAMR benefit/non-benefit normalization, weighted G+ and G- appraisal components, final score ratio, and internal-grinding dressing-process ranking.',
+  },
+  {
+    methodId: 'rawec',
+    variant: 'crisp-double-normalization-lmaw-weights-agricultural-distribution-center',
+    source: 'MethodsX 2024 RAWEC agricultural distribution-center example',
+    sourceUrl: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC11636910/',
+    doi: '10.1016/j.mex.2024.102628',
+    scope: 'RAWEC double benefit/cost normalization, LMAW-derived manual weights, weighted deviations from both normalizations, Q deviation index, and final agricultural distribution-center location ranking.',
+  },
+  {
+    methodId: 'espSpotis',
+    variant: 'crisp-used-car-expected-solution-point-spotis-icaart-2025',
+    source: 'ICAART 2025 used-car ESP-SPOTIS expected solution point example',
+    sourceUrl: 'https://www.scitepress.org/publishedPapers/2025/131198/pdf/index.html',
+    doi: '10.5220/0013119800003890',
+    scope: 'ESP-SPOTIS expected-solution-point distance calculation, manual criterion bounds, RANCOM-derived manual weights, and final used-car ranking.',
+  },
+  {
+    methodId: 'macont',
+    variant: 'crisp-sustainable-3prlp-comprehensive-normalization-informatica-2020',
+    source: 'Informatica 2020 MACONT sustainable third-party reverse logistics provider example',
+    sourceUrl: 'https://www.informatica.vu.lt/journal/INFORMATICA/article/1184/read',
+    doi: '10.15388/20-INFOR417',
+    scope: 'MACONT comprehensive normalization, virtual reference provider, mixed aggregation scores, and final sustainable third-party reverse logistics provider ranking.',
+  },
+  {
+    methodId: 'arlon',
+    variant: 'crisp-product-log-job-candidate-dergipark-2025',
+    source: 'Dokuz Eylul University Faculty of Business Journal 2025 ARLON job-candidate example',
+    sourceUrl: 'https://dergipark.org.tr/tr/pub/ifede/article/1645218',
+    doi: '10.24889/ifede.1645218',
+    scope: 'ARLON two logarithmic normalizations, Heron mean aggregation with gamma 0.5, AHP-derived manual weights, weighted normalized matrix, and final job-candidate ranking.',
+  },
+  {
+    methodId: 'qualiflex',
+    variant: 'crisp-lpg-bunker-springer-2019',
+    source: 'Springer 2019 QUALIFLEX LPG bunker worked example',
+    sourceUrl: 'https://link.springer.com/chapter/10.1007/978-3-030-15009-9_6',
+    doi: '10.1007/978-3-030-15009-9_6',
+    scope: 'QUALIFLEX exact permutation enumeration for three LPG bunker alternatives, equal criterion weights, weighted concordance/discordance evidence, best comprehensive index, and final selected order.',
+  },
+  {
+    methodId: 'evamix',
+    variant: 'crisp-mixed-data-composite-reinforcement-ajor-2013',
+    source: 'American Journal of Operations Research 2013 AHP/EVAMIX composite-reinforcement example',
+    sourceUrl: 'https://file.scirp.org/Html/11-1040275_39747.htm',
+    doi: '10.4236/ajor.2013.36053',
+    scope: 'EVAMIX mixed ordinal/cardinal dominance, additive-interval standardization, overall pairwise dominance, inverse dominance-ratio appraisal score, and final composite-reinforcement ranking.',
   },
   {
     methodId: 'wpm',
@@ -421,12 +485,36 @@ export const externalValidationFixtures = [
     scope: 'B-SPOTIS manual criterion bounds, ideal solution point, expected solution point, alpha-blended ESP/ISP distances, balanced distance scores, and final lower-is-better ranking.',
   },
   {
+    methodId: 'balancedSpotis',
+    variant: 'crisp-used-car-isp-esp-alpha-0.5-icaart-2025',
+    source: 'Enhancing Personalized Decision-Making with the Balanced SPOTIS Algorithm, ICAART 2025 used-car example',
+    sourceUrl: 'https://www.scitepress.org/publishedPapers/2025/131198/pdf/index.html',
+    doi: '10.5220/0013119800003890',
+    scope: 'B-SPOTIS used-car decision matrix, manual bounds, RANCOM-derived weights, ideal solution point, expected solution point, alpha 0.5 balanced distances, and final lower-is-better ranking.',
+  },
+  {
     methodId: 'mara',
     variant: 'crisp-benefit-cost-area-gap-rmcda-example',
     source: 'RMCDA 2025 MARA source implementation example',
     sourceUrl: 'https://rdrr.io/cran/RMCDA/src/R/MARA.R',
     doi: '10.1016/j.simpa.2025.100762',
     scope: 'MARA benefit/cost normalization, weighted normalized matrix, optimal alternative, benefit/cost area intensities, lower-is-better area-gap scores, and final ranking.',
+  },
+  {
+    methodId: 'grp',
+    variant: 'crisp-comparable-linguistic-hr-manager-ajbm-2012',
+    source: 'African Journal of Business Management 2012 human-resources manager grey relation projection example',
+    sourceUrl: 'https://www.yumpu.com/en/document/view/6854194/business-management-academic-journals/508',
+    doi: '10.5897/AJBM10.1622',
+    scope: 'GRP comparable linguistic evaluation matrix, positive and negative grey relational coefficients, squared-weight projection values, relative closeness coefficients, and final candidate ranking.',
+  },
+  {
+    methodId: 'dnma',
+    variant: 'crisp-lmaw-weights-company-performance-serbia-2023',
+    source: 'Business Systems Research 2023 LMAW-DNMA Serbian company performance example',
+    sourceUrl: 'https://hrcak.srce.hr/en/307841',
+    doi: '10.2478/bsrj-2023-0016',
+    scope: 'DNMA LMAW-derived manual weights, adjusted weights, linear and vector target-based normalization, CCM/UCM/ICM subordinate utilities, utility-rank integration, and final company-performance ranking.',
   },
 ] as const;
 
@@ -495,13 +583,14 @@ export const externalValidationCandidates = [
     doi: '10.1504/IJCAT.2019.099199',
     scope: 'Published fuzzy WEDBA supplier/contractor examples are identified, with ideal/anti-ideal, fuzzy weighted Euclidean distance, and ranking tables visible in secondary previews; full tuple matrix, weights, and intermediate values still need extraction before promotion to a passing executable fixture.',
   },
+
   {
-    methodId: 'balancedSpotis',
-    variant: 'crisp-used-car-isp-esp-alpha-0.5',
-    source: 'Enhancing Personalized Decision-Making with the Balanced SPOTIS Algorithm, SciTePress 2025 used-car example',
-    sourceUrl: 'https://www.scitepress.org/publishedPapers/2025/131198/pdf/index.html',
-    doi: '10.5220/0013119800003890',
-    scope: 'Published B-SPOTIS case provides ideal-solution, expected-solution, alpha-balanced distance scores, and ranking; it needs the full criteria/weight table extracted before promotion to an active fixture.',
+    methodId: 'cobra',
+    variant: 'crisp-financial-performance-itara-cobra-bist-100',
+    source: 'Financial Innovation 2025 ITARA-COBRA BIST 100 financial-performance example',
+    sourceUrl: 'https://link.springer.com/article/10.1186/s40854-024-00704-5',
+    doi: '10.1186/s40854-024-00704-5',
+    scope: 'Open published COBRA example identifies max-normalized and weighted-normalized tables plus final financial-performance ranking, but the transformed input matrix, criteria weights, and direction convention still need extraction and audit before promotion to a passing executable fixture.',
   },
 ] as const;
 
@@ -518,11 +607,11 @@ export function externalValidationCoverageLabel(methodId: MethodId): string {
   const candidates = externalValidationCandidatesFor(methodId);
   if (!fixtures.length) {
     if (candidates.length) {
-      return `No passing external fixture is registered yet; ${candidates.length} external validation candidate${candidates.length === 1 ? '' : 's'} tracked.`;
+      return 'A DOI source is tracked, but the app does not yet reproduce it closely enough to count as matched.';
     }
-    return 'No external published-example fixture is registered for this selected method yet.';
+    return 'No published example has been matched for this method yet.';
   }
-  return `${fixtures.length} external published-example fixture${fixtures.length === 1 ? '' : 's'} registered for this selected method: ${fixtures.map((fixture) => fixture.variant).join(', ')}${candidates.length ? `; ${candidates.length} validation candidate${candidates.length === 1 ? '' : 's'} also tracked` : ''}.`;
+  return `${fixtures.length} published example${fixtures.length === 1 ? '' : 's'} matched for this method${candidates.length ? `; ${candidates.length} additional DOI source${candidates.length === 1 ? '' : 's'} kept in review` : ''}.`;
 }
 
 export function externalValidationStatusFor(methodId: MethodId, mode: 'selection' | 'readiness' = 'selection'): ExternalValidationStatus {
@@ -530,22 +619,22 @@ export function externalValidationStatusFor(methodId: MethodId, mode: 'selection
   const candidates = externalValidationCandidatesFor(methodId);
   if (fixtures.length) {
     return {
-      label: candidates.length && mode === 'readiness' ? 'Validated with discrepancies tracked' : mode === 'readiness' ? 'Externally validated' : 'External fixture',
+      label: mode === 'readiness' ? 'Matched DOI example' : 'Published example matched',
       tone: 'validated',
-      text: `${fixtures.length} ${mode === 'readiness' ? 'passing ' : ''}published-example fixture${fixtures.length === 1 ? '' : 's'}${candidates.length ? `; ${candidates.length} validation candidate${candidates.length === 1 ? '' : 's'} tracked separately` : ''}`,
+      text: `${fixtures.length} reproduced source${fixtures.length === 1 ? '' : 's'}${candidates.length ? `; ${candidates.length} additional DOI source${candidates.length === 1 ? '' : 's'} kept in review` : ''}`,
     };
   }
   if (candidates.length) {
     return {
-      label: 'Validation candidate',
+      label: 'Needs first DOI match',
       tone: 'candidate',
-      text: `${candidates.length} published-example candidate${candidates.length === 1 ? '' : 's'} needs source extraction or reconciliation`,
+      text: `${candidates.length} DOI source${candidates.length === 1 ? '' : 's'} tracked; reproduction is not matched yet`,
     };
   }
   return {
-    label: mode === 'readiness' ? 'Internal coverage only' : 'Internal coverage',
+    label: 'Awaiting DOI example',
     tone: 'internal',
-    text: 'Needs published-example fixture before certification',
+    text: 'Needs a reproduced published example before certification',
   };
 }
 
@@ -565,6 +654,8 @@ export function externalValidationSummaryFor(methodIds: MethodId[]) {
 
 export function benchmarkEvidenceSummary(): string {
   const externalCount = validationEvidence.externalBenchmarks.count;
-  const externalLabel = externalCount === 1 ? 'fixture is' : 'fixtures are';
-  return `${validationEvidence.numericalBenchmarks.count} bundled numerical checks and ${externalCount} external published-example ${externalLabel} included; ${validationEvidence.externalBenchmarks.scope}`;
+  const externalLabel = externalCount === 1 ? 'published example is' : 'published examples are';
+  return `${validationEvidence.numericalBenchmarks.count} bundled numerical checks and ${externalCount} matched ${externalLabel} included; ${validationEvidence.externalBenchmarks.scope}`;
 }
+
+

@@ -1,21 +1,23 @@
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ArrowRight, Check, Download, FileSpreadsheet, FileText, HelpCircle, Plus, Search, Settings2, Trash2, Upload } from 'lucide-react';
+import { ArrowRight, Check, Download, FileSpreadsheet, FileText, HelpCircle, Plus, Save, Search, Trash2, Upload } from 'lucide-react';
 import { methodFamilies, methodFamilyById, methodPurpose, type MethodFamily } from './core/methodMetadata';
 import { getMethod, methodRegistry } from './core/methods';
 import { fuzzyCapability, groupDecisionCapability, validationBoundary } from './core/capabilityMatrix';
 import { methodCoverageItems } from './core/coverage';
-import { externalValidationCandidatesFor, externalValidationCoverageLabel, externalValidationFixturesFor, externalValidationStatusFor, externalValidationSummaryFor } from './core/validationEvidence';
+import { externalFixtureSampleFor } from './core/externalFixtureSamples';
+import { externalValidationCandidatesFor, externalValidationCoverageLabel, externalValidationFixturesFor, externalValidationStatusFor, externalValidationSummaryFor, validationEvidence } from './core/validationEvidence';
 import { weightingDisplayName } from './core/weightingMetadata';
 import { sampleConfig, sampleMatrix } from './data/sampleStudy';
 import { exportProject, importProject } from './services/project';
-import type { AnalysisResult, DecisionMatrix, MethodDefinition, MethodId, OutputTable, StudyConfig, ValidationResult, WeightingId } from './types';
+import type { AnalysisResult, DecisionMatrix, MethodDefinition, MethodId, OutputTable, StudyConfig, TemplateSheet, ValidationResult, WeightingId } from './types';
 import './styles.css';
 
-const steps = ['Select Method', 'Configure', 'Template', 'Upload', 'Results'];
+const steps = ['Choose', 'Setup', 'Template', 'Upload', 'Results'];
 
 type WizardStep = 1 | 2 | 3 | 4 | 5;
 const defaultFuzzyMode = 'Defuzzify on upload';
+const formatGuideNumber = (value: number) => Number(value.toFixed(4));
 
 function fuzzyModeOptions(methodId: MethodId) {
   const method = getMethod(methodId);
@@ -49,6 +51,84 @@ function sanitizeStudyConfig(config: StudyConfig): StudyConfig {
   };
 }
 
+function definedMethodParams(params: Record<string, string | number | boolean | undefined> = {}): StudyConfig['methodParams'] {
+  return Object.entries(params).reduce<StudyConfig['methodParams']>((clean, [key, value]) => {
+    if (value !== undefined) clean[key] = value;
+    return clean;
+  }, {});
+}
+
+function guideSampleForMethod(methodId: MethodId) {
+  const fixtureSample = externalFixtureSampleFor(methodId);
+  if (fixtureSample) {
+    const guideConfig = sanitizeStudyConfig({
+      ...sampleConfig,
+      ...fixtureSample.config,
+      title: fixtureSample.config.title ?? `${getMethod(methodId).name} published example`,
+      methodId,
+      methodParams: sanitizeMethodParams(methodId, {
+        ...sampleConfig.methodParams,
+        ...definedMethodParams(fixtureSample.config.methodParams),
+      }),
+      alternatives: fixtureSample.input.alternatives,
+      criteria: fixtureSample.input.criteria,
+    });
+    return {
+      config: guideConfig,
+      input: fixtureSample.input,
+      fixture: fixtureSample,
+    };
+  }
+  const guideMethod = getMethod(methodId);
+  const guideCriteria = sampleConfig.criteria;
+  const guideAlternatives = methodId === 'dematel'
+    ? guideCriteria.map((criterion) => ({ id: criterion.id, name: criterion.name }))
+    : sampleConfig.alternatives;
+  const guideConfig = sanitizeStudyConfig({
+    ...sampleConfig,
+    methodId,
+    weightingId: methodId === 'ahp' ? 'ahp' as const : guideMethod.supportsWeights ? sampleConfig.weightingId : 'manual' as const,
+    methodParams: sanitizeMethodParams(methodId, sampleConfig.methodParams),
+    alternatives: guideAlternatives,
+    criteria: guideCriteria,
+  });
+  const values = methodId === 'dematel'
+    ? guideCriteria.map((_, row) => guideCriteria.map((__, column) => row === column ? 0 : ((row + column) % 4) + 1))
+    : sampleMatrix.values.slice(0, guideAlternatives.length).map((row) => row.slice(0, guideCriteria.length));
+  return {
+    config: guideConfig,
+    input: {
+      alternatives: guideAlternatives,
+      criteria: guideCriteria,
+      values,
+    },
+  };
+}
+
+function sheetsWithGuideSampleData(sheets: TemplateSheet[], input: DecisionMatrix, methodId: MethodId): TemplateSheet[] {
+  return sheets.map((sheet) => {
+    if (sheet.name === 'Decision Matrix') {
+      return {
+        ...sheet,
+        rows: [
+          ['Alternative ID', ...input.criteria.map((criterion) => criterion.id)],
+          ...input.alternatives.map((alternative, rowIndex) => [alternative.id, ...(input.values[rowIndex] ?? [])]),
+        ],
+      };
+    }
+    if (methodId === 'dematel' && sheet.name === 'Direct Relation Matrix') {
+      return {
+        ...sheet,
+        rows: [
+          ['Factor', ...input.criteria.map((criterion) => criterion.id)],
+          ...input.criteria.map((criterion, rowIndex) => [criterion.id, ...(input.values[rowIndex] ?? [])]),
+        ],
+      };
+    }
+    return sheet;
+  });
+}
+
 function hasStandardDecisionMatrix(input: DecisionMatrix) {
   return input.alternatives.length > 1
     && input.criteria.length > 0
@@ -67,6 +147,34 @@ function methodComparisonBlockReason(methodId: MethodId, config: StudyConfig, in
 
 function comparableRankingMethods(config: StudyConfig, input: DecisionMatrix) {
   return methodRegistry.filter((method) => !methodComparisonBlockReason(method.id, config, input));
+}
+function dataInputModeLabel(option: string) {
+  if (option === 'Single expert matrix') return 'One expert matrix';
+  if (option === 'Multiple experts') return 'One matrix per expert';
+  if (option === 'Single aggregated dataset') return 'One decision table';
+  if (option === 'Multiple respondents') return 'One table per respondent';
+  return option;
+}
+
+function fuzzyModeLabel(option: string) {
+  if (option === 'Defuzzify on upload') return 'Convert fuzzy ranges to numbers';
+  return option;
+}
+
+function friendlyFieldLabel(label: string) {
+  return label;
+}
+
+function friendlyOptionLabel(option: string) {
+  return option;
+}
+
+function compactUiText(text: string, maxLength = 96) {
+  const clean = text.replace(/\s+/g, ' ').trim();
+  if (clean.length <= maxLength) return clean;
+  const sentence = clean.match(/^(.+?[.!?])\s/)?.[1];
+  if (sentence && sentence.length <= maxLength) return sentence;
+  return `${clean.slice(0, maxLength - 1).trim()}...`;
 }
 
 function isPreTemplateIssue(issue: ValidationResult['issues'][number]) {
@@ -109,6 +217,13 @@ function normalizeUniqueIds<T extends { id: string; name: string }>(
   });
 }
 
+function methodIdFromHash(hash = window.location.hash): MethodId | null {
+  const match = hash.match(/^#\/methods\/([^/?#]+)/);
+  if (!match) return null;
+  const decoded = decodeURIComponent(match[1]);
+  return methodRegistry.some((method) => method.id === decoded) ? decoded as MethodId : null;
+}
+
 function App() {
   const [config, setConfig] = useState<StudyConfig>(sampleConfig);
   const [input, setInput] = useState<DecisionMatrix>(sampleMatrix);
@@ -123,6 +238,7 @@ function App() {
   const [compareIds, setCompareIds] = useState<MethodId[]>(['topsis', 'vikor', 'saw', 'waspas']);
   const [qualitySummary, setQualitySummary] = useState({ passed: 0, total: 0 });
   const [helpOpen, setHelpOpen] = useState(false);
+  const [guideMethodId, setGuideMethodId] = useState<MethodId | null>(() => methodIdFromHash());
   const method = getMethod(config.methodId);
   const analysis = useMemo(() => method.runAnalysis(input, config), [method, input, config]);
   const filteredMethods = methodRegistry.filter((item) => {
@@ -144,6 +260,30 @@ function App() {
     };
   }, [qualitySummary.total, step]);
 
+  useEffect(() => {
+    const syncGuidePage = () => setGuideMethodId(methodIdFromHash());
+    window.addEventListener('hashchange', syncGuidePage);
+    window.addEventListener('popstate', syncGuidePage);
+    syncGuidePage();
+    return () => {
+      window.removeEventListener('hashchange', syncGuidePage);
+      window.removeEventListener('popstate', syncGuidePage);
+    };
+  }, []);
+
+  const openMethodGuide = (methodId: MethodId) => {
+    setHelpOpen(false);
+    setGuideMethodId(methodId);
+    window.history.pushState(null, '', `#/methods/${methodId}`);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const closeMethodGuide = () => {
+    setGuideMethodId(null);
+    if (window.location.hash.startsWith('#/methods/')) {
+      window.history.pushState(null, '', `${window.location.pathname}${window.location.search}`);
+    }
+  };
   const transitionTo = (nextStep: WizardStep, label: string) => {
     setLoadingLabel(label);
     window.setTimeout(() => {
@@ -180,7 +320,7 @@ function App() {
     setMaxStep(2);
     setUploadAttempted(false);
     setResultTab('Final Result');
-    transitionTo(2, 'Preparing method specification...');
+    transitionTo(2, 'Preparing this method...');
   };
 
   const handleStudyChange = (nextConfig: StudyConfig, nextInput: DecisionMatrix) => {
@@ -196,7 +336,7 @@ function App() {
     setUploadAttempted(true);
     setValidation(nextValidation);
     if (nextValidation.ok) {
-      transitionTo(5, 'Running analysis on configured data...');
+      transitionTo(5, 'Running your analysis...');
     } else {
       setStep(4);
       setMaxStep((current) => Math.max(current, 4) as WizardStep);
@@ -218,16 +358,28 @@ function App() {
   };
 
   const openTemplateStep = () => {
-    transitionTo(3, 'Generating model-specific template...');
+    transitionTo(3, 'Creating your Excel file...');
   };
 
   const downloadTemplateFile = async () => {
-    setLoadingLabel('Preparing Excel template...');
+    setLoadingLabel('Preparing Excel file...');
     try {
       const { downloadTemplate } = await import('./services/workbook');
       await downloadTemplate(method.getTemplateSchema(config), `${method.name}-MCDM-template.xlsx`);
     } catch (error) {
-      setValidation({ ok: false, issues: [{ severity: 'error', sheet: 'Template', location: method.name, message: error instanceof Error ? error.message : 'Unable to generate the template.' }] });
+      setValidation({ ok: false, issues: [{ severity: 'error', sheet: 'Template', location: method.name, message: error instanceof Error ? error.message : 'Unable to create the Excel file.' }] });
+    } finally {
+      setLoadingLabel('');
+    }
+  };
+
+  const downloadMethodSampleFile = async (methodId: MethodId) => {
+    const guideMethod = getMethod(methodId);
+    const { config: guideConfig, input: guideInput } = guideSampleForMethod(methodId);
+    setLoadingLabel(`Preparing ${guideMethod.name} sample file...`);
+    try {
+      const { downloadSampleWorkbook } = await import('./services/workbook');
+      await downloadSampleWorkbook(guideMethod.getTemplateSchema(guideConfig), `${guideMethod.name}-sample-data.xlsx`, guideInput, guideConfig);
     } finally {
       setLoadingLabel('');
     }
@@ -344,13 +496,12 @@ function App() {
       <header className="studioHeader">
         <div className="studioBrand">
           <div className="studioMark"><FileSpreadsheet size={20} /></div>
-          <strong>MCDM Studio</strong>
+          <div className="brandText"><strong>MCDM Studio</strong><span>Decision analysis workspace</span></div>
         </div>
-        <div className="localStatus"><span />Local browser analysis</div>
         <div className="headerActions">
-          <button className="ghostButton" onClick={() => setHelpOpen((current) => !current)}><HelpCircle size={16} />Help</button>
-          <button className="ghostButton" onClick={saveProject}><Download size={16} />Save project</button>
-          <label className="ghostButton fileButton"><Upload size={16} />Import<input type="file" accept=".json" onChange={(event) => {
+          <button className="ghostButton" onClick={() => setHelpOpen((current) => !current)} title="Open workflow help"><HelpCircle size={16} />Help</button>
+          <button className="ghostButton" onClick={saveProject} title="Save this study as a project file"><Save size={16} />Save project</button>
+          <label className="ghostButton fileButton" title="Open a saved MCDM Studio project"><Upload size={16} />Open project<input type="file" accept=".json" onChange={(event) => {
             const file = event.target.files?.[0];
             event.currentTarget.value = '';
             if (file) void handleImportProject(file);
@@ -362,48 +513,57 @@ function App() {
         {helpOpen ? (
           <HelpPage onClose={() => setHelpOpen(false)} onStart={() => {
             setHelpOpen(false);
+            setGuideMethodId(null);
             setStep(1);
           }} />
+        ) : guideMethodId ? (
+          <MethodGuidePage methodId={guideMethodId} onBack={closeMethodGuide} onUse={(methodId) => { closeMethodGuide(); selectMethod(methodId); }} onDownloadSample={downloadMethodSampleFile} />
         ) : (
-          <>
+          <div className="appWorkspace">
             <Stepper activeStep={step} maxStep={maxStep} onStep={handleStepNavigation} />
-            {step === 1 ? <MethodStep query={query} family={methodFamily} onQuery={setQuery} onFamily={setMethodFamily} methods={filteredMethods} onSelect={selectMethod} /> : null}
-            {step === 2 ? <ConfigureStep config={config} input={input} method={method} onChange={handleStudyChange} onNext={openTemplateStep} /> : null}
-            {step === 3 ? <TemplateStep config={config} methodName={method.name} onDownload={downloadTemplateFile} onBack={() => setStep(2)} onNext={() => transitionTo(4, 'Preparing upload workspace...')} /> : null}
-            {step === 4 ? <UploadStep config={config} methodName={method.name} validation={validation} uploadAttempted={uploadAttempted} onUpload={handleUpload} onBack={() => setStep(3)} onSample={runConfiguredAnalysis} /> : null}
-            {step === 5 ? <ResultsStep config={config} analysis={analysis} checksPassed={qualitySummary.passed} checksTotal={qualitySummary.total} activeTab={resultTab} compareIds={compareIds} onTab={setResultTab} onCompareIds={setCompareIds} onEdit={() => setStep(2)} onUpload={() => setStep(4)} onJson={saveProject} onExcel={exportExcel} onDocx={exportDoc} onPdf={exportPdfReport} onExport={exportAll} /> : null}
-          </>
+            <div className="workflowCanvas">
+              {step === 1 ? <MethodStep query={query} family={methodFamily} onQuery={setQuery} onFamily={setMethodFamily} methods={filteredMethods} onSelect={selectMethod} onGuide={openMethodGuide} /> : null}
+              {step === 2 ? <ConfigureStep config={config} input={input} method={method} onChange={handleStudyChange} onNext={openTemplateStep} /> : null}
+              {step === 3 ? <TemplateStep config={config} methodName={method.name} onDownload={downloadTemplateFile} onBack={() => setStep(2)} onNext={() => transitionTo(4, 'Opening upload step...')} /> : null}
+              {step === 4 ? <UploadStep config={config} methodName={method.name} validation={validation} uploadAttempted={uploadAttempted} onUpload={handleUpload} onBack={() => setStep(3)} onSample={runConfiguredAnalysis} /> : null}
+              {step === 5 ? <ResultsStep config={config} analysis={analysis} checksPassed={qualitySummary.passed} checksTotal={qualitySummary.total} activeTab={resultTab} compareIds={compareIds} onTab={setResultTab} onCompareIds={setCompareIds} onEdit={() => setStep(2)} onUpload={() => setStep(4)} onJson={saveProject} onExcel={exportExcel} onDocx={exportDoc} onPdf={exportPdfReport} onExport={exportAll} /> : null}
+            </div>
+          </div>
         )}
       </main>
+      <footer className="studioFooter">
+        <span>© 2026 MCDM Studio. All rights reserved.</span>
+        <span>Citation: Naved, M. (2026). <em>MCDM Studio: Multi-Criteria Decision-Making Analysis Tool</em> (Version 1.0) [Computer software]. MCDM Studio.</span>
+      </footer>
     </div>
   );
 }
 
 function HelpPage({ onClose, onStart }: { onClose: () => void; onStart: () => void }) {
   const workflow = [
-    ['Select Method', 'Choose one MCDM model using search, method family, or validation evidence filters.'],
-    ['Configure', 'Set alternatives, criteria or factors, benefit/cost directions, weights, fuzzy mode, respondent mode, and method-specific parameters.'],
-    ['Template', 'Download the generated Excel template. The sheets and sample rows change according to the selected method and specifications.'],
-    ['Upload', 'Fill the workbook, upload it back, and review validation messages before running the analysis.'],
-    ['Results', 'Review intermediate tables, diagnostics, rankings or cause-effect results, visualizations, and export options.'],
+    ['Choose', 'Pick the method.'],
+    ['Setup', 'Set criteria and weights.'],
+    ['Template', 'Get the Excel file.'],
+    ['Upload', 'Upload completed data.'],
+    ['Results', 'Export results.'],
   ];
   return (
     <section className="helpPage">
       <div className="helpHero">
         <div>
-          <span className="eyebrow">User guide</span>
-          <h1>How to use MCDM Studio</h1>
-          <p>Use this guide when setting up a study, preparing Excel data, working with fuzzy or respondent data, and exporting publication material.</p>
+
+          <h1>Use MCDM Studio</h1>
+          <p>Pick a method, prepare the file, upload, export.</p>
         </div>
         <div className="helpActions">
           <button className="secondaryAction" onClick={onClose}>Back to app</button>
-          <button className="primaryAction" onClick={onStart}>Start from method selection <ArrowRight size={16} /></button>
+          <button className="primaryAction" onClick={onStart}>Start <ArrowRight size={16} /></button>
         </div>
       </div>
 
       <div className="helpGrid">
         <article className="helpCard wide">
-          <h2>Standard Workflow</h2>
+          <h2>Main flow</h2>
           <div className="helpTimeline">
             {workflow.map(([title, text], index) => (
               <div key={title}>
@@ -416,64 +576,286 @@ function HelpPage({ onClose, onStart }: { onClose: () => void; onStart: () => vo
         </article>
 
         <article className="helpCard">
-          <h2>Data Setup</h2>
+          <h2>Data</h2>
           <ul>
-            <li>Use one row per alternative and one column per criterion for ranking methods.</li>
-            <li>For DEMATEL, use factors and direct-relation matrices instead of alternatives.</li>
-            <li>Mark every criterion as benefit or cost before generating the template.</li>
-            <li>Manual weights are editable; automatic/equal weights are calculated by the app.</li>
+            <li>Rows are alternatives; columns are criteria.</li>
+            <li>DEMATEL uses factor influence values.</li>
+            <li>Benefit means higher is better; Cost means lower is better.</li>
+            <li>Automatic weights hide manual weight cells.</li>
           </ul>
         </article>
 
         <article className="helpCard">
-          <h2>Excel Templates</h2>
+          <h2>Excel</h2>
           <ul>
-            <li>Download a fresh template after changing method, criteria, factors, fuzzy mode, or respondent count.</li>
-            <li>Keep sheet names and header names unchanged.</li>
-            <li>Use the sample rows on the Template screen as the expected data shape.</li>
-            <li>Validation messages identify the sheet and location that need correction.</li>
+            <li>After setup changes, download a fresh file.</li>
+            <li>Keep sheet and header names unchanged.</li>
+            <li>Template preview shows where data goes.</li>
+            <li>Upload messages point to the sheet and cell area.</li>
           </ul>
         </article>
 
         <article className="helpCard">
-          <h2>Fuzzy Data</h2>
+          <h2>Fuzzy</h2>
           <ul>
-            <li>Triangular values use `(l,m,u)`, for example `(2,3,5)`.</li>
-            <li>Trapezoidal values use `(a,b,c,d)`, for example `(1,2,4,6)`.</li>
-            <li>All 65 methods support native triangular/trapezoidal fuzzy workflows.</li>
-            <li>Advanced fuzzy families are future variants, not hidden aliases.</li>
+            <li>Triangular fuzzy values use `(l,m,u)`, for example `(2,3,5)`.</li>
+            <li>Trapezoidal fuzzy values use `(a,b,c,d)`, for example `(1,2,4,6)`.</li>
+            <li>Use fuzzy values for ranges.</li>
+            <li>Each method shows fuzzy handling.</li>
           </ul>
         </article>
 
         <article className="helpCard">
-          <h2>Respondents And Experts</h2>
+          <h2>Groups</h2>
           <ul>
-            <li>Ordinary ranking methods can aggregate multiple respondent decision matrices.</li>
-            <li>AHP pairwise respondent judgments aggregate by geometric mean.</li>
-            <li>DEMATEL supports multiple expert direct-relation matrices.</li>
-            <li>Reports include disagreement and consensus diagnostics where group data is used.</li>
+            <li>Multiple respondents can score the same options.</li>
+            <li>AHP combines pairwise judgments.</li>
+            <li>DEMATEL can use multiple experts.</li>
+            <li>Group sheets are combined before analysis.</li>
           </ul>
         </article>
 
         <article className="helpCard">
-          <h2>Results And Exports</h2>
+          <h2>Results</h2>
           <ul>
-            <li>Use result tabs to inspect inputs, transformed matrices, diagnostics, final results, sensitivity, and visualizations.</li>
-            <li>Export Excel for all calculation tables and validation evidence.</li>
-            <li>Export DOCX or PDF for a report-style research appendix.</li>
-            <li>Save Project JSON when you want to resume or share the local study state.</li>
+            <li>Start with Final Result.</li>
+            <li>Excel exports calculation tables.</li>
+            <li>DOCX/PDF exports a report appendix.</li>
+            <li>Save a project file when you need to pause.</li>
           </ul>
         </article>
 
         <article className="helpCard">
-          <h2>Common Fixes</h2>
+          <h2>Fixes</h2>
           <ul>
-            <li>If upload fails, check that you used the template for the selected method.</li>
-            <li>If weights are not editable, the selected weighting mode is automatic or self-weighted.</li>
-            <li>If results are blocked, correct validation errors before continuing.</li>
-            <li>If study shape changes, re-download the template so workbook dimensions match.</li>
+            <li>Use the Excel file for the selected method.</li>
+            <li>Locked weights are calculated automatically.</li>
+            <li>Fix upload messages before results.</li>
+            <li>After structure changes, download a fresh file.</li>
           </ul>
         </article>
+      </div>
+    </section>
+  );
+}
+
+function methodFormulaFor(method: MethodDefinition) {
+  const notes: Partial<Record<MethodId, { transform: string; score: string; rule: string }>> = {
+    topsis: { transform: 'r_ij = x_ij / sqrt(sum_i x_ij^2); v_ij = w_j r_ij', score: 'C_i = d_i^- / (d_i^+ + d_i^-)', rule: 'Higher closeness coefficient C_i receives the better rank.' },
+    ahp: { transform: 'a_jk = pairwise importance of C_j over C_k', score: 'w_j = GM_j / sum_j GM_j; CR = CI / RI', rule: 'Priorities are accepted when the consistency ratio is inside the selected threshold.' },
+    dematel: { transform: 'X = Z / max_i sum_j z_ij; T = X(I - X)^-1', score: 'D_i = sum_j t_ij; R_i = sum_j t_ji', rule: 'D+R gives prominence; D-R separates cause factors from effect factors.' },
+    vikor: { transform: 'S_i = sum_j w_j (f_j* - x_ij)/(f_j* - f_j-); R_i = max_j[...]', score: 'Q_i = v(S_i-S*)/(S--S*) + (1-v)(R_i-R*)/(R--R*)', rule: 'Lower Q_i is preferred, with acceptable advantage and stability checks.' },
+    copras: { transform: 'q_ij = x_ij / sum_i x_ij; d_ij = w_j q_ij', score: 'Q_i = S_i+ + min(S-) sum(S-) / (S_i- sum(min(S-)/S_i-))', rule: 'Higher relative significance and utility percent receive the better rank.' },
+    saw: { transform: 'r_ij = benefit x_ij/max(x_j), cost min(x_j)/x_ij', score: 'S_i = sum_j w_j r_ij', rule: 'Higher additive utility S_i receives the better rank.' },
+    srp: { transform: 'p_ij = rank of A_i on C_j after direction handling', score: 'S_i = sum_j w_j p_ij', rule: 'Lower weighted rank score is preferred.' },
+    fuca: { transform: 'p_ij = criterion-wise ordinal position of A_i', score: 'S_i = sum_j w_j p_ij', rule: 'Lower FUCA score indicates stronger overall priority.' },
+    seca: { transform: 'sigma_j and pi_j estimate dispersion and correlation reference weights', score: 'min lambda_b + lambda_c subject to sum_j w_j = 1 and w_j >= epsilon', rule: 'Derived objective weights are applied to the normalized decision matrix.' },
+    dear: { transform: 'Normalize each response according to benefit/cost direction', score: 'MRPI_i = sum_j w_j r_ij', rule: 'Higher multi-response performance index is preferred.' },
+    eamr: { transform: 'Separate benefit and cost-control normalized terms', score: 'E_i = benefit_i - beta * cost_i / lambda', rule: 'Higher appraisal score receives the better rank.' },
+    rawec: { transform: 'Measure alternative deviation from the criterion-wise reference pattern', score: 'Q_i = v_i - v_i_prime after weighted correction', rule: 'Higher RAWEC index is preferred.' },
+    comet: { transform: 'Characteristic values define characteristic objects in the criteria space', score: 'P(A_i) is interpolated from the preference function over characteristic objects', rule: 'Higher COMET preference value receives the better rank.' },
+    wpm: { transform: 'r_ij = direction-adjusted comparable ratio', score: 'P_i = product_j r_ij ^ w_j', rule: 'Higher multiplicative utility P_i receives the better rank.' },
+    waspas: { transform: 'Compute WSM_i and WPM_i from the same normalized matrix', score: 'Q_i = lambda WSM_i + (1-lambda) WPM_i', rule: 'Higher blended WASPAS utility receives the better rank.' },
+    moora: { transform: 'r_ij = x_ij / sqrt(sum_i x_ij^2)', score: 'Y_i = sum benefit w_j r_ij - sum cost w_j r_ij', rule: 'Higher MOORA net assessment receives the better rank.' },
+    moosra: { transform: 'r_ij = x_ij / sqrt(sum_i x_ij^2)', score: 'U_i = sum benefit w_j r_ij / sum cost w_j r_ij', rule: 'Higher MOOSRA ratio receives the better rank.' },
+    arlon: { transform: 'Separate weighted benefit and cost components after normalization', score: 'R_i = G_i adjusted by kappa benefit/cost balance', rule: 'Higher ARLON final value is preferred.' },
+    macont: { transform: 'Create the virtual reference alternative from criterion averages', score: 'S_i combines rho, Q, S1, and S2 mixed aggregation terms', rule: 'Higher MACONT final aggregation score receives the better rank.' },
+    aras: { transform: 'Add the optimal row, normalize, then weight each criterion', score: 'K_i = S_i / S_0', rule: 'Higher utility degree K_i receives the better rank.' },
+    edas: { transform: 'AV_j = mean_i x_ij; PDA/NDA measure distance from average solution', score: 'AS_i = 0.5(NSP_i + NSN_i)', rule: 'Higher EDAS appraisal score receives the better rank.' },
+    mabac: { transform: 'v_ij = w_j(r_ij + 1); G_j = product_i v_ij^(1/m)', score: 'S_i = sum_j (v_ij - G_j)', rule: 'Higher distance from the border approximation area is preferred.' },
+    codas: { transform: 'Normalize and weight, then find distance from the negative ideal', score: 'H_ik = (E_i-E_k) + psi(E_i-E_k)(T_i-T_k)', rule: 'Higher CODAS assessment score receives the better rank.' },
+    cocoso: { transform: 'Compute weighted sum S_i and weighted product P_i', score: 'K_i combines arithmetic, relative, and compromise appraisal terms', rule: 'Higher CoCoSo compromise score receives the better rank.' },
+    cradis: { transform: 'Normalize, weight, and compare to ideal and anti-ideal reference solutions', score: 'Q_i is derived from S0+ and S0- appraisal measures', rule: 'Higher CRADIS appraisal receives the better rank under the selected convention.' },
+    mara: { transform: 'Construct the optimal alternative and map benefit/cost intensities', score: 'gap_i = area(optimal) - area(A_i)', rule: 'Lower MARA area gap is preferred.' },
+    raps: { transform: 'Build optimal benefit and cost components for the perimeter model', score: 'PS_i = perimeter(A_i) / perimeter(optimal)', rule: 'Higher perimeter similarity is preferred.' },
+    oreste: { transform: 'Convert criterion importance and alternative performance into ordinal ranks', score: 'B_i = mean_j global_rank_ij', rule: 'Lower ORESTE projection rank receives the better final rank.' },
+    qualiflex: { transform: 'Enumerate feasible permutations of alternatives', score: 'I(P) = sum weighted concordance-discordance over all ordered pairs', rule: 'The permutation with maximum comprehensive index determines the final order.' },
+    regime: { transform: 'Compare alternatives pairwise on each criterion using direction-aware signs', score: 'phi_i = outgoing dominance - incoming dominance', rule: 'Higher net regime flow receives the better rank.' },
+    evamix: { transform: 'Separate ordinal dominance and cardinal dominance matrices', score: 'E_i = standardized ordinal dominance + standardized cardinal dominance', rule: 'Higher EVAMIX appraisal score receives the better rank.' },
+    lexicographic: { transform: 'Sort criteria by priority before comparing alternatives', score: 'A_i beats A_k at the first criterion where their values differ', rule: 'The earliest decisive criterion determines each pairwise order.' },
+    marcos: { transform: 'Append ideal and anti-ideal rows, then normalize and weight', score: 'f(K_i-, K_i+) combines utility relative to both reference rows', rule: 'Higher MARCOS utility receives the better rank.' },
+    mairca: { transform: 'T_pij is theoretical preference; T_rij is real preference', score: 'Q_i = sum_j |T_pij - T_rij|', rule: 'Lower total gap from theoretical preference is preferred.' },
+    promethee: { transform: 'Apply preference functions P_j(A_i,A_k) to every pair', score: 'phi_i = phi_i+ - phi_i-', rule: 'Higher PROMETHEE net flow receives the better rank.' },
+    electre: { transform: 'Build concordance and discordance matrices for pairwise outranking', score: 'outranking_i = concordance dominance filtered by discordance veto', rule: 'Alternatives with stronger outranking credibility are preferred.' },
+    smart: { transform: 'Map each criterion to a single-attribute utility scale', score: 'U_i = sum_j w_j u_j(x_ij)', rule: 'Higher SMART utility receives the better rank.' },
+    maut: { transform: 'Define utility functions u_j(x_ij) for each criterion', score: 'U_i = sum_j w_j u_j(x_ij)', rule: 'Higher multi-attribute utility receives the better rank.' },
+    smarter: { transform: 'Convert criterion ranks into ROC or selected rank-based weights', score: 'U_i = sum_j w_j u_j(x_ij)', rule: 'Higher SMARTER utility receives the better rank.' },
+    macbeth: { transform: 'Convert qualitative attractiveness judgments into a numerical value scale', score: 'V_i = sum_j w_j v_j(x_ij)', rule: 'Higher MACBETH value receives the better rank.' },
+    pugh: { transform: 'Compare each concept with the baseline using plus, same, and minus scores', score: 'S_i = sum_j w_j p_ij after optional score transform', rule: 'Higher Pugh weighted score receives the better rank.' },
+    ocra: { transform: 'Calculate separate input and output preference ratings', score: 'O_i = benefit_competitiveness_i - cost_competitiveness_i', rule: 'Higher OCRA competitiveness rating receives the better rank.' },
+    multimoora: { transform: 'Compute ratio system, reference point, and full multiplicative form', score: 'rank_i combines the three MULTIMOORA subordinate rankings', rule: 'Dominance theory or rank-sum aggregation sets the final order.' },
+    psi: { transform: 'Normalize data and estimate criterion variation without subjective weights', score: 'PSI_i = sum_j omega_j r_ij', rule: 'Higher preference selection index receives the better rank.' },
+    piv: { transform: 'Normalize and weight values, then locate the best weighted value per criterion', score: 'P_i = sum_j |best_j - v_ij|', rule: 'Lower proximity indexed value is preferred.' },
+    rov: { transform: 'Normalize each criterion into best and worst utility views', score: 'U_i = (U_i+ + U_i-) / 2', rule: 'Higher range-of-value utility receives the better rank.' },
+    wisp: { transform: 'Compute integrated weighted sum and weighted product terms', score: 'Q_i combines sum/product difference and ratio utility components', rule: 'Higher WISP integrated utility receives the better rank.' },
+    todim: { transform: 'Measure pairwise gains and losses against each criterion with loss attenuation theta', score: 'delta_i = normalized sum_k dominance(A_i,A_k)', rule: 'Higher TODIM dominance score receives the better rank.' },
+    ram: { transform: 'Normalize benefit and cost criteria using root assessment terms', score: 'R_i = benefit_root_i - cost_root_i', rule: 'Higher RAM assessment receives the better rank.' },
+    gra: { transform: 'Normalize sequences and calculate grey relational coefficients', score: 'gamma_i = sum_j w_j xi_ij', rule: 'Higher grey relational grade receives the better rank.' },
+    grp: { transform: 'Calculate positive and negative grey relational coefficients', score: 'C_i = projection_i+ / (projection_i+ + projection_i-)', rule: 'Higher grey relational projection closeness receives the better rank.' },
+    spotis: { transform: 'Set criterion bounds and the ideal solution point', score: 'D_i = sum_j w_j |x_ij - s_j*| / |upper_j - lower_j|', rule: 'Lower SPOTIS distance receives the better rank.' },
+    espSpotis: { transform: 'Set criterion bounds and the expected solution point', score: 'D_i = sum_j w_j |x_ij - e_j| / |upper_j - lower_j|', rule: 'Lower expected-solution distance receives the better rank.' },
+    balancedSpotis: { transform: 'Calculate both ideal-solution and expected-solution distances', score: 'BD_i = alpha D_i(ESP) + (1-alpha) D_i(ISP)', rule: 'Lower balanced SPOTIS distance receives the better rank.' },
+    wedba: { transform: 'Normalize, standardize, and identify ideal and anti-ideal points', score: 'D_i = weighted Euclidean distance balance from reference points', rule: 'Lower distance index receives the better rank.' },
+    lmaw: { transform: 'Apply logarithmic additive scaling to normalized values', score: 'Q_i = product or sum of weighted logarithmic utility terms', rule: 'Higher LMAW utility receives the better rank.' },
+    dnma: { transform: 'Build linear and vector normalized matrices against target values', score: 'DNMA_i = phi utility_i + (1-phi) rank_i using CCM/UCM/ICM weights', rule: 'Higher integrated DNMA score receives the better rank.' },
+    probid: { transform: 'Build weighted normalized matrix and ideal-average reference solutions', score: 'P_i = distance closeness across ideal, average, and worst references', rule: 'Higher PROBID preference receives the better rank.' },
+    sprobid: { transform: 'Use simplified first/last-quarter ideal reference distances', score: 'P_i = grouped ideal-distance preference score', rule: 'Higher SPROBID preference receives the better rank.' },
+    rim: { transform: 'Define domain bounds and ideal reference intervals', score: 'C_i = sum_j w_j closeness(x_ij, ideal_interval_j)', rule: 'Higher interval closeness receives the better rank.' },
+    rafsi: { transform: 'Map criterion values into a common functional interval', score: 'Q_i = sum_j w_j n_ij after functional mapping', rule: 'Higher RAFSI utility receives the better rank.' },
+    lopm: { transform: 'Check each value against lower, upper, or target property limits', score: 'M_i = sum_j w_j merit_ij', rule: 'Higher weighted merit receives the better rank.' },
+    aroman: { transform: 'Blend linear and vector normalized matrices with beta', score: 'A_i = lambda benefit_i - (1-lambda) cost_i', rule: 'Higher AROMAN aggregate receives the better rank.' },
+    cobra: { transform: 'Normalize, weight, and calculate ideal, anti-ideal, and average references', score: 'C_i combines Euclidean and taxicab distance components', rule: 'Higher COBRA comprehensive score receives the better rank.' },
+    ervd: { transform: 'Compare each value to an observed or manual reference point', score: 'V_i = sum_j w_j relative_gain_loss_ij(lambda, alpha)', rule: 'Higher ERVD relative value receives the better rank.' },
+  };
+  return notes[method.id] ?? {
+    transform: method.outputs.slice(0, 2).join(' -> '),
+    score: method.outputs.slice(-2).join(' -> '),
+    rule: 'The final ranking follows the scoring direction reported in the method output tables.',
+  };
+}
+
+function methodMathSections(method: MethodDefinition, guideInput: DecisionMatrix, guideAnalysis: AnalysisResult | null) {
+  const matrixText = method.id === 'dematel' ? 'direct-relation matrix' : 'decision matrix';
+  const formula = methodFormulaFor(method);
+  const firstAlternative = guideInput.alternatives[0];
+  const firstRow = guideInput.values[0]?.slice(0, Math.min(3, guideInput.criteria.length)).join(', ') ?? '';
+  const weights = guideInput.criteria.map((criterion) => criterion.weight).slice(0, Math.min(3, guideInput.criteria.length)).join(', ');
+  const directions = guideInput.criteria.map((criterion) => `${criterion.id} ${criterion.direction}`).slice(0, Math.min(3, guideInput.criteria.length)).join('; ');
+  const firstCriterion = guideInput.criteria[0];
+  const firstValue = guideInput.values[0]?.[0] ?? 0;
+  const firstWeight = firstCriterion?.weight ?? 0;
+  const topResult = guideAnalysis?.ranking[0];
+  const tableTitles = guideAnalysis?.tables.slice(0, 4).map((table) => table.title).join(' -> ') || method.outputs.join(' -> ');
+  return [
+    {
+      title: '1. Define the reproducible study data',
+      equation: method.id === 'dematel' ? 'Z = [z_ij], z_ii = 0' : 'X = [x_ij], w = [w_j], direction_j in {benefit,cost}',
+      text: `${firstAlternative?.id ?? 'A1'} row [${firstRow}]; w [${weights}]; ${directions}.`,
+    },
+    {
+      title: '2. Prepare the method values',
+      equation: formula.transform,
+      text: `${firstCriterion?.id ?? 'C1'}: x=${formatGuideNumber(firstValue)}, w=${formatGuideNumber(firstWeight)}; repeat across X before scoring.`,
+    },
+    {
+      title: '3. Compute the score used for ranking',
+      equation: formula.score,
+      text: `${formula.rule}${topResult ? ` In this sample, ${topResult.alternative} ranks first with ${formatGuideNumber(topResult.score)}.` : ''}`,
+    },
+    {
+      title: '4. Audit the calculation tables',
+      equation: tableTitles,
+      text: 'Intermediate tables stay visible for paper matching and reruns.',
+    },
+  ];
+}
+function MethodGuidePage({ methodId, onBack, onUse, onDownloadSample }: { methodId: MethodId; onBack: () => void; onUse: (id: MethodId) => void; onDownloadSample: (id: MethodId) => void | Promise<void> }) {
+  const method = getMethod(methodId);
+  const fixtures = externalValidationFixturesFor(method.id);
+  const candidates = externalValidationCandidatesFor(method.id);
+  const status = externalValidationStatusFor(method.id, 'readiness');
+  const { config: guideConfig, input: guideInput, fixture: guideFixture } = guideSampleForMethod(method.id);
+  let guideAnalysis: AnalysisResult | null = null;
+  try {
+    guideAnalysis = method.runAnalysis(guideInput, guideConfig);
+  } catch {
+    guideAnalysis = null;
+  }
+  const previewTable = guideAnalysis?.tables.find((table) => table.id === 'ranking' || table.id === 'cause-effect') ?? guideAnalysis?.tables[0];
+  const sampleRows = guideInput.alternatives.slice(0, 3).map((alternative, index) => ({
+    option: alternative.name,
+    values: guideInput.values[index]?.slice(0, 4) ?? [],
+  }));
+  const sampleCriteria = guideInput.criteria.slice(0, 4);
+  return (
+    <section className="methodGuidePage">
+      <div className="guideHero">
+        <button className="textAction" onClick={onBack}>Back to methods</button>
+        <div>
+          <h1>{method.name}</h1>
+          <p><strong>{method.fullName}</strong></p>
+        </div>
+        <div className="guideActions">
+          <button className="secondaryAction" onClick={() => void onDownloadSample(method.id)}><Download size={16} />Download sample</button>
+          <button className="primaryAction" onClick={() => onUse(method.id)}>Use {method.name}<ArrowRight size={16} /></button>
+        </div>
+      </div>
+      <div className="guideBrief" aria-label="Method brief">
+        <div><span>Best for</span><strong>{compactUiText(methodPurpose[method.id], 82)}</strong></div>
+        <div><span>Evidence</span><strong>{fixtures.length ? `${fixtures.length} matched DOI source${fixtures.length === 1 ? '' : 's'}` : candidates.length ? 'First DOI match in review' : 'Awaiting DOI example'}</strong></div>
+        <div><span>Sample</span><strong>{guideFixture?.doi ? `DOI ${guideFixture.doi}` : guideFixture ? 'Published fixture' : 'Built-in demo data'}</strong></div>
+      </div>
+      <div className="guideReproLine" aria-label="Reproducibility path">
+        <span>Download sample</span>
+        <i />
+        <span>Upload in app</span>
+        <i />
+        <span>Match paper result</span>
+      </div>
+      <div className="guideGrid">
+        <section className="guideSection guideEvidence">
+          <h2>Paper trail</h2>
+          <div className={`validationBadge ${status.tone}`}>
+            <strong>{status.label}</strong>
+            <span>{status.text}</span>
+          </div>
+          {fixtures.length ? fixtures.map((fixture) => (
+            <a key={fixture.variant} href={fixture.sourceUrl} target="_blank" rel="noreferrer">
+              <strong>DOI {fixture.doi}</strong>
+              <span>{fixture.source}</span>
+            </a>
+          )) : candidates.length ? candidates.map((candidate) => (
+            <a key={candidate.variant} href={candidate.sourceUrl} target="_blank" rel="noreferrer">
+              <strong>Review DOI {candidate.doi}</strong>
+              <span>{candidate.source}</span>
+            </a>
+          )) : <p>No published example is matched for this method yet.</p>}
+        </section>
+        <section className="guideSection">
+          <h2>Purpose</h2>
+          <p>{compactUiText(method.description, 140)}</p>
+          <dl className="guideFacts">
+            <div><dt>Family</dt><dd>{methodFamilies[methodFamilyById[method.id]]}</dd></div>
+            <div><dt>Weights</dt><dd>{method.supportsWeights ? 'Used when the method requires criterion importance' : 'Not required for this method'}</dd></div>
+            <div><dt>Fuzzy values</dt><dd>{method.fuzzySupport.nativeModeLabel ? method.fuzzySupport.nativeModeLabel : 'Converted to crisp values before calculation'}</dd></div>
+          </dl>
+        </section>
+        <section className="guideSection guideMath">
+          <h2>Calculation</h2>
+          {methodMathSections(method, guideInput, guideAnalysis).map((section) => (
+            <article key={section.title}>
+              <h3>{section.title}</h3>
+              <code>{section.equation}</code>
+              <p>{section.text}</p>
+            </article>
+          ))}
+        </section>
+        <section className="guideSection guideRunPreview">
+          <h2>Expected result</h2>
+          {guideAnalysis && previewTable ? (
+            <>
+              <p>{guideFixture ? <>DOI <strong>{guideFixture.doi}</strong>. Top result: <strong>{guideAnalysis.ranking[0]?.alternative ?? 'N/A'}</strong>, score <strong>{guideAnalysis.ranking[0]?.score.toFixed(4) ?? 'N/A'}</strong>.</> : <>Demo sample. Top result: <strong>{guideAnalysis.ranking[0]?.alternative ?? 'N/A'}</strong>, score <strong>{guideAnalysis.ranking[0]?.score.toFixed(4) ?? 'N/A'}</strong>.</>}</p>
+              <div className="guideResultList">
+                {guideAnalysis.ranking.slice(0, 5).map((row) => <span key={row.alternativeId}>{row.rank}. {row.alternative} ({row.score.toFixed(4)})</span>)}
+              </div>
+              <p className="guideTableNote">First table: {previewTable.title}.</p>
+            </>
+          ) : <p>This method needs a special input shape for preview.</p>}
+        </section>
+        <section className="guideSection sampleDataSection">
+          <h2>Data preview</h2>
+          <p>{guideFixture ? 'Matched DOI data.' : 'Demo data.'}</p>
+          <div className="sampleDataGrid" style={{ gridTemplateColumns: `minmax(120px, 1.2fr) repeat(${sampleCriteria.length}, minmax(58px, .7fr))` }}>
+            <strong>Option</strong>
+            {sampleCriteria.map((criterion) => <strong key={criterion.id}>{criterion.id}</strong>)}
+            {sampleRows.map((row) => (
+              <Fragment key={row.option}>
+                <span>{row.option}</span>
+                {row.values.map((value, index) => <span key={`${row.option}-${sampleCriteria[index]?.id ?? index}`}>{value}</span>)}
+              </Fragment>
+            ))}
+          </div>
+        </section>
       </div>
     </section>
   );
@@ -496,7 +878,7 @@ function Stepper({ activeStep, maxStep, onStep }: { activeStep: WizardStep; maxS
   );
 }
 
-function MethodStep({ query, family, onQuery, onFamily, methods, onSelect }: { query: string; family: MethodFamily; onQuery: (value: string) => void; onFamily: (value: MethodFamily) => void; methods: typeof methodRegistry; onSelect: (id: MethodId) => void }) {
+function MethodStep({ query, family, onQuery, onFamily, methods, onSelect, onGuide }: { query: string; family: MethodFamily; onQuery: (value: string) => void; onFamily: (value: MethodFamily) => void; methods: typeof methodRegistry; onSelect: (id: MethodId) => void; onGuide: (id: MethodId) => void }) {
   const [selectedId, setSelectedId] = useState<MethodId>(methods[0]?.id ?? 'topsis');
   const [evidenceFilter, setEvidenceFilter] = useState<'all' | 'validated' | 'candidate' | 'internal'>('all');
   const familyCounts = methodRegistry.reduce<Record<MethodFamily, number>>((acc, method) => {
@@ -509,96 +891,150 @@ function MethodStep({ query, family, onQuery, onFamily, methods, onSelect }: { q
       setSelectedId(methods[0].id);
     }
   }, [methods, selectedId]);
-  const inputSummary = (method: MethodDefinition) =>
-    method.id === 'dematel' ? 'Factor influence matrix' : 'Decision matrix';
-  const capabilityBadges = (method: MethodDefinition) => [
-    method.id === 'dematel' ? 'Cause-effect' : 'Ranking',
-    method.supportsWeights ? 'Weights' : 'Self-weighted',
-    method.id === 'dematel' ? 'Expert sheets' : 'Respondent sheets',
-    method.fuzzySupport.nativeModeLabel ? 'Native fuzzy' : 'Defuzzify fuzzy',
-  ];
   const evidenceCounts = externalValidationSummaryFor(methodRegistry.map((method) => method.id));
-  const methodWithCandidateCount = methods.filter((method) => externalValidationCandidatesFor(method.id).length > 0).length;
+  const reviewMethodCount = evidenceCounts.candidates;
   const filteredMethods = methods.filter((method) => {
     if (evidenceFilter === 'all') return true;
-    if (evidenceFilter === 'candidate') return externalValidationCandidatesFor(method.id).length > 0;
+    if (evidenceFilter === 'candidate') return externalValidationStatusFor(method.id).tone === 'candidate';
     return externalValidationStatusFor(method.id).tone === evidenceFilter;
   });
   const selectedMethod = filteredMethods.find((method) => method.id === selectedId) ?? filteredMethods[0] ?? methods[0] ?? methodRegistry[0];
+  const selectedFamilyLabel = methodFamilies[methodFamilyById[selectedMethod.id]];
   const selectedValidation = externalValidationStatusFor(selectedMethod.id);
+  const selectedFixtures = externalValidationFixturesFor(selectedMethod.id);
+  const selectedCandidates = externalValidationCandidatesFor(selectedMethod.id);
+  const selectedFixtureSample = externalFixtureSampleFor(selectedMethod.id);
+  const selectedInputSummary = selectedMethod.id === 'dematel'
+    ? 'Direct-relation matrix; expert count'
+    : selectedMethod.id === 'ahp'
+      ? 'Pairwise matrix; consistency threshold'
+      : selectedMethod.supportsWeights
+        ? 'Decision matrix; weights; criterion directions'
+        : 'Decision matrix; criterion directions';
+  const evidenceLead = selectedFixtures[0]?.doi
+    ? `DOI ${selectedFixtures[0].doi}`
+    : selectedCandidates[0]?.doi
+      ? `Review DOI ${selectedCandidates[0].doi}`
+      : 'Internal check';
+  const evidenceDetail = selectedFixtures.length
+    ? `${selectedFixtures.length} matched source${selectedFixtures.length > 1 ? 's' : ''}`
+    : selectedCandidates.length
+      ? 'First DOI match in review'
+      : 'Awaiting DOI example';
   return (
-    <section className="singlePanel">
-        <div className="sectionTitle">
-          <h1>Choose an MCDM method</h1>
-          <p>Select the decision model. The app then shows only the specifications, template, upload, and results for that method.</p>
+    <section className="singlePanel methodWorkbench">
+      <div className="sectionTitle compactTitle">
+        <div>
+          <h1>Method library</h1>
+          <p>Choose the method, review its evidence, and build the Excel template.</p>
         </div>
-        <div className="methodChooser">
-          <div className="methodPickPanel">
-            <label className="searchBox"><Search size={17} /><input value={query} onChange={(event) => onQuery(event.target.value)} placeholder="Search methods..." /></label>
+        <div className="titleEvidence" aria-label={`${evidenceCounts.validated} methods have matched DOI examples; ${evidenceCounts.candidates} methods need a first DOI match; ${validationEvidence.externalBenchmarks.count} DOI examples reproduced`}>
+          <span><strong>{evidenceCounts.validated}</strong> methods matched</span>
+          <span><strong>{evidenceCounts.candidates}</strong> need DOI match</span>
+        </div>
+      </div>
+      <div className="methodChooser proChooser">
+        <div className="methodPickPanel methodIndexPanel">
+          <div className="methodFilters">
+            <label className="searchBox"><Search size={17} /><input value={query} onChange={(event) => onQuery(event.target.value)} placeholder="Search methods" /></label>
             <label className="methodSelectLabel">
-              <span>Method family</span>
-              <select aria-label="Method family" value={family} onChange={(event) => onFamily(event.target.value as MethodFamily)}>
+              <span>Family</span>
+              <select aria-label="Decision type" value={family} onChange={(event) => onFamily(event.target.value as MethodFamily)}>
                 {Object.entries(methodFamilies).map(([id, label]) => <option key={id} value={id}>{label} ({familyCounts[id as MethodFamily]})</option>)}
               </select>
             </label>
             <label className="methodSelectLabel">
-              <span>Validation evidence</span>
-              <select aria-label="Validation evidence" value={evidenceFilter} onChange={(event) => setEvidenceFilter(event.target.value as typeof evidenceFilter)}>
-                <option value="all">All evidence levels ({methods.length})</option>
-                <option value="validated">External fixtures ({methods.filter((method) => externalValidationStatusFor(method.id).tone === 'validated').length})</option>
-                <option value="candidate">Methods with candidates ({methodWithCandidateCount})</option>
-                <option value="internal">Internal only ({methods.filter((method) => externalValidationStatusFor(method.id).tone === 'internal').length})</option>
+              <span>Evidence</span>
+              <select aria-label="Published evidence status" value={evidenceFilter} onChange={(event) => setEvidenceFilter(event.target.value as typeof evidenceFilter)}>
+                <option value="all">All methods ({methods.length})</option>
+                <option value="validated">Published match ({methods.filter((method) => externalValidationStatusFor(method.id).tone === 'validated').length})</option>
+                <option value="candidate">Needs match ({reviewMethodCount})</option>
               </select>
             </label>
-            <label className="methodSelectLabel">
-              <span>Method</span>
-              <select aria-label="MCDM method" value={selectedMethod.id} onChange={(event) => setSelectedId(event.target.value as MethodId)} disabled={!filteredMethods.length}>
-                {filteredMethods.map((method) => <option key={method.id} value={method.id}>{method.name}</option>)}
-              </select>
-            </label>
-            <button className="primaryAction methodContinue" onClick={() => onSelect(selectedMethod.id)} disabled={!filteredMethods.length}>Continue with {selectedMethod.name}<ArrowRight size={16} /></button>
           </div>
-          <div className="selectedMethodPanel">
-            <span className="eyebrow">Selected model</span>
-            {filteredMethods.length ? (
-              <>
-                <h2>{selectedMethod.name}</h2>
-                <p>{methodPurpose[selectedMethod.id]}</p>
-                <div className={`validationBadge ${selectedValidation.tone}`}>
-                  <strong>{selectedValidation.label}</strong>
-                  <span>{selectedValidation.text}</span>
-                </div>
-                <div className="validationSummary" aria-label="External validation coverage summary">
-                  <span><strong>{evidenceCounts.validated}</strong> externally validated</span>
-                  <span><strong>{evidenceCounts.candidateFixtures}</strong> validation candidates</span>
-                  <span><strong>{evidenceCounts.internal}</strong> internal only</span>
-                </div>
-                <div className="methodSupport large">
-                  <em>{inputSummary(selectedMethod)}</em>
-                  <i>{methodFamilies[methodFamilyById[selectedMethod.id]]}</i>
-                  {capabilityBadges(selectedMethod).map((badge) => <i key={badge}>{badge}</i>)}
-                </div>
-              </>
-            ) : (
-              <p>No methods match the current search, family, and validation filters.</p>
-            )}
+          <div className="methodListHeader">
+            <span>Method</span>
+            <span>Family</span>
+            <span>Evidence</span>
+          </div>
+          <div className="methodList" role="listbox" aria-label="Matching MCDM methods">
+            {filteredMethods.length ? filteredMethods.map((method) => {
+              const status = externalValidationStatusFor(method.id);
+              const shortStatus = status.tone === 'validated' ? 'Matched' : status.tone === 'candidate' ? 'Needs match' : 'Awaiting';
+              return (
+                <button key={method.id} role="option" aria-selected={method.id === selectedMethod.id} className={method.id === selectedMethod.id ? 'active' : ''} onClick={() => setSelectedId(method.id)} title={`${method.name}: ${method.fullName}`} aria-label={`${method.name}, ${method.fullName}, ${status.label}`}>
+                  <span className="methodRadio" aria-hidden="true" />
+                  <span className="methodListName"><strong>{method.name}</strong></span>
+                  <span className="methodListFamily">{methodFamilies[methodFamilyById[method.id]]}</span>
+                  <span className={`catalogValidation ${status.tone}`} title={status.label}>{shortStatus}</span>
+                </button>
+              );
+            }) : <p className="emptyMethodState">No methods match these filters.</p>}
           </div>
         </div>
-        {filteredMethods.length > 1 ? (
-          <details className="methodCatalog">
-            <summary>Browse {filteredMethods.length} matching methods</summary>
-            <div className="methodCatalogGrid">
-              {filteredMethods.map((method) => (
-                <button key={method.id} className={method.id === selectedMethod.id ? 'active' : ''} onClick={() => setSelectedId(method.id)}>
-                  <strong>{method.name}</strong>
-                  <em className={`catalogValidation ${externalValidationStatusFor(method.id).tone}`}>{externalValidationStatusFor(method.id).label}</em>
-                  <span>{methodPurpose[method.id]}</span>
-                </button>
-              ))}
-            </div>
-          </details>
-        ) : null}
+        <aside className="selectedMethodPanel evidencePane">
+          {filteredMethods.length ? (
+            <>
+              <div className="methodDetailHeader">
+                <span>{selectedFamilyLabel}</span>
+                <h2>{selectedMethod.name}</h2>
+                <p>{selectedMethod.fullName}</p>
+              </div>
+              <div className="inspectorFacts">
+                <div><span>Best for</span><strong>{compactUiText(methodPurpose[selectedMethod.id], 88)}</strong></div>
+                <div><span>Inputs</span><strong>{selectedInputSummary}</strong></div>
+                <div><span>Sample</span><strong>{selectedFixtureSample ? 'Matched data' : 'Demo data'}</strong></div>
+              </div>
+              <div className={`validationBadge compactEvidence ${selectedValidation.tone}`}>
+                <strong>{selectedValidation.label}</strong>
+                <span>{evidenceDetail}</span>
+                {selectedFixtures.length ? (
+                  <div className="evidenceLinks">
+                    {selectedFixtures.slice(0, 2).map((fixture) => (
+                      <a key={`${fixture.methodId}-${fixture.variant}`} href={fixture.sourceUrl} target="_blank" rel="noreferrer">DOI {fixture.doi}</a>
+                    ))}
+                    {selectedFixtures.length > 2 ? <em>+{selectedFixtures.length - 2}</em> : null}
+                  </div>
+                ) : selectedCandidates.length ? (
+                  <div className="evidenceLinks">
+                    {selectedCandidates.slice(0, 1).map((candidate) => (
+                      <a key={`${candidate.methodId}-${candidate.variant}`} href={candidate.sourceUrl} target="_blank" rel="noreferrer">Review DOI {candidate.doi}</a>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+              <MethodProcessGraphic method={selectedMethod} evidenceLead={evidenceLead} hasMatchedSample={Boolean(selectedFixtureSample)} />
+              <div className="methodPrimaryActions">
+                <button className="primaryAction methodContinue" onClick={() => onSelect(selectedMethod.id)}>Use {selectedMethod.name}<ArrowRight size={16} /></button>
+                <button className="textAction methodGuideAction" onClick={() => onGuide(selectedMethod.id)}>Math and sample <ArrowRight size={16} /></button>
+              </div>
+            </>
+          ) : (
+            <p>No methods match these filters.</p>
+          )}
+        </aside>
+      </div>
     </section>
+  );
+}
+
+function MethodProcessGraphic({ method, evidenceLead, hasMatchedSample }: { method: MethodDefinition; evidenceLead: string; hasMatchedSample: boolean }) {
+  const nodes = [
+    { code: '01', title: 'Source', note: evidenceLead },
+    { code: '02', title: 'Data', note: hasMatchedSample ? 'Matched sample' : 'Demo sample' },
+    { code: '03', title: method.name, note: 'Calculation' },
+    { code: '04', title: 'Result', note: 'Ranked output' },
+  ];
+  return (
+    <div className="methodPath methodSignal" aria-label="Reproducible method path">
+      {nodes.map((node) => (
+        <div key={node.title} aria-label={`${node.title}: ${node.note}`}>
+          <i className="signalGlyph" aria-hidden="true">{node.code}</i>
+          <strong>{node.title}</strong>
+          <em>{node.note}</em>
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -955,73 +1391,42 @@ function ConfigureStep({ config, input, method, onChange, onNext }: { config: St
   };
 
   return (
-    <section className="singlePanel">
+    <section className="singlePanel methodWorkbench">
       <div className="sectionTitle">
-        <h1>Configure {method.name}</h1>
-        <p>Set the specifications for this method. These values control the generated template and the analysis run.</p>
+        <h1>Set up {method.name}</h1>
+        <p>Set the data shape. Keep method terms unchanged.</p>
       </div>
-      <CapabilityStrip method={method} config={config} />
+      <SetupReadinessLine config={config} method={method} canGenerateTemplate={canGenerateTemplate} issueCount={preTemplateIssues.length} />
       <div className="specSection">
         <div>
-          <h2>Data collection</h2>
-          <p>{isDematel ? 'Use one final influence matrix, or collect separate matrices from multiple experts.' : 'Use one final decision matrix, or collect separate decision matrices from multiple respondents.'}</p>
+          <h2>Your input</h2>
+          
         </div>
         <div className="segmentedControl">
           {(isDematel ? ['Single expert matrix', 'Multiple experts'] : ['Single aggregated dataset', 'Multiple respondents']).map((option) => (
-            <button key={option} className={dataInputMode === option ? 'active' : ''} onClick={() => updateDataInputMode(option)}>{option}</button>
+            <button key={option} className={dataInputMode === option ? 'active' : ''} onClick={() => updateDataInputMode(option)}>{dataInputModeLabel(option)}</button>
           ))}
         </div>
       </div>
-      <ConfigurationSummary method={method} config={config} usesGroupData={usesGroupData} usesManualWeights={usesManualWeights} usesAutomaticWeights={usesAutomaticWeights} showAHPPairwise={showAHPPairwise} />
       <div className="configGrid">
         <label><span>Study title</span><input aria-label="Study title" value={config.title} onChange={(event) => updateConfig({ ...config, title: event.target.value })} /></label>
-        {method.supportsWeights ? <label><span>Weighting method</span><select aria-label="Weighting method" value={config.weightingId} onChange={(event) => updateConfig({ ...config, weightingId: event.target.value as WeightingId })}>
-          {isAHP ? <option value="ahp">AHP pairwise priorities</option> : null}
-          {!isAHP ? <option value="manual">Manual weights</option> : null}
-          {!isAHP ? <option value="equal">Equal weights</option> : null}
-          {!isAHP ? <option value="stddev">Standard deviation weights</option> : null}
-          {!isAHP ? <option value="cov">Coefficient of variation weights</option> : null}
-          {!isAHP ? <option value="entropy">Entropy weights</option> : null}
-          {!isAHP ? <option value="critic">CRITIC weights</option> : null}
-          {!isAHP ? <option value="merec">MEREC weights</option> : null}
-          {!isAHP ? <option value="merecG">MEREC-G weights</option> : null}
-          {!isAHP ? <option value="lopcow">LOPCOW weights</option> : null}
-          {!isAHP ? <option value="wenslo">WENSLO weights</option> : null}
-          {!isAHP ? <option value="angular">Angular weights</option> : null}
-          {!isAHP ? <option value="gini">Gini coefficient weights</option> : null}
-          {!isAHP ? <option value="mpsi">MPSI weights</option> : null}
-          {!isAHP ? <option value="cilos">CILOS weights</option> : null}
-          {!isAHP ? <option value="idocriw">IDOCRIW weights</option> : null}
-          {!isAHP ? <option value="cimas">CIMAS weights</option> : null}
-          {!isAHP ? <option value="ahp">AHP weights</option> : null}
-          {!isAHP ? <option value="bwm">BWM weights</option> : null}
-          {!isAHP ? <option value="dibr">DIBR weights</option> : null}
-          {!isAHP ? <option value="simos">Revised Simos / SRF cards</option> : null}
-          {!isAHP ? <option value="swara">SWARA weights</option> : null}
-          {!isAHP ? <option value="roc">ROC rank-order weights</option> : null}
-          {!isAHP ? <option value="fucom">FUCOM weights</option> : null}
-          {!isAHP ? <option value="lbwa">LBWA weights</option> : null}
-          {!isAHP ? <option value="piprecia">PIPRECIA weights</option> : null}
-          {!isAHP ? <option value="rankSum">Rank Sum weights</option> : null}
-          {!isAHP ? <option value="rankReciprocal">Rank Reciprocal weights</option> : null}
-          {!isAHP ? <option value="rancom">RANCOM weights</option> : null}
-        </select></label> : null}
+        {method.supportsWeights ? <WeightingSelect isAHP={isAHP} value={config.weightingId} onChange={(weightingId) => updateConfig({ ...config, weightingId })} /> : null}
         {visibleSpecificationFields.map((field) => (
           field.key === 'lexicographicOrder' || field.key === 'smarterOrder' ? (
-            <CriterionOrderEditor key={field.key} label={field.label} criteria={config.criteria} value={String(config.methodParams[field.key] ?? config.criteria.map((criterion) => criterion.id).join(','))} onChange={(values) => updateOrderParam(field.key, values)} />
+            <CriterionOrderEditor key={field.key} label={friendlyFieldLabel(field.label)} criteria={config.criteria} value={String(config.methodParams[field.key] ?? config.criteria.map((criterion) => criterion.id).join(','))} onChange={(values) => updateOrderParam(field.key, values)} />
           ) : (
             <label key={field.key}>
-              <span>{field.label}</span>
+              <span>{friendlyFieldLabel(field.label)}</span>
               {field.key === 'pughBaselineAlternative' ? (
-              <select aria-label={field.label} value={String(config.methodParams.pughBaselineAlternative ?? config.alternatives[0]?.id ?? '')} onChange={(event) => updateParam(field.key, event.target.value)}>
+              <select aria-label={friendlyFieldLabel(field.label)} value={String(config.methodParams.pughBaselineAlternative ?? config.alternatives[0]?.id ?? '')} onChange={(event) => updateParam(field.key, event.target.value)}>
                 {config.alternatives.map((alternative) => <option key={alternative.id} value={alternative.id}>{alternative.id} - {alternative.name}</option>)}
               </select>
             ) : field.type === 'select' ? (
-              <select aria-label={field.label} value={String(config.methodParams[field.key] ?? field.defaultValue)} onChange={(event) => updateParam(field.key, event.target.value)}>
-                {field.options?.map((option) => <option key={option} value={option}>{option}</option>)}
+              <select aria-label={friendlyFieldLabel(field.label)} value={String(config.methodParams[field.key] ?? field.defaultValue)} onChange={(event) => updateParam(field.key, event.target.value)}>
+                {field.options?.map((option) => <option key={option} value={option}>{friendlyOptionLabel(option)}</option>)}
               </select>
             ) : (
-              <input aria-label={field.label} type={field.type} {...(field.type === 'number' ? numericBounds(field.key) : {})} value={String(config.methodParams[field.key] ?? field.defaultValue)} onChange={(event) => updateParam(field.key, event.target.value)} />
+              <input aria-label={friendlyFieldLabel(field.label)} type={field.type} {...(field.type === 'number' ? numericBounds(field.key) : {})} value={String(config.methodParams[field.key] ?? field.defaultValue)} onChange={(event) => updateParam(field.key, event.target.value)} />
             )}
             </label>
           )
@@ -1042,7 +1447,7 @@ function ConfigureStep({ config, input, method, onChange, onNext }: { config: St
           <label><span>AHP pairwise respondent count</span><input aria-label="AHP pairwise respondent count" type="number" min="2" step="1" value={String(config.methodParams.ahpRespondentCount ?? config.methodParams.respondentCount ?? 2)} onChange={(event) => updateParam('ahpRespondentCount', event.target.value)} /></label>
         ) : null}
         <label><span>Fuzzy input mode</span><select aria-label="Fuzzy input mode" value={String(config.methodParams.fuzzyInputMode ?? defaultFuzzyMode)} onChange={(event) => updateParam('fuzzyInputMode', event.target.value)}>
-          {fuzzyModeOptions(method.id).map((option) => <option key={option}>{option}</option>)}
+          {fuzzyModeOptions(method.id).map((option) => <option key={option} value={option}>{fuzzyModeLabel(option)}</option>)}
         </select></label>
         {usesManualSpotisBounds ? (
           <>
@@ -1151,17 +1556,17 @@ function ConfigureStep({ config, input, method, onChange, onNext }: { config: St
         ) : null}
       </div>
       <div className="workflowNote">
-        <strong>{usesGroupData ? 'Group study template' : 'Single dataset template'}</strong>
+        <strong>{usesGroupData ? 'Group Excel file' : 'Single Excel file'}</strong>
         <span>{isDematel
-          ? usesGroupData ? 'The workbook will include one expert influence-matrix sheet per expert and aggregate them before DEMATEL.' : 'The workbook will use one direct-relation matrix as the final expert or committee matrix.'
-          : usesGroupData ? 'The workbook will include one respondent decision-matrix sheet per respondent and aggregate them before analysis.' : 'The workbook will use the main decision matrix only; respondent sheets will not be added.'}</span>
+          ? usesGroupData ? 'One direct-relation matrix per expert.' : 'One final direct-relation matrix.'
+          : usesGroupData ? 'One decision table per respondent.' : 'One final decision table.'}</span>
       </div>
       {method.supportsWeights && !usesManualWeights ? (
         <div className="workflowNote calculatedWeightNotice">
           <strong>{weightingLabel} weighting</strong>
           <span>{usesAHPWeights
-            ? 'Weights come from reciprocal pairwise judgments. The criteria table is only for names and benefit/cost directions.'
-            : `${weightingLabel} weights are calculated during analysis, so manual weight inputs are hidden and ignored in uploaded files.`}</span>
+            ? 'Weights come from pairwise judgments. The criteria table is only for names and benefit/cost type.'
+            : `${weightingLabel} weights are calculated during analysis, so manual weight cells are hidden.`}</span>
         </div>
       ) : null}
       {!isDematel ? (
@@ -1186,8 +1591,8 @@ function ConfigureStep({ config, input, method, onChange, onNext }: { config: St
         <div className="tableToolbar">
           <h2>{criteriaLabel}</h2>
           <div className="toolbarActions">
-            {usesAutomaticWeights ? <span>No manual weight cells for {weightingLabel}</span> : null}
-            {usesAHPWeights && !isAHP ? <span>AHP weighting uses the pairwise matrix below</span> : null}
+            {usesAutomaticWeights ? <span>{weightingLabel} calculates weights for you</span> : null}
+            {usesAHPWeights && !isAHP ? <span>AHP weights use the pairwise table below</span> : null}
             <button className="miniAction" onClick={addCriterion}><Plus size={14} />Add {isDematel ? 'factor' : 'criterion'}</button>
           </div>
         </div>
@@ -1205,8 +1610,8 @@ function ConfigureStep({ config, input, method, onChange, onNext }: { config: St
         </table>
       </div>
       <details className="advancedSeedData">
-        <summary>Optional in-app seed data</summary>
-        <p>The generated workbook is the main data-entry path. Edit these values only when you want the downloaded template to start from custom example numbers.</p>
+        <summary>Optional starting values</summary>
+        <p>Prefill the workbook if you want a starting point.</p>
         <div className="cleanTableWrap compactMatrix">
           <div className="tableToolbar"><h2>{matrixLabel}</h2><span>{input.values.length} x {config.criteria.length}</span></div>
           <table>
@@ -1231,7 +1636,7 @@ function ConfigureStep({ config, input, method, onChange, onNext }: { config: St
         </div>
         {showAHPPairwise ? (
           <div className="cleanTableWrap compactMatrix">
-            <div className="tableToolbar"><h2>Criteria pairwise comparison</h2><span>Use Saaty scale: 1 equal, 3 moderate, 5 strong, 7 very strong, 9 extreme</span></div>
+            <div className="tableToolbar"><h2>Criteria pairwise comparison</h2><span>Saaty 1-9 scale</span></div>
             <table>
               <thead><tr><th>Criterion</th>{config.criteria.map((criterion) => <th key={criterion.id}>{criterion.id}</th>)}</tr></thead>
               <tbody>{config.criteria.map((rowCriterion, rowIndex) => (
@@ -1262,7 +1667,7 @@ function ConfigureStep({ config, input, method, onChange, onNext }: { config: St
               <div className="subMatrix" key={criterion.id}>
                 <h3>{criterion.id} - {criterion.name}</h3>
                 <table>
-                  <thead><tr><th>Alternative</th>{config.alternatives.map((alternative) => <th key={alternative.id}>{alternative.id}</th>)}</tr></thead>
+                  <thead><tr><th>Option</th>{config.alternatives.map((alternative) => <th key={alternative.id}>{alternative.id}</th>)}</tr></thead>
                   <tbody>{config.alternatives.map((rowAlternative, rowIndex) => (
                     <tr key={rowAlternative.id}>
                       <td>{rowAlternative.id}</td>
@@ -1292,12 +1697,105 @@ function ConfigureStep({ config, input, method, onChange, onNext }: { config: St
           {preTemplateIssues.slice(0, 5).map((issue) => <div className={`validationItem ${issue.severity}`} key={`${issue.sheet}-${issue.location}-${issue.message}`}><strong>{issue.severity}</strong><span>{issue.sheet} {issue.location}: {issue.message}</span></div>)}
           {preTemplateIssues.length > 5 ? <div className="readyNote">{preTemplateIssues.length - 5} more issue{preTemplateIssues.length - 5 === 1 ? '' : 's'} will be checked again after upload.</div> : null}
         </div>
-      ) : <div className="readyNote">Specifications and current data pass the pre-template check.</div>}
-      <div className="flowActions"><button className="primaryAction" onClick={onNext} disabled={!canGenerateTemplate}>Generate template <ArrowRight size={16} /></button></div>
+      ) : <div className="readyNote">Setup looks good. Create the Excel file when ready.</div>}
+      <div className="flowActions"><button className="primaryAction" onClick={onNext} disabled={!canGenerateTemplate}>Create Excel <ArrowRight size={16} /></button></div>
     </section>
   );
 }
 
+function WeightingSelect({ isAHP, value, onChange }: { isAHP: boolean; value: WeightingId; onChange: (value: WeightingId) => void }) {
+  const groups = isAHP ? [
+    { label: 'Pairwise', options: [{ value: 'ahp' as WeightingId, label: 'AHP pairwise priorities' }] },
+  ] : [
+    { label: 'Manual', options: [
+      { value: 'manual' as WeightingId, label: 'Manual weights' },
+      { value: 'equal' as WeightingId, label: 'Equal weights' },
+    ] },
+    { label: 'Objective data', options: [
+      { value: 'stddev' as WeightingId, label: 'Standard deviation weights' },
+      { value: 'cov' as WeightingId, label: 'Coefficient of variation weights' },
+      { value: 'entropy' as WeightingId, label: 'Entropy weights' },
+      { value: 'critic' as WeightingId, label: 'CRITIC weights' },
+      { value: 'merec' as WeightingId, label: 'MEREC weights' },
+      { value: 'merecG' as WeightingId, label: 'MEREC-G weights' },
+      { value: 'lopcow' as WeightingId, label: 'LOPCOW weights' },
+      { value: 'wenslo' as WeightingId, label: 'WENSLO weights' },
+      { value: 'angular' as WeightingId, label: 'Angular weights' },
+      { value: 'gini' as WeightingId, label: 'Gini coefficient weights' },
+      { value: 'mpsi' as WeightingId, label: 'MPSI weights' },
+      { value: 'cilos' as WeightingId, label: 'CILOS weights' },
+      { value: 'idocriw' as WeightingId, label: 'IDOCRIW weights' },
+      { value: 'cimas' as WeightingId, label: 'CIMAS weights' },
+    ] },
+    { label: 'Judgment based', options: [
+      { value: 'ahp' as WeightingId, label: 'AHP weights' },
+      { value: 'bwm' as WeightingId, label: 'BWM weights' },
+      { value: 'dibr' as WeightingId, label: 'DIBR weights' },
+      { value: 'simos' as WeightingId, label: 'Revised Simos / SRF cards' },
+      { value: 'swara' as WeightingId, label: 'SWARA weights' },
+      { value: 'fucom' as WeightingId, label: 'FUCOM weights' },
+      { value: 'lbwa' as WeightingId, label: 'LBWA weights' },
+      { value: 'piprecia' as WeightingId, label: 'PIPRECIA weights' },
+    ] },
+    { label: 'Rank order', options: [
+      { value: 'roc' as WeightingId, label: 'ROC rank-order weights' },
+      { value: 'rankSum' as WeightingId, label: 'Rank Sum weights' },
+      { value: 'rankReciprocal' as WeightingId, label: 'Rank Reciprocal weights' },
+      { value: 'rancom' as WeightingId, label: 'RANCOM weights' },
+    ] },
+  ];
+  const hint = value === 'manual'
+    ? 'Use known study weights.'
+    : value === 'equal'
+      ? 'Same weight for each criterion.'
+      : value === 'ahp' || value === 'bwm' || value === 'dibr' || value === 'simos' || value === 'swara' || value === 'fucom' || value === 'lbwa' || value === 'piprecia' || value === 'roc' || value === 'rankSum' || value === 'rankReciprocal' || value === 'rancom'
+        ? 'Uses judgement or order inputs.'
+        : 'Calculated from the data.';
+
+  return (
+    <label className="weightingControl">
+      <span>Weights</span>
+      <select aria-label="Weighting method" value={value} onChange={(event) => onChange(event.target.value as WeightingId)}>
+        {groups.map((group) => (
+          <optgroup key={group.label} label={group.label}>
+            {group.options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+          </optgroup>
+        ))}
+      </select>
+      <em>{hint}</em>
+    </label>
+  );
+}
+function SetupReadinessLine({ config, method, canGenerateTemplate, issueCount }: { config: StudyConfig; method: MethodDefinition; canGenerateTemplate: boolean; issueCount: number }) {
+  const isDematel = config.methodId === 'dematel';
+  const fuzzyMode = String(config.methodParams.fuzzyInputMode ?? defaultFuzzyMode);
+  const structureText = isDematel
+    ? `${config.criteria.length} factors for the direct-relation matrix`
+    : `${config.alternatives.length} options and ${config.criteria.length} criteria`;
+  const weightText = isDematel
+    ? 'DEMATEL factor influence only'
+    : method.supportsWeights
+      ? `${weightingDisplayName(config.weightingId)} weighting`
+      : 'No external weighting needed';
+  const fuzzyText = method.fuzzySupport.enabled ? fuzzyModeLabel(fuzzyMode) : 'Fuzzy ranges converted on upload';
+
+  return (
+    <div className={`setupReadiness ${canGenerateTemplate ? 'ready' : 'blocked'}`} aria-label="Setup readiness">
+      <div>
+        <span>{canGenerateTemplate ? 'Ready for Excel' : 'Fix setup first'}</span>
+        <strong>{structureText}</strong>
+      </div>
+      <div>
+        <span>Settings</span>
+        <strong>{weightText}; {fuzzyText}</strong>
+      </div>
+      <div className="setupReadinessState">
+        <span>Evidence</span>
+        <strong>{canGenerateTemplate ? 'Ready to build file' : `${issueCount} setup issue${issueCount === 1 ? '' : 's'}`}</strong>
+      </div>
+    </div>
+  );
+}
 function CriterionOrderEditor({
   label,
   criteria,
@@ -1590,57 +2088,45 @@ function TemplateStep({ config, methodName, onDownload, onBack, onNext }: { conf
   const templateSheets = getMethod(config.methodId).getTemplateSchema(config);
   const method = getMethod(config.methodId);
   return (
-    <section className="singlePanel">
+    <section className="singlePanel methodWorkbench">
       <div className="templateHero">
         <FileSpreadsheet size={32} />
-        <h1>{methodName} template is ready</h1>
-        <p>Download the model-specific Excel workbook, replace the sample values with your study data, then upload the completed file.</p>
-        <button className="primaryAction" onClick={onDownload}><Download size={16} />Download template</button>
+        <h1>{methodName} Excel file</h1>
+        <p>Download, fill, upload.</p>
+        <button className="primaryAction" onClick={onDownload}><Download size={16} />Download Excel file</button>
       </div>
-      <TemplateSpecSummary config={config} methodName={methodName} />
-      <CapabilityStrip method={method} config={config} />
-      <SamplePreview title={`${methodName} filled template preview`} config={config} templateSheets={templateSheets} />
-      <div className="flowActions"><button className="secondaryAction" onClick={onBack}>Back to specifications</button><button className="secondaryAction" onClick={onNext}>Continue to upload <ArrowRight size={16} /></button></div>
+      <TemplateHandoffLine config={config} phase="template" />
+      <details className="templateDetails">
+        <summary>File details</summary>
+        <TemplateSpecSummary config={config} methodName={methodName} />
+        <CapabilityStrip method={method} config={config} />
+      </details>
+      <SamplePreview title={`${methodName} Excel preview`} config={config} templateSheets={templateSheets} />
+      <div className="flowActions"><button className="secondaryAction" onClick={onBack}>Back to setup</button><button className="secondaryAction" onClick={onNext}>Upload data <ArrowRight size={16} /></button></div>
     </section>
   );
 }
 
-function ConfigurationSummary({ method, config, usesGroupData, usesManualWeights, usesAutomaticWeights, showAHPPairwise }: { method: MethodDefinition; config: StudyConfig; usesGroupData: boolean; usesManualWeights: boolean; usesAutomaticWeights: boolean; showAHPPairwise: boolean }) {
+function TemplateHandoffLine({ config, phase }: { config: StudyConfig; phase: 'template' | 'upload' }) {
+  const method = getMethod(config.methodId);
   const isDematel = config.methodId === 'dematel';
-  const fuzzyMode = String(config.methodParams.fuzzyInputMode ?? defaultFuzzyMode);
-  const respondentCount = Number(config.methodParams.respondentCount ?? 1);
-  const expertCount = Number(config.methodParams.dematelExpertCount ?? 1);
-  const ahpRespondents = Number(config.methodParams.ahpRespondentCount ?? respondentCount);
-  const weightText = isDematel
-    ? 'DEMATEL does not use criteria weights in this workflow.'
-    : usesManualWeights
-      ? 'Manual weights remain editable in the criteria table and workbook.'
-      : usesAutomaticWeights
-        ? `${weightingDisplayName(config.weightingId)} weights are calculated from uploaded data; manual weight inputs are hidden.`
-        : showAHPPairwise
-          ? 'AHP weights are derived from reciprocal pairwise comparisons, not typed into the criteria table.'
-          : 'The selected method controls its own scoring structure.';
-  const groupText = isDematel
-    ? usesGroupData
-      ? `${expertCount} expert sheets will be generated and averaged before DEMATEL cause-effect analysis.`
-      : 'One direct-relation matrix will be treated as the final expert or committee input.'
-    : usesGroupData
-      ? `${respondentCount} respondent decision-matrix sheets will be generated and aggregated before analysis.`
-      : 'One aggregated decision matrix will be generated. No respondent sheets are added.';
-  const ahpText = showAHPPairwise
-    ? usesGroupData
-      ? `${ahpRespondents} AHP respondent pairwise sheet set${ahpRespondents === 1 ? '' : 's'} will be combined by geometric mean.`
-      : 'One reciprocal AHP pairwise matrix will be validated and used.'
-    : 'No AHP pairwise sheet is needed for the selected setup.';
-  const fuzzyText = fuzzyMode.startsWith('Native fuzzy')
-    ? 'Triangular and trapezoidal entries stay fuzzy through the supported fuzzy calculation path.'
-    : 'Triangular and trapezoidal entries are accepted and converted by centroid before the crisp calculation.';
+  const dataInputMode = String(config.methodParams.dataInputMode ?? (isDematel ? 'Single expert matrix' : 'Single aggregated dataset'));
+  const matrixText = isDematel ? 'direct-relation matrix' : 'decision matrix';
+  const groupText = dataInputModeLabel(dataInputMode);
+  const steps = [
+    { key: 'template', title: 'Download', text: `${method.name} Excel file` },
+    { key: 'fill', title: 'Fill', text: `${groupText}; enter the ${matrixText}` },
+    { key: 'upload', title: 'Upload', text: 'Check and run' },
+  ];
+
   return (
-    <div className="configurationSummary" aria-label="Configured workflow summary">
-      <div><span>Data</span><strong>{groupText}</strong></div>
-      <div><span>Weights</span><strong>{weightText}</strong></div>
-      <div><span>AHP</span><strong>{ahpText}</strong></div>
-      <div><span>Fuzzy</span><strong>{method.fuzzySupport.enabled ? fuzzyText : 'Fuzzy upload is accepted through defuzzified crisp analysis for this method.'}</strong></div>
+    <div className="templateHandoff" aria-label="Excel handoff flow">
+      {steps.map((item) => (
+        <div key={item.key} className={item.key === phase ? 'active' : ''}>
+          <span>{item.title}</span>
+          <strong>{item.text}</strong>
+        </div>
+      ))}
     </div>
   );
 }
@@ -1654,23 +2140,23 @@ function CapabilityStrip({ method, config }: { method: MethodDefinition; config:
   const expertCount = usesGroupData ? Number(config.methodParams.dematelExpertCount ?? 1) : 1;
   const fuzzyMode = String(config.methodParams.fuzzyInputMode ?? defaultFuzzyMode);
   const respondentLabel = isDematel
-    ? usesGroupData ? `${expertCount} expert influence matrices` : 'One aggregated influence matrix'
-    : usesGroupData ? `${respondentCount} respondent decision matrices` : 'One aggregated decision matrix';
+    ? usesGroupData ? `${expertCount} expert direct-relation matrices` : 'One final direct-relation matrix'
+    : usesGroupData ? `${respondentCount} respondent decision matrices` : 'One final decision matrix';
   const respondentRule = isDematel
     ? usesGroupData ? String(config.methodParams.dematelAggregation ?? 'Arithmetic mean') : 'No expert aggregation'
     : usesGroupData ? String(config.methodParams.respondentAggregation ?? 'Arithmetic mean') : 'No respondent aggregation';
   const pairwiseRule = usesGroupData && (config.methodId === 'ahp' || config.weightingId === 'ahp')
-    ? `${ahpRespondents} AHP pairwise respondent matrix${ahpRespondents === 1 ? '' : 'es'} combined by geometric mean`
-    : config.methodId === 'ahp' || config.weightingId === 'ahp' ? 'Single pairwise matrix' : 'Not used for selected setup';
+    ? `${ahpRespondents} AHP pairwise respondent sheet${ahpRespondents === 1 ? '' : 's'} combined`
+    : config.methodId === 'ahp' || config.weightingId === 'ahp' ? 'Single pairwise table' : 'Not used for this setup';
   const fuzzyRule = fuzzyMode.startsWith('Native fuzzy')
-    ? 'Triangular/trapezoidal values stay fuzzy through supported method tables'
-    : 'Triangular/trapezoidal values are converted by centroid before the crisp run';
+    ? 'Fuzzy ranges stay fuzzy'
+    : 'Fuzzy ranges convert before analysis';
   return (
     <div className="capabilityStrip" aria-label="Selected method capabilities">
-      <div><span>Group input</span><strong>{respondentLabel}</strong><em>{respondentRule}</em></div>
-      <div><span>AHP judgments</span><strong>{pairwiseRule}</strong><em>Reciprocal pairwise checks are enforced</em></div>
-      <div><span>Fuzzy handling</span><strong>{method.fuzzySupport.nativeModeLabel ? fuzzyMode : 'Defuzzify on upload'}</strong><em>{fuzzyRule}</em></div>
-      <div><span>Output type</span><strong>{isDematel ? 'Cause-effect model' : 'Ranked alternatives'}</strong><em>{method.outputs.slice(0, 2).join(', ')}</em></div>
+      <div><span>Your input</span><strong>{respondentLabel}</strong><em>{respondentRule}</em></div>
+      <div><span>AHP checks</span><strong>{pairwiseRule}</strong><em>Consistency checked</em></div>
+      <div><span>Fuzzy values</span><strong>{method.fuzzySupport.nativeModeLabel ? fuzzyModeLabel(fuzzyMode) : fuzzyModeLabel(defaultFuzzyMode)}</strong><em>{fuzzyRule}</em></div>
+      <div><span>Result</span><strong>{isDematel ? 'Factor influence map' : 'Ranked options'}</strong><em>{method.outputs.slice(0, 2).join(', ')}</em></div>
     </div>
   );
 }
@@ -1685,29 +2171,33 @@ function TemplateSpecSummary({ config, methodName }: { config: StudyConfig; meth
   const fuzzyMode = String(config.methodParams.fuzzyInputMode ?? defaultFuzzyMode);
   return (
     <div className="templateSpecs">
-      <div><span>Selected model</span><strong>{methodName}</strong></div>
+      <div><span>Selected method</span><strong>{methodName}</strong></div>
       <div><span>{isDematel ? 'Factors' : 'Alternatives'}</span><strong>{isDematel ? config.criteria.length : config.alternatives.length}</strong></div>
       <div><span>{isDematel ? 'Matrix shape' : 'Criteria'}</span><strong>{isDematel ? `${config.criteria.length} x ${config.criteria.length}` : config.criteria.length}</strong></div>
       <div><span>Weighting</span><strong>{isDematel ? 'Not used' : weightingDisplayName(config.weightingId)}</strong></div>
-      <div><span>Data collection</span><strong>{dataInputMode}</strong></div>
+      <div><span>Input format</span><strong>{dataInputModeLabel(dataInputMode)}</strong></div>
       <div><span>{isDematel ? 'Experts' : 'Respondents'}</span><strong>{usesGroupData ? isDematel ? dematelExperts : respondentCount : 'Not used'}</strong></div>
       <div><span>AHP pairwise respondents</span><strong>{usesGroupData && (config.methodId === 'ahp' || config.weightingId === 'ahp') ? ahpRespondents : 'Not used'}</strong></div>
-      <div><span>Fuzzy mode</span><strong>{fuzzyMode}</strong></div>
-      <div><span>Template source</span><strong>Selected specifications</strong></div>
+      <div><span>Fuzzy values</span><strong>{fuzzyModeLabel(fuzzyMode)}</strong></div>
+      <div><span>Built from</span><strong>Your setup</strong></div>
     </div>
   );
 }
 
 function UploadStep({ config, methodName, validation, uploadAttempted, onUpload, onBack, onSample }: { config: StudyConfig; methodName: string; validation: ValidationResult; uploadAttempted: boolean; onUpload: (file: File) => void; onBack: () => void; onSample: () => void }) {
   return (
-    <section className="singlePanel">
+    <section className="singlePanel methodWorkbench">
       <div className="sectionTitle">
-        <h1>Upload completed template</h1>
-        <p>The app validates workbook structure, criterion types, weights, and matrix values before running the selected method.</p>
+        <h1>Upload data</h1>
+        <p>We check the file, then open results.</p>
       </div>
-      <TemplateSpecSummary config={config} methodName={methodName} />
+      <TemplateHandoffLine config={config} phase="upload" />
+      <details className="templateDetails uploadDetails">
+        <summary>Expected file</summary>
+        <TemplateSpecSummary config={config} methodName={methodName} />
+      </details>
       <label className="uploadZone">
-        <Upload size={26} /><strong>Drop or choose an Excel template</strong><span>.xlsx or .xls files generated by MCDM Studio</span>
+        <Upload size={26} /><strong>Drop or choose Excel file</strong><span>.xlsx, .xls, or .csv</span>
         <input type="file" accept=".xlsx,.xls,.csv" onChange={(event) => {
           const file = event.target.files?.[0];
           event.currentTarget.value = '';
@@ -1715,11 +2205,11 @@ function UploadStep({ config, methodName, validation, uploadAttempted, onUpload,
         }} />
       </label>
       <div className="validationList">
-        {validation.issues.length ? validation.issues.map((issue) => <div className={`validationItem ${issue.severity}`} key={`${issue.sheet}-${issue.location}-${issue.message}`}><strong>{issue.severity}</strong><span>{issue.sheet} {issue.location}: {issue.message}</span></div>) : <div className="readyNote">{uploadAttempted ? 'Validation passed. The completed workbook is ready for analysis.' : 'Upload the completed template to run validation and analysis.'}</div>}
+        {validation.issues.length ? validation.issues.map((issue) => <div className={`validationItem ${issue.severity}`} key={`${issue.sheet}-${issue.location}-${issue.message}`}><strong>{issue.severity}</strong><span>{issue.sheet} {issue.location}: {issue.message}</span></div>) : <div className="readyNote">{uploadAttempted ? 'File looks good. You can review the results now.' : 'Upload a file to run the analysis.'}</div>}
       </div>
       <div className="flowActions uploadActions">
-        <button className="secondaryAction" onClick={onBack}>Back to template</button>
-        <button className="textAction" onClick={onSample}>Analyze current screen data <ArrowRight size={16} /></button>
+        <button className="secondaryAction" onClick={onBack}>Back to Excel file</button>
+        <button className="textAction" onClick={onSample}>Try with example data <ArrowRight size={16} /></button>
       </div>
     </section>
   );
@@ -1729,59 +2219,94 @@ function ResultsStep({ config, analysis, checksPassed, checksTotal, activeTab, c
   const isDematel = analysis.methodId === 'dematel';
   const comparisonUnavailable = methodComparisonBlockReason(config.methodId, config, analysis.input);
   const canCompareMethods = !comparisonUnavailable;
-  const qualityText = checksTotal ? `${checksPassed}/${checksTotal} built-in method checks passed.` : 'Built-in method checks are loading.';
+  const passedDiagnostics = analysis.diagnostics.filter((item) => item.status === 'pass').length;
+  const qualityText = checksTotal ? `${checksPassed}/${checksTotal} checks` : 'Checking';
   const externalEvidenceText = externalValidationCoverageLabel(config.methodId);
-  const tabs = ['Input Summary', 'Cleaned Input', 'Transformed Matrix', 'Method Tables', 'Diagnostics', 'Final Result', 'Visualizations', ...(canCompareMethods ? ['Compare Methods'] : [])];
+  const resultValidationStatus = externalValidationStatusFor(config.methodId, 'readiness');
+  const resultFixtures = externalValidationFixturesFor(config.methodId);
+  const resultCandidates = externalValidationCandidatesFor(config.methodId);
+  const doiLabel = resultFixtures[0]?.doi ? `DOI ${resultFixtures[0].doi}` : resultCandidates[0]?.doi ? `Review DOI ${resultCandidates[0].doi}` : 'Awaiting DOI example';
+  const tabs = ['Final Result', 'Charts', ...(canCompareMethods ? ['Compare Methods'] : []), 'Overview', 'Your Data', 'Prepared Data', 'Calculations', 'Checks'];
   const inputTable = inputMatrixTable(analysis);
   const activeTable = activeTab === 'Final Result'
     ? analysis.tables.find((table) => table.id === 'ranking' || table.id === 'cause-effect') ?? analysis.tables[0]
-    : activeTab === 'Transformed Matrix'
+    : activeTab === 'Prepared Data'
       ? analysis.tables.find((table) => table.id.includes('normalized') || table.id.includes('total')) ?? analysis.tables[0]
       : analysis.tables[0];
   const rankingTable = analysis.tables.find((table) => table.id === 'ranking');
   return (
     <section className="resultsPanel">
       <div className="resultsHeader">
-        <div><h1>{analysis.methodName} results</h1><p>{config.title}. {qualityText} {externalEvidenceText}</p></div>
-        <div className="exportActions">
-          <button className="secondaryAction" onClick={onEdit}>Edit specifications</button>
-          <button className="secondaryAction" onClick={onUpload}>Re-upload</button>
-          <button className="secondaryAction" onClick={() => void onExcel()}>Excel</button>
-          <button className="secondaryAction" onClick={() => void onDocx()}>DOCX</button>
-          <button className="secondaryAction" onClick={() => void onPdf()}>PDF</button>
-          <button className="secondaryAction" onClick={onJson}>Project JSON</button>
-          <button className="primaryAction" onClick={() => void onExport()}><FileText size={16} />Full package</button>
+        <div><h1>{analysis.methodName} results</h1><p>Ready to review.</p></div>
+        <div className="exportActions" aria-label="Export results">
+          <button className="secondaryAction" onClick={onEdit}>Edit setup</button>
+          <button className="secondaryAction" onClick={onUpload}><Upload size={15} />Re-upload</button>
+          <button className="secondaryAction" onClick={() => void onExcel()} title="Export Excel"><FileSpreadsheet size={15} />Excel</button>
+          <button className="secondaryAction" onClick={() => void onDocx()} title="Export DOCX"><FileText size={15} />DOCX</button>
+          <button className="secondaryAction" onClick={() => void onPdf()} title="Export PDF"><FileText size={15} />PDF</button>
+          <button className="secondaryAction" onClick={onJson}><Download size={15} />Project file</button>
+          <button className="primaryAction" onClick={() => void onExport()}><FileText size={16} />Export all</button>
         </div>
       </div>
-      <div className="resultTabs">{tabs.map((tab) => <button className={activeTab === tab ? 'active' : ''} key={tab} onClick={() => onTab(tab)}>{tab}</button>)}</div>
-      <div className="resultCards">
-        <Metric label={isDematel ? 'Top factor' : 'Top alternative'} value={analysis.ranking[0]?.alternative ?? 'N/A'} />
-        <Metric label="Top score" value={analysis.ranking[0]?.score?.toFixed(4) ?? 'N/A'} />
-        <Metric label="Output tables" value={String(analysis.tables.length)} />
+      <div className="resultStatusStrip resultsQaStrip" aria-label="Result quality and evidence">
+        <div><span>Study</span><strong>{config.title}</strong></div>
+        <div><span>Quality</span><strong>{qualityText}; {passedDiagnostics}/{analysis.diagnostics.length} diagnostics</strong></div>
+        <div><span>Evidence</span><strong title={externalEvidenceText}>{resultValidationStatus.label}</strong></div>
+        <div><span>DOI source</span>{resultFixtures[0] ? <a href={resultFixtures[0].sourceUrl} target="_blank" rel="noreferrer">{doiLabel}</a> : <strong>{doiLabel}</strong>}</div>
       </div>
-      {activeTab === 'Input Summary' ? <InputSummary analysis={analysis} config={config} checksPassed={checksPassed} checksTotal={checksTotal} /> : null}
-      {activeTab === 'Cleaned Input' ? <TableBlock table={inputTable} /> : null}
-      {activeTab === 'Visualizations' ? <VisualizationPanel analysis={analysis} rankingTitle={rankingTable?.title ?? 'Ranking visualization'} /> : null}
+      <OutcomeLine analysis={analysis} isDematel={isDematel} />
+      <div className="resultTabs">{tabs.map((tab) => <button className={activeTab === tab ? 'active' : ''} key={tab} onClick={() => onTab(tab)}>{tab}</button>)}</div>
+      {activeTab === 'Overview' ? <InputSummary analysis={analysis} config={config} checksPassed={checksPassed} checksTotal={checksTotal} /> : null}
+      {activeTab === 'Your Data' ? <TableBlock table={inputTable} /> : null}
+      {activeTab === 'Charts' ? <VisualizationPanel analysis={analysis} rankingTitle={rankingTable?.title ?? 'Ranking chart'} /> : null}
       {activeTab === 'Compare Methods' && canCompareMethods ? <CompareMethods config={config} analysis={analysis} compareIds={compareIds} onChange={onCompareIds} /> : null}
       {activeTab === 'Compare Methods' && !canCompareMethods ? <div className="readyNote">{comparisonUnavailable}</div> : null}
-      {(activeTab === 'Transformed Matrix' || activeTab === 'Final Result') ? (
+      {(activeTab === 'Prepared Data' || activeTab === 'Final Result') ? (
         <div className="resultsGridSimple">
           <TableBlock table={activeTable} />
-          <VisualizationPanel analysis={analysis} rankingTitle={rankingTable?.title ?? 'Ranking visualization'} compact />
+          <VisualizationPanel analysis={analysis} rankingTitle={rankingTable?.title ?? 'Ranking chart'} compact />
         </div>
       ) : null}
-      {activeTab === 'Diagnostics' ? <Diagnostics diagnostics={analysis.diagnostics} /> : null}
-      {activeTab === 'Method Tables' ? analysis.tables.map((table) => <TableBlock key={table.id} table={table} />) : null}
+      {activeTab === 'Checks' ? <Checks diagnostics={analysis.diagnostics} /> : null}
+      {activeTab === 'Calculations' ? analysis.tables.map((table) => <TableBlock key={table.id} table={table} />) : null}
     </section>
   );
 }
 
+function OutcomeLine({ analysis, isDematel }: { analysis: AnalysisResult; isDematel: boolean }) {
+  const top = analysis.ranking[0];
+  const second = analysis.ranking[1];
+  const margin = top && second ? Math.abs(top.score - second.score) : 0;
+  const evidenceTarget = isDematel ? 'cause-effect map' : 'final ranking';
+  const scoreLabel = isDematel ? 'Prominence score' : 'Preference score';
+  const marginText = second
+    ? `${margin.toFixed(4)} from ${second.alternative}`
+    : 'Only one item in this study';
+
+  return (
+    <div className="outcomeLine" aria-label="Result summary">
+      <div className="outcomeLead">
+        <span>{isDematel ? 'Top factor' : 'Top option'}</span>
+        <strong>{top?.alternative ?? 'N/A'}</strong>
+        <em>{top ? `${scoreLabel} ${top.score.toFixed(4)}` : 'No result available'}</em>
+      </div>
+      <div className="outcomeNode">
+        <span>{isDematel ? 'Influence gap' : 'Lead gap'}</span>
+        <strong>{marginText}</strong>
+      </div>
+      <div className="outcomeNode">
+        <span>Audit trail</span>
+        <strong>{analysis.tables.length} table{analysis.tables.length === 1 ? '' : 's'} + {evidenceTarget}</strong>
+      </div>
+    </div>
+  );
+}
 function inputMatrixTable(analysis: AnalysisResult): OutputTable {
   const isDematel = analysis.methodId === 'dematel';
   return {
     id: 'cleaned-input',
-    title: isDematel ? 'Analyzed Direct Relation Matrix' : 'Analyzed Decision Matrix',
-    columns: [isDematel ? 'Source factor' : 'Alternative', ...analysis.input.criteria.map((criterion) => criterion.id)],
+    title: isDematel ? 'Analyzed direct-relation matrix' : 'Analyzed decision matrix',
+    columns: [isDematel ? 'Source factor' : 'Option', ...analysis.input.criteria.map((criterion) => criterion.id)],
     rows: analysis.input.values.map((row, index) => [
       isDematel ? (analysis.input.criteria[index]?.name ?? analysis.input.criteria[index]?.id ?? `F${index + 1}`) : (analysis.input.alternatives[index]?.name ?? analysis.input.alternatives[index]?.id ?? `A${index + 1}`),
       ...row.map((value) => Number.isFinite(value) ? Number(value.toFixed(6)) : 'Invalid'),
@@ -1831,17 +2356,17 @@ function CompareMethods({ config, analysis, compareIds, onChange }: { config: St
       </div>
       {unavailableMethods.length ? (
         <details className="comparisonNotes">
-          <summary>Methods not available for this comparison</summary>
+          <summary>Methods that cannot compare this data</summary>
           <div>
             {unavailableMethods.map(({ method, reason }) => <p key={method.id}><strong>{method.name}</strong>: {reason}</p>)}
           </div>
         </details>
       ) : null}
       <div className="cleanTableWrap">
-        <h2>Method comparison</h2>
+        <h2>Compare methods</h2>
         <table>
-          <thead><tr><th>Method</th><th>Top result</th><th>Top score</th><th>Ranking order</th></tr></thead>
-          <tbody>{rows.length ? rows.map((row) => <tr key={row.method}><td>{row.method}</td><td>{row.top}</td><td>{row.top === 'Unavailable' ? 'N/A' : row.score.toFixed(4)}</td><td>{row.ranking}</td></tr>) : <tr><td colSpan={4}>Select at least one compatible ranking method.</td></tr>}</tbody>
+          <thead><tr><th>Method</th><th>Best option</th><th>Score</th><th>Order</th></tr></thead>
+          <tbody>{rows.length ? rows.map((row) => <tr key={row.method}><td>{row.method}</td><td>{row.top}</td><td>{row.top === 'Unavailable' ? 'N/A' : row.score.toFixed(4)}</td><td>{row.ranking}</td></tr>) : <tr><td colSpan={4}>Select at least one method that can use this data.</td></tr>}</tbody>
         </table>
       </div>
     </div>
@@ -1852,13 +2377,13 @@ function InputSummary({ analysis, config, checksPassed, checksTotal }: { analysi
   const method = getMethod(config.methodId);
   return (
     <>
-      <div className="summaryGrid">
+      <div className="summaryGrid resultsQaStrip">
         <Metric label="Study" value={config.title} />
         <Metric label="Method" value={analysis.methodName} />
         <Metric label="Weighting" value={method.supportsWeights ? weightingDisplayName(config.weightingId) : 'Not used'} />
-        <Metric label="Alternatives/factors" value={String(analysis.input.alternatives.length)} />
-        <Metric label="Criteria/factors" value={String(analysis.input.criteria.length)} />
-        <Metric label="Diagnostics" value={`${analysis.diagnostics.filter((item) => item.status === 'pass').length}/${analysis.diagnostics.length} passed`} />
+        <Metric label="Options or factors" value={String(analysis.input.alternatives.length)} />
+        <Metric label="Criteria or factors" value={String(analysis.input.criteria.length)} />
+        <Metric label="Checks" value={`${analysis.diagnostics.filter((item) => item.status === 'pass').length}/${analysis.diagnostics.length} passed`} />
       </div>
       <ReadinessPanel method={method} config={config} checksPassed={checksPassed} checksTotal={checksTotal} />
     </>
@@ -1873,8 +2398,8 @@ function ReadinessPanel({ method, config, checksPassed, checksTotal }: { method:
   return (
     <section className="readinessPanel">
       <div className="tableToolbar">
-        <h2>Research readiness</h2>
-        <span>Selected workflow</span>
+        <h2>Review readiness</h2>
+        <span>For this result</span>
       </div>
       <div className="readinessGrid">
         {items.map((item) => (
@@ -1890,8 +2415,8 @@ function ReadinessPanel({ method, config, checksPassed, checksTotal }: { method:
           <span>{validationStatus.text}</span>
         </div>
         <div>
-          <span>External published validation</span>
-          <strong>{externalFixtures.length ? `${externalFixtures.length} fixture${externalFixtures.length === 1 ? '' : 's'} registered for ${method.name}` : `No published fixture registered for ${method.name} yet`}</strong>
+          <span>Published examples</span>
+          <strong>{externalFixtures.length ? `${externalFixtures.length} reproduced example${externalFixtures.length === 1 ? '' : 's'} for ${method.name}` : `No published example has been reproduced for ${method.name} yet`}</strong>
         </div>
         {externalFixtures.length ? externalFixtures.map((fixture) => (
           <a key={`${fixture.methodId}-${fixture.variant}`} href={fixture.sourceUrl} target="_blank" rel="noreferrer">
@@ -1899,15 +2424,15 @@ function ReadinessPanel({ method, config, checksPassed, checksTotal }: { method:
             <span>{fixture.source}; DOI {fixture.doi}</span>
           </a>
         )) : (
-          <p>Bundled numerical checks still run for this method, but external paper-by-paper validation is pending for this selected method.</p>
+          <p>No matched DOI fixture yet.</p>
         )}
         {externalCandidates.length ? (
           <div className="evidenceNotice">
-            <strong>Validation candidate tracked</strong>
+            <strong>Additional DOI sources kept in review</strong>
             {externalCandidates.map((candidate) => (
               <a key={`${candidate.methodId}-${candidate.variant}`} href={candidate.sourceUrl} target="_blank" rel="noreferrer">
                 <span>{candidate.variant}</span>
-                <em>{candidate.scope} DOI {candidate.doi}</em>
+                <em>{candidate.source}; DOI {candidate.doi}</em>
               </a>
             ))}
           </div>
@@ -1915,15 +2440,15 @@ function ReadinessPanel({ method, config, checksPassed, checksTotal }: { method:
       </div>
       <div className="capabilityProfile">
         <div>
-          <span>Respondent strategy</span>
+          <span>Group data</span>
           <strong>{groupDecisionCapability(method, config)}</strong>
         </div>
         <div>
-          <span>Fuzzy strategy</span>
+          <span>Fuzzy values</span>
           <strong>{fuzzyCapability(method, config)}</strong>
         </div>
         <div>
-          <span>Validation boundary</span>
+          <span>Validation note</span>
           <strong>{validationBoundary(method)}</strong>
         </div>
       </div>
@@ -1931,14 +2456,14 @@ function ReadinessPanel({ method, config, checksPassed, checksTotal }: { method:
   );
 }
 
-function Diagnostics({ diagnostics }: { diagnostics: AnalysisResult['diagnostics'] }) {
+function Checks({ diagnostics }: { diagnostics: AnalysisResult['diagnostics'] }) {
   return <div className="diagnostics">{diagnostics.map((item) => <div key={item.label} className={item.status}><strong>{item.label}</strong><span>{item.value}</span></div>)}</div>;
 }
 
 function VisualizationPanel({ analysis, rankingTitle, compact = false }: { analysis: AnalysisResult; rankingTitle: string; compact?: boolean }) {
   return (
     <div className={compact ? 'visualPanel compact' : 'visualPanel'}>
-      {analysis.methodId === 'dematel' ? <DematelPlot analysis={analysis} /> : <RankingBars analysis={analysis} title={rankingTitle} />}
+      {analysis.methodId === 'dematel' ? <DematelPlot analysis={analysis} /> : <RankingBars analysis={analysis} title={compact ? 'Score chart' : rankingTitle} />}
       {!compact ? <WeightBars analysis={analysis} /> : null}
       {!compact && analysis.methodId !== 'dematel' ? <SensitivityBand analysis={analysis} /> : null}
       {!compact ? <MatrixHeatmap analysis={analysis} /> : null}
@@ -2016,8 +2541,8 @@ function SensitivityBand({ analysis }: { analysis: AnalysisResult }) {
   if (!data.length) return null;
   return (
     <div className="rankingBars sensitivityCard">
-      <h2>{visualization?.title ?? 'Weight perturbation band'}</h2>
-      <p>Shows the configured +/-10% criterion-weight review range; use it as a publication check before deeper scenario reruns.</p>
+      <h2>{visualization?.title ?? 'Weight sensitivity'}</h2>
+      <p>Shows how the result behaves when criterion weights move up or down by 10%.</p>
       {data.map((item) => {
         const high = Math.max(Number(item.highScenario), 0.0001);
         const lowWidth = Math.max(2, (Number(item.lowScenario) / high) * 100);
@@ -2066,17 +2591,6 @@ function TableBlock({ table }: { table: AnalysisResult['tables'][number] }) {
   );
 }
 
-function NextPanel() {
-  return (
-    <aside className="nextPanel">
-      <h2>What happens next</h2>
-      <div><Settings2 size={18} /><strong>Configure study</strong><span>Set criteria, weights, and analysis options.</span></div>
-      <div><FileSpreadsheet size={18} /><strong>Download template</strong><span>Get the Excel template for your data.</span></div>
-      <div><Upload size={18} /><strong>Upload completed file</strong><span>Run validation, calculations, and reports.</span></div>
-    </aside>
-  );
-}
-
 function SamplePreview({ title, config = sampleConfig, templateSheets = [] }: { title: string; config?: StudyConfig; templateSheets?: ReturnType<MethodDefinition['getTemplateSchema']> }) {
   const isDematel = config.methodId === 'dematel';
   const visibleSheets = templateSheets.filter((sheet) => sheet.name !== 'Instructions');
@@ -2097,9 +2611,9 @@ function SamplePreview({ title, config = sampleConfig, templateSheets = [] }: { 
     ? 'No criteria weights'
     : config.weightingId === 'manual' ? 'Manual weights required' : `${weightingDisplayName(config.weightingId)} weights calculated`;
   const nativeFuzzyPreviewNote = config.methodId === 'grp'
-    ? 'Fuzzy cells use triangular `(l,m,u)` or trapezoidal `(a,b,c,d)` values and are processed through fuzzy positive/negative grey projection closeness.'
-    : 'Fuzzy cells use triangular `(l,m,u)` or trapezoidal `(a,b,c,d)` values and are processed in native fuzzy mode for this method.';
-  const calculatedWeightPreviewNote = `${weightingDisplayName(config.weightingId)} weighting is selected. The workbook intentionally has no editable manual-weight sheet; applied weights are calculated during analysis and shown in results and exports.`;
+    ? 'Use `(l,m,u)` or `(a,b,c,d)`. This method keeps fuzzy ranges in calculation.'
+    : 'Fuzzy cells can use triangular `(l,m,u)` or trapezoidal `(a,b,c,d)` ranges. This method keeps those ranges in its fuzzy calculation.';
+  const calculatedWeightPreviewNote = `${weightingDisplayName(config.weightingId)} weights are calculated in results and exports.`;
   const compactRows = (rows: Array<Array<string | number>>, maxRows = 5, maxColumns = 7) =>
     rows.slice(0, maxRows).map((row) => row.slice(0, maxColumns));
   const matrixSheet = templateSheets.find((sheet) => sheet.name === (isDematel ? 'Direct Relation Matrix' : 'Decision Matrix'));
@@ -2107,12 +2621,12 @@ function SamplePreview({ title, config = sampleConfig, templateSheets = [] }: { 
   return (
     <section className="samplePanel">
       <h2>{title}</h2>
-      <p className="sampleNote">These sheets are generated from the selected method, current criteria/factors, respondent settings, weighting method, and fuzzy mode.</p>
+      <p className="sampleNote">Matched to the current setup.</p>
       <div className="templatePreviewMeta">
         <span>{templateSheets.length} workbook sheets</span>
-        <span>{usesGroupData ? isDematel ? `${Number(config.methodParams.dematelExpertCount ?? 1)} expert sheets` : `${Number(config.methodParams.respondentCount ?? 1)} respondent sheets` : 'Single matrix input'}</span>
+        <span>{usesGroupData ? isDematel ? `${Number(config.methodParams.dematelExpertCount ?? 1)} expert matrices` : `${Number(config.methodParams.respondentCount ?? 1)} respondent matrices` : isDematel ? 'One direct-relation matrix' : 'One decision matrix'}</span>
         <span>{weightingNote}</span>
-        <span>{fuzzyMode}</span>
+        <span>{fuzzyModeLabel(fuzzyMode)}</span>
       </div>
       {!isDematel && config.weightingId !== 'manual' ? (
         <p className="sampleNote">{calculatedWeightPreviewNote}</p>
@@ -2120,30 +2634,33 @@ function SamplePreview({ title, config = sampleConfig, templateSheets = [] }: { 
       {fuzzyMode.startsWith('Native fuzzy') ? (
         <p className="sampleNote">{nativeFuzzyPreviewNote}</p>
       ) : null}
-      <div className="sheetInventory" aria-label="Workbook sheets">
-        {templateSheets.map((sheet) => <span key={sheet.name}>{sheet.name}</span>)}
-      </div>
-      <div className="templateSheetGrid">
-        {previewSheets.map((sheet) => (
-          <div className="templateSheetCard" key={sheet.name}>
-            <div className="tableToolbar"><h2>{sheet.name}</h2><span>{sheet.rows.length} rows</span></div>
-            <table>
-              <tbody>{compactRows(sheet.rows).map((row, rowIndex) => (
-                <tr key={rowIndex}>{row.map((cell, cellIndex) => <td key={cellIndex}>{cell}</td>)}</tr>
-              ))}</tbody>
-            </table>
-          </div>
-        ))}
-      </div>
-      {hiddenCount ? <p className="sampleNote">{hiddenCount} more sheet{hiddenCount === 1 ? '' : 's'} will be included in the downloaded workbook.</p> : null}
-      <div className="cleanTableWrap previewMatrix">
-        <div className="tableToolbar"><h2>{isDematel ? 'Filled direct-relation example' : 'Filled decision-matrix example'}</h2><span>{isDematel ? `${config.criteria.length} x ${config.criteria.length}` : `${config.alternatives.length} x ${config.criteria.length}`}</span></div>
-        <table>
-          <tbody>{matrixPreview.map((row, rowIndex) => (
-            <tr key={rowIndex}>{row.map((cell, cellIndex) => rowIndex === 0 ? <th key={cellIndex}>{cell}</th> : <td key={cellIndex}>{cell}</td>)}</tr>
-          ))}</tbody>
-        </table>
-      </div>
+      <details className="workbookPreviewDetails">
+        <summary>Workbook structure</summary>
+        <div className="sheetInventory" aria-label="Workbook sheets">
+          {templateSheets.map((sheet) => <span key={sheet.name}>{sheet.name}</span>)}
+        </div>
+        <div className="templateSheetGrid">
+          {previewSheets.map((sheet) => (
+            <div className="templateSheetCard" key={sheet.name}>
+              <div className="tableToolbar"><h2>{sheet.name}</h2><span>{sheet.rows.length} rows</span></div>
+              <table>
+                <tbody>{compactRows(sheet.rows).map((row, rowIndex) => (
+                  <tr key={rowIndex}>{row.map((cell, cellIndex) => <td key={cellIndex}>{cell}</td>)}</tr>
+                ))}</tbody>
+              </table>
+            </div>
+          ))}
+        </div>
+        {hiddenCount ? <p className="sampleNote">{hiddenCount} more sheet{hiddenCount === 1 ? '' : 's'} included in the download.</p> : null}
+        <div className="cleanTableWrap previewMatrix">
+          <div className="tableToolbar"><h2>{isDematel ? 'Direct-relation example' : 'Decision matrix example'}</h2><span>{isDematel ? `${config.criteria.length} x ${config.criteria.length}` : `${config.alternatives.length} x ${config.criteria.length}`}</span></div>
+          <table>
+            <tbody>{matrixPreview.map((row, rowIndex) => (
+              <tr key={rowIndex}>{row.map((cell, cellIndex) => rowIndex === 0 ? <th key={cellIndex}>{cell}</th> : <td key={cellIndex}>{cell}</td>)}</tr>
+            ))}</tbody>
+          </table>
+        </div>
+      </details>
     </section>
   );
 }
@@ -2157,3 +2674,21 @@ function LoadingOverlay({ label }: { label: string }) {
 }
 
 createRoot(document.getElementById('root')!).render(<App />);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

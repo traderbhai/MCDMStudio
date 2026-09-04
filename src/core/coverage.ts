@@ -5,21 +5,21 @@ import { externalValidationCoverageLabel, validationEvidence } from './validatio
 
 export function methodCoverageItems(method: MethodDefinition, config: StudyConfig, checksPassed: number, checksTotal: number) {
   const qaMode = checksTotal
-    ? `${checksPassed}/${checksTotal} built-in registry checks passed in this browser session`
-    : 'Built-in registry checks run when results open';
-  const benchmarkMode = `${benchmarkCoverageLabel(method.id)}. ${validationEvidence.numericalBenchmarks.count} bundled numerical checks exist across covered methods.`;
+    ? `${checksPassed} of ${checksTotal} quality checks passed in this browser session`
+    : 'Built-in checks run when results open';
+  const benchmarkMode = `${benchmarkCoverageLabel(method.id)}. ${validationEvidence.numericalBenchmarks.count} numerical checks are bundled across the app.`;
 
   return [
-    { label: 'Method family', value: method.id === 'dematel' ? 'Cause-effect modeling' : 'Alternative ranking' },
+    { label: 'Decision type', value: method.id === 'dematel' ? 'Factor influence study' : 'Option ranking' },
     { label: 'Group data', value: groupDecisionCapability(method, config) },
     { label: 'Fuzzy data', value: fuzzyCapability(method, config) },
-    { label: 'Weight handling', value: method.supportsWeights ? 'Manual, objective, pairwise, and rank-order weighting options' : 'Self-weighted or method-owned calculation' },
-    { label: 'Template validation', value: 'Sheets, dimensions, numeric/fuzzy cells, directions, weights, and method parameters are checked before analysis' },
-    { label: 'Automated QA', value: qaMode },
-    { label: 'Numerical evidence', value: benchmarkMode },
-    { label: 'External method validation', value: externalValidationCoverageLabel(method.id) },
+    { label: 'Weights', value: method.supportsWeights ? 'Choose manual weights, automatic weights, pairwise judgments, or rank-order weights.' : 'This method calculates its own scoring structure.' },
+    { label: 'Before analysis', value: 'The app checks sheet names, table size, numbers, fuzzy ranges, criterion type, weights, and method settings.' },
+    { label: 'App checks', value: qaMode },
+    { label: 'Benchmarks', value: benchmarkMode },
+    { label: 'Published examples', value: externalValidationCoverageLabel(method.id) },
     { label: 'Fuzzy validation boundary', value: validationBoundary(method) },
-    { label: 'Publication package', value: 'Exports include intermediate tables, diagnostics, visual data, and reproducibility metadata; external validation status is reported separately' },
-    { label: 'Evidence boundary', value: validationEvidence.externalBenchmarks.scope },
+    { label: 'Exports', value: 'Excel, DOCX, PDF, and project files include the tables, checks, charts, and reproducibility details needed to review the study.' },
+    { label: 'Evidence boundary', value: 'Published-example coverage is still being expanded across crisp, fuzzy, and group setups.' },
   ];
 }

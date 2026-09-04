@@ -2,7 +2,7 @@ import type { DecisionMatrix, StudyConfig, TemplateSheet, ValidationIssue, Valid
 import { validateDecisionInput } from '../core/validation';
 import { getMethod } from '../core/methods';
 import { weightingMetadata } from '../core/weightingMetadata';
-import { crispFuzzy, parseDecisionValue, type FuzzyNumber } from '../core/fuzzy';
+import { crispFuzzy, fuzzyLabel, parseDecisionValue, type FuzzyNumber } from '../core/fuzzy';
 import { safeFileName, safeSheetName } from './fileNames';
 
 interface ParsedMatrix {
@@ -231,7 +231,9 @@ function uploadedMethodParams(workbook: { Sheets: Record<string, unknown> }, XLS
     ...keyValueSheetParams(workbook, XLSX, 'ORESTE Settings', { 'Rank model': 'oresteRankModel' }),
     ...keyValueSheetParams(workbook, XLSX, 'QUALIFLEX Settings', { 'Exact permutation limit': 'qualiflexExactLimit' }),
     ...keyValueSheetParams(workbook, XLSX, 'REGIME Settings', { 'Preference model': 'regimePreferenceModel' }),
-    ...keyValueSheetParams(workbook, XLSX, 'EVAMIX Settings', { 'Data mode': 'evamixDataMode' }),
+    ...keyValueSheetParams(workbook, XLSX, 'GRP Settings', { 'Distinguishing coefficient zeta': 'graZeta', 'Input scale': 'grpInputScale' }),
+    ...keyValueSheetParams(workbook, XLSX, 'DNMA Settings', { Integration: 'dnmaIntegration', 'CCM/UCM/ICM weights': 'dnmaModelWeights', 'Utility-rank balance phi': 'dnmaPhi' }),
+    ...keyValueSheetParams(workbook, XLSX, 'EVAMIX Settings', { 'Data mode': 'evamixDataMode', 'Ordinal criterion IDs': 'evamixOrdinalCriteria' }),
     ...keyValueSheetParams(workbook, XLSX, 'DIBR Parameters', {
       'Criterion order': 'dibrOrder',
       'Adjacent importance ratios': 'dibrAdjacentRatios',
@@ -358,6 +360,103 @@ function sanitizeWorkbookConfig(workbook: { Sheets: Record<string, unknown> }, X
     },
     issues,
   };
+}
+
+function sampleCellValue(input: DecisionMatrix, rowIndex: number, columnIndex: number): string | number {
+  const fuzzy = input.fuzzyValues?.[rowIndex]?.[columnIndex];
+  if (fuzzy && fuzzy.type !== 'crisp') return fuzzyLabel(fuzzy);
+  return input.values[rowIndex]?.[columnIndex] ?? '';
+}
+
+function filledDecisionRows(input: DecisionMatrix): Array<Array<string | number>> {
+  return [
+    ['Alternative ID', ...input.criteria.map((criterion) => criterion.id)],
+    ...input.alternatives.map((alternative, rowIndex) => [
+      alternative.id,
+      ...input.criteria.map((_, columnIndex) => sampleCellValue(input, rowIndex, columnIndex)),
+    ]),
+  ];
+}
+
+function filledRelationRows(input: DecisionMatrix, matrix = input.values, fuzzyMatrix?: FuzzyNumber[][]): Array<Array<string | number>> {
+  return [
+    ['Factor', ...input.criteria.map((criterion) => criterion.id)],
+    ...input.criteria.map((criterion, rowIndex) => [
+      criterion.id,
+      ...input.criteria.map((_, columnIndex) => {
+        const fuzzy = fuzzyMatrix?.[rowIndex]?.[columnIndex];
+        if (fuzzy && fuzzy.type !== 'crisp') return fuzzyLabel(fuzzy);
+        return matrix[rowIndex]?.[columnIndex] ?? '';
+      }),
+    ]),
+  ];
+}
+
+export function buildSampleWorkbookSheets(sheets: TemplateSheet[], input: DecisionMatrix, config: StudyConfig): TemplateSheet[] {
+  return sheets.map((sheet) => {
+    if (sheet.name === 'Alternatives') {
+      return { ...sheet, rows: [['Alternative ID', 'Alternative Name'], ...input.alternatives.map((item) => [item.id, item.name])] };
+    }
+    if (sheet.name === 'Criteria') {
+      const hasWeightColumn = sheet.rows[0]?.some((cell) => String(cell).toLowerCase().includes('weight'));
+      return {
+        ...sheet,
+        rows: [
+          hasWeightColumn ? ['Criterion ID', 'Criterion Name', 'Direction', 'Manual Weight'] : ['Criterion ID', 'Criterion Name', 'Direction'],
+          ...input.criteria.map((item) => hasWeightColumn ? [item.id, item.name, item.direction, item.weight] : [item.id, item.name, item.direction]),
+        ],
+      };
+    }
+    if (sheet.name === 'Weights') {
+      return { ...sheet, rows: [['Criterion ID', 'Manual Weight'], ...input.criteria.map((item) => [item.id, item.weight])] };
+    }
+    if (sheet.name === 'Decision Matrix') {
+      return { ...sheet, rows: filledDecisionRows(input) };
+    }
+    const respondentMatch = sheet.name.match(/^Respondent (\d+)$/);
+    if (respondentMatch) {
+      const index = Number(respondentMatch[1]) - 1;
+      const matrix = input.respondentMatrices?.[index] ?? input.values;
+      const fuzzyMatrix = input.respondentFuzzyMatrices?.[index] ?? input.fuzzyValues;
+      return { ...sheet, rows: [
+        ['Alternative ID', ...input.criteria.map((criterion) => criterion.id)],
+        ...input.alternatives.map((alternative, rowIndex) => [
+          alternative.id,
+          ...input.criteria.map((_, columnIndex) => {
+            const fuzzy = fuzzyMatrix?.[rowIndex]?.[columnIndex];
+            if (fuzzy && fuzzy.type !== 'crisp') return fuzzyLabel(fuzzy);
+            return matrix[rowIndex]?.[columnIndex] ?? '';
+          }),
+        ]),
+      ] };
+    }
+    if (sheet.name === 'Factors') {
+      return { ...sheet, rows: [['Factor ID', 'Factor Name'], ...input.criteria.map((item) => [item.id, item.name])] };
+    }
+    if (sheet.name === 'Direct Relation Matrix') {
+      return { ...sheet, rows: filledRelationRows(input) };
+    }
+    const expertMatch = sheet.name.match(/^Expert (\d+)$/);
+    if (expertMatch) {
+      const index = Number(expertMatch[1]) - 1;
+      return { ...sheet, rows: filledRelationRows(input, input.expertMatrices?.[index] ?? input.values, input.expertFuzzyMatrices?.[index] ?? input.fuzzyValues) };
+    }
+    return sheet;
+  }).map((sheet) => {
+    if (sheet.name !== 'Instructions') return sheet;
+    return {
+      ...sheet,
+      rows: [
+        ...sheet.rows.slice(0, 1),
+        ['Sample workbook', 'This file is prefilled from the method page example and can be uploaded directly.'],
+        ...sheet.rows.slice(1).filter((row) => !String(row[0] ?? '').startsWith('Tip')),
+      ],
+    };
+  });
+}
+
+export async function downloadSampleWorkbook(sheets: TemplateSheet[], filename: string, input: DecisionMatrix, config: StudyConfig): Promise<void> {
+  await downloadTemplate(buildSampleWorkbookSheets(sheets, input, config), filename);
 }
 
 export async function downloadTemplate(sheets: TemplateSheet[], filename: string): Promise<void> {

@@ -19,16 +19,16 @@ Status meanings:
 | SRP | Newer ranking | Passing external fixture | Scientific Reports 2023 fixture checks criterion-wise dense ranks, VIMM-derived weights, weighted rank matrix, final preference scores, and material-selection ranking. |
 | FUCA | Newer ranking | Passing external fixture | mcdabench 2026 FUCA manual example validates criterion-wise average ranks, weighted rank scores, and lower-is-better final ranking. |
 | SECA | Newer ranking | Validation candidate | RMCDA optimizer-backed SECA example is tracked as a discrepancy: source returns optimized criterion weights, while current app uses deterministic reference-balance approximation plus ranking. |
-| DEAR | Newer ranking | Internal coverage only | Needs published-example fixture. |
-| EAMR | Newer ranking | Internal coverage only | Needs published-example fixture. |
-| RAWEC | Newer ranking | Internal coverage only | Needs published-example fixture. |
+| DEAR | Newer ranking | Passing external fixture | Materials 2022 fixture checks response-weight calculation for benefit MRR and cost surface roughness, MRPI ratio scoring, and final CNC milling experiment ranking. |
+| EAMR | Newer ranking | Passing external fixture | Machines 2022 fixture checks benefit/non-benefit normalization, weighted G+ and G- components, score ratio, and internal-grinding dressing-process ranking. |
+| RAWEC | Newer ranking | Passing external fixture | MethodsX 2024 fixture checks double benefit/cost normalization, LMAW-derived manual weights, weighted deviation values, Q deviation index, and agricultural distribution-center location ranking. |
 | COMET | Newer ranking | Passing external fixture | pymcdm COMET fixture checks min/max characteristic values, TOPSIS method-expert ranking of characteristic objects, rank-derived preference levels, triangular fuzzy membership interpolation, and final preference ranking. |
 | WPM | Utility/additive | Passing external fixture | Sage Open 2021 WPM component fixture checks normalization, product utility score, and ranking. |
 | WASPAS | Utility/additive | Passing external fixture | Sage Open 2021 fixture checks WSM/WPM components, lambda 0.5 score, and ranking. |
 | MOORA | Ratio/proportional | Passing external fixture | Journal of Industrial Engineering International 2017 fixture checks ratio-system normalization, benefit/cost sums, net score, and ranking. |
 | MOOSRA | Ratio/proportional | Passing external fixture | Journal of Industrial Engineering International 2017 fixture checks benefit/cost sums, MOOSRA ratio, and ranking. |
-| ARLON | Newer ranking | Internal coverage only | Needs published-example fixture. |
-| MACONT | Newer ranking | Internal coverage only | Needs published-example fixture. |
+| ARLON | Newer ranking | Passing external fixture | DergiPark 2025 job-candidate ARLON example; product-log normalization, weighted matrix, and final ranking matched. |
+| MACONT | Newer ranking | Passing external fixture | Informatica 2020 fixture checks comprehensive normalization, virtual reference aggregation scores, and sustainable third-party reverse logistics provider ranking. |
 | ARAS | Ratio/proportional | Passing external fixture | Frontiers in Public Health 2023 fixture checks published normalized matrix, weighted matrix, optimality function, utility degree, and ranking. |
 | EDAS | Distance/reference | Passing external fixture | Informatica 2015 fixture checks average solution, PDA/NDA handling, appraisal score, and ranking. |
 | MABAC | Distance/reference | Passing external fixture | Mathematics 2024 fixture checks normalized matrix, weighted matrix, border approximation area, distance matrix, and ranking. |
@@ -38,9 +38,9 @@ Status meanings:
 | MARA | Newer ranking | Passing external fixture | RMCDA 2025 fixture checks benefit/cost normalization, weighted normalized matrix, optimal alternative, area intensities, lower-is-better MARA gap scores, and final ranking. |
 | RAPS | Newer ranking | Validation candidate | MDPI Mathematics 2021 RAPS perimeter-similarity tables and final ranking are tracked, but the complete decision matrix/weights still need extraction before a passing executable fixture can be added. |
 | ORESTE | Compromise/rank aggregation | Passing external fixture | RMCDA 2025 fixture checks beneficial/cost alternative ranks, criterion ranks, alpha-blended rank indexes, global rank scores, and final ranking. |
-| QUALIFLEX | Compromise/rank aggregation | Internal coverage only | Needs published-example fixture. |
+| QUALIFLEX | Compromise/rank aggregation | Passing external fixture | Springer 2019 LPG bunker QUALIFLEX example; exact permutation summary and final selected order matched. |
 | REGIME | Compromise/rank aggregation | Passing external fixture | RMCDA 2025 fixture checks weighted pairwise dominance signs, dominance flow scores, and final ranking for the official REGIME worked example. |
-| EVAMIX | Compromise/rank aggregation | Internal coverage only | Needs published-example fixture. |
+| EVAMIX | Compromise/rank aggregation | Passing external fixture | American Journal of Operations Research 2013 AHP/EVAMIX composite-reinforcement example; normalized matrix, ordinal/cardinal dominance, overall dominance, appraisal scores, and final ranking matched. |
 | Lexicographic | Compromise/rank aggregation | Passing external fixture | JMCDA 2022 fixture checks strict priority-order comparison, direction-adjusted evidence, decisive criterion, and final non-compensatory ranking. |
 | MARCOS | Ratio/proportional | Passing external fixture | Materia 2026 fixture checks utility normalization, ROC weights, range-scaled K- convention, f(K+) ranking, utility-table cells, and final milling-process ranking. |
 | MAIRCA | Ratio/proportional | Passing external fixture | RMCDA 2026 fixture checks min-max normalization, theoretical assessment matrix, real assessment matrix, gap matrix, total gap values, and final ranking. |
@@ -60,26 +60,33 @@ Status meanings:
 | TODIM | Newer ranking | Passing external fixture | RMCDA 2025 fixture checks benefit/cost normalization, theta 1 pairwise prospect-dominance cells, normalized dominance scores, and final material-selection ranking. |
 | RAM | Utility/additive | Passing external fixture | pymcdm 2026 fixture checks column-sum normalization, weighted matrix, S+/S- utility sums, root assessment RI score, and final ranking. |
 | GRA | Grey/relational | Passing external fixture | Journal of Healthcare Engineering 2019 fixture checks grey relational coefficients, grey relational grades, and supplier ranking. |
-| GRP | Grey/relational | Internal coverage only | Needs published-example fixture. |
+| GRP | Grey/relational | Passing external fixture | African Journal of Business Management 2012 human-resources manager GRP example; positive/negative grey coefficients, squared-weight projection values, relative closeness, and final candidate ranking matched. |
 | SPOTIS | Distance/reference | Passing external fixture | Original SPOTIS rank-reversal example checks manual bounds, ideal solution point, normalized distance matrix, weighted distance scores, and final distance ranking. |
-| ESP-SPOTIS | Distance/reference | Internal coverage only | Needs published-example fixture. |
-| B-SPOTIS | Distance/reference | Passing external fixture | pymcdm 2026 fixture checks manual criterion bounds, ideal solution point, expected solution point, alpha-blended ESP/ISP distances, balanced distance scores, and final lower-is-better ranking; the richer SciTePress used-car case remains tracked separately as a candidate needing full table extraction. |
+| ESP-SPOTIS | Distance/reference | Passing external fixture | ICAART 2025 fixture checks expected-solution-point distance calculation, manual bounds, RANCOM-derived weights, and used-car ranking. |
+| B-SPOTIS | Distance/reference | Passing external fixture | pymcdm 2026 and ICAART 2025 fixtures check manual criterion bounds, ideal solution point, expected solution point, alpha 0.5 ESP/ISP distance blending, balanced distance scores, and final lower-is-better rankings. |
 | WEDBA | Distance/reference | Validation candidate | IJCAT 2019 fuzzy WEDBA examples are tracked, but the complete tuple matrix/weights/intermediate values still need extraction before a passing executable fixture can be added. |
 | LMAW | Utility/additive | Passing external fixture | JMcDM 2025 fixture checks positive standardization, logarithmic normalization, nonlinear Q utility matrix, final scores, and best logistics alternative. |
-| DNMA | Compromise/rank aggregation | Internal coverage only | Needs published-example fixture. |
+| DNMA | Compromise/rank aggregation | Passing external fixture | Business Systems Research 2023 LMAW-DNMA Serbian company-performance example; adjusted weights, target normalization, CCM/UCM/ICM utilities, integrated scores, and final ranking matched. |
 | PROBID | Distance/reference | Passing external fixture | pymcdm 2026 fixture checks vector normalization, weighted matrix, ideal/average reference distance aggregation, preference index, and final ranking. |
 | SPROBID | Distance/reference | Passing external fixture | pymcdm 2026 fixture checks vector normalization, weighted matrix, ordered ideal solutions, first/last-quarter ideal-distance aggregation, preference index, and final ranking. |
 | RIM | Distance/reference | Passing external fixture | RMCDA 2025 fixture checks domain bounds, reference ideal intervals, normalized closeness matrix, weighted closeness matrix, positive/negative distances, R index, and final ranking. |
 | RAFSI | Newer ranking | Passing external fixture | rafsi R package example checks manual ideal/anti-ideal references, functional mapping matrix, normalized matrix, weighted matrix, final scores, and ranking. |
 | LoPM | Distance/reference | Passing external fixture | pymcdm 2026 fixture checks manual lower-limit, upper-limit, and target property limits, merit components, weighted merit matrix, lower-is-better merit scores, and final material-selection ranking. |
 | AROMAN | Utility/additive | Passing external fixture | pymcdm 2026 fixture checks min-max normalization, vector normalization, beta-averaged blended matrix, weighted matrix, lambda-powered cost/profit components, preference scores, and final ranking. |
-| COBRA | Distance/reference | Internal coverage only | Needs published-example fixture. |
+| COBRA | Distance/reference | Validation candidate | Financial Innovation 2025 ITARA-COBRA BIST 100 example is tracked, but the transformed input matrix, weights, direction convention, and final ranking tables still need extraction before promotion. |
 | ERVD | Distance/reference | Passing external fixture | pymcdm 2026 fixture checks sum normalization, normalized manual reference point, relative performance matrix, weighted separation measures, preference scores, and final ranking. |
 
 Current count:
 
-- Passing external fixtures: 50 methods/variants
-- Validation candidates: 4 methods, 9 candidate records
-- Internal coverage only: 11 methods
+- Methods matched: 60/65
+- Methods needing a first matched DOI fixture: 5 (SECA, CRADIS, RAPS, WEDBA, COBRA)
+- Passing external fixtures: 61 published examples across 60 methods/variants
+- Validation candidates: 5 methods, 9 registry candidates; 5 executable discrepancy records
+- Internal coverage only: 0 methods
+
+Boundary note: if a future method is listed as Internal coverage only, its current evidence should remain "Needs published-example fixture" until a traceable active fixture passes.
 
 This matrix should be updated only when `scripts/external-validation-smoke.mjs` and `npm run verify` pass.
+
+
+

@@ -1,0 +1,383 @@
+{
+  "methodId": "dnma",
+  "variant": "crisp-lmaw-weights-company-performance-serbia-2023",
+  "source": "Performance Analysis of Companies in Serbia Based on the LMAW-DNMA Method, Business Systems Research, 2023, DOI: 10.2478/bsrj-2023-0016, Tables 2-11",
+  "sourceUrl": "https://hrcak.srce.hr/en/307841",
+  "doi": "10.2478/bsrj-2023-0016",
+  "config": {
+    "title": "DNMA validation: company performance in Serbia",
+    "weightingId": "manual",
+    "methodParams": {
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload",
+      "dnmaIntegration": "Utility and rank integration",
+      "dnmaModelWeights": "0.6,0.1,0.3",
+      "dnmaPhi": 0.5
+    }
+  },
+  "input": {
+    "alternatives": [
+      {
+        "id": "A1",
+        "name": "JP EPS BELGRADE"
+      },
+      {
+        "id": "A2",
+        "name": "NIS AD NOVI SAD"
+      },
+      {
+        "id": "A3",
+        "name": "TELEKOM SRBIJA AD, BELGRADE"
+      },
+      {
+        "id": "A4",
+        "name": "JP SRBIJAGAS NOVI SAD"
+      },
+      {
+        "id": "A5",
+        "name": "DELHAIZE S"
+      },
+      {
+        "id": "A6",
+        "name": "NELT CO. DOO BELGRADE"
+      },
+      {
+        "id": "A7",
+        "name": "DELTA HOLDING DOO BELGRADE"
+      },
+      {
+        "id": "A8",
+        "name": "MERCATA VT DOO"
+      },
+      {
+        "id": "A9",
+        "name": "PHOENIX PHARMA DOO BELGRADE"
+      },
+      {
+        "id": "A10",
+        "name": "COCA-COLA HBC - SERBIA DOO ZEMUN"
+      },
+      {
+        "id": "A11",
+        "name": "MY KIOSK GROUP DOO"
+      },
+      {
+        "id": "A12",
+        "name": "TARKETT DOO BACA PALANKA"
+      },
+      {
+        "id": "A13",
+        "name": "MK GROUP DOO BELGRADE"
+      },
+      {
+        "id": "A14",
+        "name": "KNEZ PETROL COMPANY DOO BELGRADE"
+      },
+      {
+        "id": "A15",
+        "name": "HEMOFARM AD VRSAC"
+      },
+      {
+        "id": "A16",
+        "name": "MILSED DOO BELGRADE"
+      },
+      {
+        "id": "A17",
+        "name": "FCA SERBIA DOO KRAGUJEVAC"
+      },
+      {
+        "id": "A18",
+        "name": "EMS AD BELGRADE"
+      },
+      {
+        "id": "A19",
+        "name": "KOEFIK DOO BELGRADE"
+      },
+      {
+        "id": "A20",
+        "name": "YURA CORPORATION DOO RACA"
+      }
+    ],
+    "criteria": [
+      {
+        "id": "C1",
+        "name": "Operating revenue",
+        "direction": "benefit",
+        "weight": 0.1941
+      },
+      {
+        "id": "C2",
+        "name": "Net profit/loss",
+        "direction": "benefit",
+        "weight": 0.1993
+      },
+      {
+        "id": "C3",
+        "name": "Business assets",
+        "direction": "benefit",
+        "weight": 0.194
+      },
+      {
+        "id": "C4",
+        "name": "Capital",
+        "direction": "benefit",
+        "weight": 0.2026
+      },
+      {
+        "id": "C5",
+        "name": "Number of employees",
+        "direction": "benefit",
+        "weight": 0.209
+      }
+    ],
+    "values": [
+      [
+        24.013,
+        959.978,
+        602.051,
+        319.834,
+        -15.492
+      ],
+      [
+        11.544,
+        411.025,
+        262.836,
+        310.238,
+        20.957
+      ],
+      [
+        12.333,
+        490.964,
+        185.581,
+        144.701,
+        6.709
+      ],
+      [
+        2.471,
+        287.578,
+        129.753,
+        122.489,
+        5.802
+      ],
+      [
+        11.637,
+        83.293,
+        42.881,
+        118.912,
+        2.989
+      ],
+      [
+        3.121,
+        37.637,
+        18.721,
+        87.126,
+        248
+      ],
+      [
+        3.311,
+        149.188,
+        83.718,
+        76.424,
+        2.497
+      ],
+      [
+        1.078,
+        12.763,
+        1.093,
+        75.391,
+        958
+      ],
+      [
+        2.749,
+        39.024,
+        10.837,
+        74.941,
+        1.772
+      ],
+      [
+        1.623,
+        56.832,
+        43.084,
+        64.769,
+        6.783
+      ],
+      [
+        3.589,
+        12.247,
+        2.622,
+        64.365,
+        596
+      ],
+      [
+        3.215,
+        38.174,
+        19.813,
+        58.565,
+        2.493
+      ],
+      [
+        2.151,
+        94.429,
+        46.83,
+        57.675,
+        17.461
+      ],
+      [
+        1.183,
+        11.849,
+        3.417,
+        52.652,
+        3.447
+      ],
+      [
+        3.922,
+        68.38,
+        47.524,
+        49.284,
+        5.091
+      ],
+      [
+        2.758,
+        27.749,
+        3.547,
+        45.553,
+        1.084
+      ],
+      [
+        2.072,
+        49.521,
+        31.195,
+        41.512,
+        -3.866
+      ],
+      [
+        1.656,
+        105.336,
+        69.53,
+        39.043,
+        2.362
+      ],
+      [
+        2.983,
+        34.703,
+        8.502,
+        38.062,
+        152
+      ],
+      [
+        6.913,
+        27.713,
+        4.458,
+        37.188,
+        -1.092
+      ]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      {
+        "alternative": "JP EPS BELGRADE",
+        "score": 0.8
+      },
+      {
+        "alternative": "NIS AD NOVI SAD",
+        "score": 0.6662
+      },
+      {
+        "alternative": "TELEKOM SRBIJA AD, BELGRADE",
+        "score": 0.5945
+      },
+      {
+        "alternative": "MERCATA VT DOO",
+        "score": 0.5427
+      }
+    ],
+    "scores": [
+      {
+        "alternative": "JP SRBIJAGAS NOVI SAD",
+        "score": 0.4723
+      },
+      {
+        "alternative": "MY KIOSK GROUP DOO",
+        "score": 0.4511
+      },
+      {
+        "alternative": "KNEZ PETROL COMPANY DOO BELGRADE",
+        "score": 0.0554
+      }
+    ],
+    "tables": [
+      {
+        "id": "dnma-targets",
+        "cells": [
+          {
+            "row": 0,
+            "column": 5,
+            "value": 0.1934
+          },
+          {
+            "row": 3,
+            "column": 3,
+            "value": 319.834
+          },
+          {
+            "row": 4,
+            "column": 5,
+            "value": 0.2099
+          }
+        ]
+      },
+      {
+        "id": "linear-normalized",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": 1
+          },
+          {
+            "row": 1,
+            "column": 4,
+            "value": 0.966
+          },
+          {
+            "row": 13,
+            "column": 1,
+            "value": 0.0045
+          }
+        ]
+      },
+      {
+        "id": "dnma-subordinate-utilities",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": 0.7901
+          },
+          {
+            "row": 0,
+            "column": 3,
+            "value": 0.2099
+          },
+          {
+            "row": 0,
+            "column": 5,
+            "value": 0.8045
+          },
+          {
+            "row": 1,
+            "column": 7,
+            "value": 0.6662
+          },
+          {
+            "row": 13,
+            "column": 7,
+            "value": 0.0554
+          }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.002
+}

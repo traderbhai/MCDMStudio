@@ -1,0 +1,472 @@
+{
+  "methodId": "macont",
+  "variant": "crisp-sustainable-3prlp-comprehensive-normalization-informatica-2020",
+  "source": "MACONT: Mixed Aggregation by Comprehensive Normalization Technique for Multi-Criteria Analysis, Informatica 2020, DOI: 10.15388/20-INFOR417, Tables 2-3 and normalized matrix equations",
+  "sourceUrl": "https://www.informatica.vu.lt/journal/INFORMATICA/article/1184/read",
+  "doi": "10.15388/20-INFOR417",
+  "config": {
+    "title": "MACONT validation: Informatica 2020 sustainable third-party reverse logistics provider example",
+    "weightingId": "manual",
+    "methodParams": {
+      "macontLambda": 0.4,
+      "macontMu": 0.3,
+      "macontDelta": 0.5,
+      "macontTheta": 0.5,
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      {
+        "id": "P1",
+        "name": "P1"
+      },
+      {
+        "id": "P2",
+        "name": "P2"
+      },
+      {
+        "id": "P3",
+        "name": "P3"
+      },
+      {
+        "id": "P4",
+        "name": "P4"
+      },
+      {
+        "id": "P5",
+        "name": "P5"
+      },
+      {
+        "id": "P6",
+        "name": "P6"
+      },
+      {
+        "id": "P7",
+        "name": "P7"
+      },
+      {
+        "id": "P8",
+        "name": "P8"
+      }
+    ],
+    "criteria": [
+      {
+        "id": "C1",
+        "name": "C1",
+        "direction": "benefit",
+        "weight": 0.048
+      },
+      {
+        "id": "C2",
+        "name": "C2",
+        "direction": "cost",
+        "weight": 0.067
+      },
+      {
+        "id": "C3",
+        "name": "C3",
+        "direction": "cost",
+        "weight": 0.085
+      },
+      {
+        "id": "C4",
+        "name": "C4",
+        "direction": "benefit",
+        "weight": 0.026
+      },
+      {
+        "id": "C5",
+        "name": "C5",
+        "direction": "benefit",
+        "weight": 0.017
+      },
+      {
+        "id": "C6",
+        "name": "C6",
+        "direction": "benefit",
+        "weight": 0.034
+      },
+      {
+        "id": "C7",
+        "name": "C7",
+        "direction": "benefit",
+        "weight": 0.098
+      },
+      {
+        "id": "C8",
+        "name": "C8",
+        "direction": "cost",
+        "weight": 0.087
+      },
+      {
+        "id": "C9",
+        "name": "C9",
+        "direction": "benefit",
+        "weight": 0.065
+      },
+      {
+        "id": "C10",
+        "name": "C10",
+        "direction": "benefit",
+        "weight": 0.113
+      },
+      {
+        "id": "C11",
+        "name": "C11",
+        "direction": "benefit",
+        "weight": 0.046
+      },
+      {
+        "id": "C12",
+        "name": "C12",
+        "direction": "benefit",
+        "weight": 0.079
+      },
+      {
+        "id": "C13",
+        "name": "C13",
+        "direction": "benefit",
+        "weight": 0.047
+      },
+      {
+        "id": "C14",
+        "name": "C14",
+        "direction": "benefit",
+        "weight": 0.025
+      },
+      {
+        "id": "C15",
+        "name": "C15",
+        "direction": "benefit",
+        "weight": 0.072
+      },
+      {
+        "id": "C16",
+        "name": "C16",
+        "direction": "benefit",
+        "weight": 0.08
+      },
+      {
+        "id": "C17",
+        "name": "C17",
+        "direction": "benefit",
+        "weight": 0.011
+      }
+    ],
+    "values": [
+      [
+        0.647,
+        1,
+        1.219512,
+        0.459,
+        0.443,
+        0.5,
+        1,
+        1.727116,
+        0.742,
+        0.75,
+        1,
+        0.329,
+        0.521,
+        0.848,
+        0.625,
+        0.62,
+        0.453
+      ],
+      [
+        1,
+        1.727116,
+        2.079002,
+        0.905,
+        1,
+        0.231,
+        0.235,
+        2.242152,
+        0.597,
+        0.375,
+        0.286,
+        0.768,
+        0.808,
+        0.967,
+        0.75,
+        0.717,
+        0.907
+      ],
+      [
+        0.794,
+        1.364256,
+        1.531394,
+        0.392,
+        0.633,
+        0.808,
+        0.647,
+        1.996008,
+        0.661,
+        0.625,
+        0.571,
+        0.78,
+        1,
+        0.87,
+        0.5,
+        0.804,
+        0.573
+      ],
+      [
+        0.559,
+        1.862197,
+        1.046025,
+        0.5,
+        0.544,
+        1,
+        0.529,
+        1.618123,
+        0.258,
+        0.875,
+        0.714,
+        1,
+        0.562,
+        0.728,
+        0.375,
+        0.924,
+        0.493
+      ],
+      [
+        0.441,
+        3.460208,
+        1,
+        0.608,
+        0.354,
+        0.308,
+        0.765,
+        1,
+        0.516,
+        0.5,
+        0.429,
+        0.549,
+        0.863,
+        0.609,
+        0.5,
+        0.978,
+        0.427
+      ],
+      [
+        0.941,
+        1.136364,
+        1.968504,
+        1,
+        0.848,
+        0.192,
+        0.471,
+        2.469136,
+        0.387,
+        0.25,
+        0.571,
+        0.463,
+        0.712,
+        1,
+        0.875,
+        0.75,
+        1
+      ],
+      [
+        0.824,
+        3.08642,
+        1.706485,
+        0.851,
+        0.684,
+        0.885,
+        0.824,
+        2.074689,
+        1,
+        1,
+        0.286,
+        0.61,
+        0.877,
+        0.891,
+        0.625,
+        0.793,
+        0.613
+      ],
+      [
+        0.5,
+        2.906977,
+        1.145475,
+        0.568,
+        0.392,
+        0.731,
+        0.941,
+        1.30719,
+        0.935,
+        0.75,
+        0.429,
+        0.695,
+        0.644,
+        0.37,
+        1,
+        1,
+        0.52
+      ]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      {
+        "alternative": "P8",
+        "score": 0.4047
+      },
+      {
+        "alternative": "P7",
+        "score": 0.3422
+      },
+      {
+        "alternative": "P4",
+        "score": 0.2116
+      },
+      {
+        "alternative": "P1",
+        "score": 0.2029
+      },
+      {
+        "alternative": "P5",
+        "score": 0.1382
+      },
+      {
+        "alternative": "P3",
+        "score": 0.0836
+      },
+      {
+        "alternative": "P6",
+        "score": -0.3708
+      },
+      {
+        "alternative": "P2",
+        "score": -0.374
+      }
+    ],
+    "scores": [
+      {
+        "alternative": "P1",
+        "score": 0.2029
+      },
+      {
+        "alternative": "P2",
+        "score": -0.374
+      },
+      {
+        "alternative": "P3",
+        "score": 0.0836
+      },
+      {
+        "alternative": "P4",
+        "score": 0.2116
+      },
+      {
+        "alternative": "P5",
+        "score": 0.1382
+      },
+      {
+        "alternative": "P6",
+        "score": -0.3708
+      },
+      {
+        "alternative": "P7",
+        "score": 0.3422
+      },
+      {
+        "alternative": "P8",
+        "score": 0.4047
+      }
+    ],
+    "tables": [
+      {
+        "id": "macont-ratio-normalized",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": 0.647
+          },
+          {
+            "row": 0,
+            "column": 2,
+            "value": 1
+          },
+          {
+            "row": 1,
+            "column": 5,
+            "value": 1
+          },
+          {
+            "row": 7,
+            "column": 16,
+            "value": 1
+          }
+        ]
+      },
+      {
+        "id": "macont-integrated-normalized",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": 0.35
+          },
+          {
+            "row": 0,
+            "column": 7,
+            "value": 0.674
+          },
+          {
+            "row": 3,
+            "column": 10,
+            "value": 0.581
+          },
+          {
+            "row": 7,
+            "column": 15,
+            "value": 0.676
+          }
+        ]
+      },
+      {
+        "id": "macont-scores",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": 0.0207
+          },
+          {
+            "row": 0,
+            "column": 2,
+            "value": 1.6741
+          },
+          {
+            "row": 0,
+            "column": 5,
+            "value": 0.2029
+          },
+          {
+            "row": 7,
+            "column": 1,
+            "value": 0.0688
+          },
+          {
+            "row": 7,
+            "column": 2,
+            "value": 2.3379
+          },
+          {
+            "row": 7,
+            "column": 5,
+            "value": 0.4047
+          }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.002,
+  "notes": "The HTML article exposes the raw decision matrix as an image and the rounded normalized matrices as text. This fixture uses a ratio-equivalent positive input reconstructed from the published ratio-normalized matrix, which preserves the MACONT normalized matrices and final ranking under the paper equations."
+}

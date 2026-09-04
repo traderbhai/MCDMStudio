@@ -1,0 +1,287 @@
+{
+  "methodId": "dear",
+  "variant": "crisp-mrpi-machining-mrr-surface-roughness",
+  "source": "Evaluating CNC Milling Performance for Machining AISI 316 Stainless Steel with Carbide Cutting Tool Insert, Materials, 2022, DOI: 10.3390/ma15228051, Table 6",
+  "sourceUrl": "https://www.mdpi.com/1996-1944/15/22/8051",
+  "doi": "10.3390/ma15228051",
+  "config": {
+    "title": "DEAR validation: CNC milling multi-response optimization",
+    "weightingId": "manual",
+    "methodParams": {
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      {
+        "id": "E1",
+        "name": "E1"
+      },
+      {
+        "id": "E2",
+        "name": "E2"
+      },
+      {
+        "id": "E3",
+        "name": "E3"
+      },
+      {
+        "id": "E4",
+        "name": "E4"
+      },
+      {
+        "id": "E5",
+        "name": "E5"
+      },
+      {
+        "id": "E6",
+        "name": "E6"
+      },
+      {
+        "id": "E7",
+        "name": "E7"
+      },
+      {
+        "id": "E8",
+        "name": "E8"
+      },
+      {
+        "id": "E9",
+        "name": "E9"
+      },
+      {
+        "id": "E10",
+        "name": "E10"
+      },
+      {
+        "id": "E11",
+        "name": "E11"
+      },
+      {
+        "id": "E12",
+        "name": "E12"
+      },
+      {
+        "id": "E13",
+        "name": "E13"
+      },
+      {
+        "id": "E14",
+        "name": "E14"
+      },
+      {
+        "id": "E15",
+        "name": "E15"
+      },
+      {
+        "id": "E16",
+        "name": "E16"
+      },
+      {
+        "id": "E17",
+        "name": "E17"
+      },
+      {
+        "id": "E18",
+        "name": "E18"
+      },
+      {
+        "id": "E19",
+        "name": "E19"
+      },
+      {
+        "id": "E20",
+        "name": "E20"
+      }
+    ],
+    "criteria": [
+      {
+        "id": "MRR",
+        "name": "MRR",
+        "direction": "benefit",
+        "weight": 0.5
+      },
+      {
+        "id": "SR",
+        "name": "SR",
+        "direction": "cost",
+        "weight": 0.5
+      }
+    ],
+    "values": [
+      [
+        6733.82,
+        0.517
+      ],
+      [
+        1790.86,
+        0.394
+      ],
+      [
+        14544.3,
+        0.964
+      ],
+      [
+        28990,
+        1.365
+      ],
+      [
+        19354.3,
+        1.118
+      ],
+      [
+        19617.83,
+        1.235
+      ],
+      [
+        13970.3,
+        0.937
+      ],
+      [
+        22261.9,
+        0.778
+      ],
+      [
+        22290.7,
+        1.15
+      ],
+      [
+        12374.87,
+        1.104
+      ],
+      [
+        11429.8,
+        0.988
+      ],
+      [
+        14444.1,
+        0.953
+      ],
+      [
+        15597.8,
+        1.001
+      ],
+      [
+        15335.5,
+        0.648
+      ],
+      [
+        14072.4,
+        0.943
+      ],
+      [
+        14023.08,
+        0.934
+      ],
+      [
+        9372.42,
+        0.415
+      ],
+      [
+        14358.8,
+        0.952
+      ],
+      [
+        5448.5,
+        0.974
+      ],
+      [
+        7032.9,
+        0.889
+      ]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      {
+        "alternative": "E4"
+      },
+      {
+        "alternative": "E9"
+      },
+      {
+        "alternative": "E6"
+      },
+      {
+        "alternative": "E5"
+      },
+      {
+        "alternative": "E8"
+      },
+      {
+        "alternative": "E13"
+      },
+      {
+        "alternative": "E3"
+      },
+      {
+        "alternative": "E12"
+      },
+      {
+        "alternative": "E18"
+      },
+      {
+        "alternative": "E10"
+      },
+      {
+        "alternative": "E15"
+      },
+      {
+        "alternative": "E16"
+      },
+      {
+        "alternative": "E7"
+      },
+      {
+        "alternative": "E11"
+      },
+      {
+        "alternative": "E14"
+      },
+      {
+        "alternative": "E20"
+      },
+      {
+        "alternative": "E19"
+      },
+      {
+        "alternative": "E17"
+      },
+      {
+        "alternative": "E1"
+      },
+      {
+        "alternative": "E2"
+      }
+    ],
+    "tables": [
+      {
+        "id": "dear-response-weights",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": 0.024
+          },
+          {
+            "row": 0,
+            "column": 2,
+            "value": 0.079
+          },
+          {
+            "row": 3,
+            "column": 1,
+            "value": 0.102
+          },
+          {
+            "row": 16,
+            "column": 2,
+            "value": 0.099
+          }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.0011
+}

@@ -1,0 +1,386 @@
+{
+  "methodId": "eamr",
+  "variant": "crisp-dressing-process-internal-grinding-machines-2022",
+  "source": "A Comparative Study on Multi-Criteria Decision-Making in Dressing Process for Internal Grinding, Machines 2022, DOI: 10.3390/machines10050303, Table 7",
+  "sourceUrl": "https://www.mdpi.com/2075-1702/10/5/303",
+  "doi": "10.3390/machines10050303",
+  "config": {
+    "title": "EAMR validation: Machines 2022 internal-grinding dressing process example",
+    "weightingId": "manual",
+    "methodParams": {
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      {
+        "id": "A1",
+        "name": "A1"
+      },
+      {
+        "id": "A2",
+        "name": "A2"
+      },
+      {
+        "id": "A3",
+        "name": "A3"
+      },
+      {
+        "id": "A4",
+        "name": "A4"
+      },
+      {
+        "id": "A5",
+        "name": "A5"
+      },
+      {
+        "id": "A6",
+        "name": "A6"
+      },
+      {
+        "id": "A7",
+        "name": "A7"
+      },
+      {
+        "id": "A8",
+        "name": "A8"
+      },
+      {
+        "id": "A9",
+        "name": "A9"
+      },
+      {
+        "id": "A10",
+        "name": "A10"
+      },
+      {
+        "id": "A11",
+        "name": "A11"
+      },
+      {
+        "id": "A12",
+        "name": "A12"
+      },
+      {
+        "id": "A13",
+        "name": "A13"
+      },
+      {
+        "id": "A14",
+        "name": "A14"
+      },
+      {
+        "id": "A15",
+        "name": "A15"
+      },
+      {
+        "id": "A16",
+        "name": "A16"
+      }
+    ],
+    "criteria": [
+      {
+        "id": "Ra",
+        "name": "Ra",
+        "direction": "cost",
+        "weight": 0.5003
+      },
+      {
+        "id": "MRR",
+        "name": "MRR",
+        "direction": "benefit",
+        "weight": 0.4997
+      }
+    ],
+    "values": [
+      [
+        1,
+        0.6174
+      ],
+      [
+        1.709402,
+        0.6999
+      ],
+      [
+        1.875117,
+        0.7538
+      ],
+      [
+        1.511259,
+        0.7468
+      ],
+      [
+        1.974334,
+        0.8374
+      ],
+      [
+        1.474709,
+        0.8513
+      ],
+      [
+        1.449275,
+        0.7919
+      ],
+      [
+        1.685772,
+        0.8234
+      ],
+      [
+        1.191753,
+        1
+      ],
+      [
+        1.12765,
+        1
+      ],
+      [
+        1.072386,
+        1
+      ],
+      [
+        1.031353,
+        0.9478
+      ],
+      [
+        1.148897,
+        0.9704
+      ],
+      [
+        1.168497,
+        1
+      ],
+      [
+        1.120699,
+        0.9452
+      ],
+      [
+        1.004924,
+        1
+      ]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      {
+        "alternative": "A5",
+        "score": 1.6511
+      },
+      {
+        "alternative": "A3",
+        "score": 1.4117
+      },
+      {
+        "alternative": "A8",
+        "score": 1.3863
+      },
+      {
+        "alternative": "A6",
+        "score": 1.2539
+      },
+      {
+        "alternative": "A2",
+        "score": 1.1949
+      },
+      {
+        "alternative": "A9",
+        "score": 1.1904
+      },
+      {
+        "alternative": "A14",
+        "score": 1.1671
+      },
+      {
+        "alternative": "A7",
+        "score": 1.1463
+      },
+      {
+        "alternative": "A4",
+        "score": 1.1272
+      },
+      {
+        "alternative": "A10",
+        "score": 1.1263
+      },
+      {
+        "alternative": "A13",
+        "score": 1.1136
+      },
+      {
+        "alternative": "A11",
+        "score": 1.0712
+      },
+      {
+        "alternative": "A15",
+        "score": 1.0581
+      },
+      {
+        "alternative": "A16",
+        "score": 1.0037
+      },
+      {
+        "alternative": "A12",
+        "score": 0.9764
+      },
+      {
+        "alternative": "A1",
+        "score": 0.6167
+      }
+    ],
+    "scores": [
+      {
+        "alternative": "A1",
+        "score": 0.6167
+      },
+      {
+        "alternative": "A2",
+        "score": 1.1949
+      },
+      {
+        "alternative": "A3",
+        "score": 1.4117
+      },
+      {
+        "alternative": "A4",
+        "score": 1.1272
+      },
+      {
+        "alternative": "A5",
+        "score": 1.6511
+      },
+      {
+        "alternative": "A6",
+        "score": 1.2539
+      },
+      {
+        "alternative": "A7",
+        "score": 1.1463
+      },
+      {
+        "alternative": "A8",
+        "score": 1.3863
+      },
+      {
+        "alternative": "A9",
+        "score": 1.1904
+      },
+      {
+        "alternative": "A10",
+        "score": 1.1263
+      },
+      {
+        "alternative": "A11",
+        "score": 1.0712
+      },
+      {
+        "alternative": "A12",
+        "score": 0.9764
+      },
+      {
+        "alternative": "A13",
+        "score": 1.1136
+      },
+      {
+        "alternative": "A14",
+        "score": 1.1671
+      },
+      {
+        "alternative": "A15",
+        "score": 1.0581
+      },
+      {
+        "alternative": "A16",
+        "score": 1.0037
+      }
+    ],
+    "tables": [
+      {
+        "id": "eamr-normalized",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": 1
+          },
+          {
+            "row": 0,
+            "column": 2,
+            "value": 0.6174
+          },
+          {
+            "row": 4,
+            "column": 1,
+            "value": 0.5065
+          },
+          {
+            "row": 8,
+            "column": 2,
+            "value": 1
+          },
+          {
+            "row": 15,
+            "column": 1,
+            "value": 0.9951
+          }
+        ]
+      },
+      {
+        "id": "eamr-weighted",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": 0.5003
+          },
+          {
+            "row": 0,
+            "column": 2,
+            "value": 0.3085
+          },
+          {
+            "row": 4,
+            "column": 2,
+            "value": 0.4184
+          },
+          {
+            "row": 8,
+            "column": 2,
+            "value": 0.4997
+          }
+        ]
+      },
+      {
+        "id": "eamr-appraisal",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": 0.3085
+          },
+          {
+            "row": 0,
+            "column": 2,
+            "value": 0.5003
+          },
+          {
+            "row": 0,
+            "column": 3,
+            "value": 0.6167
+          },
+          {
+            "row": 4,
+            "column": 3,
+            "value": 1.6511
+          },
+          {
+            "row": 15,
+            "column": 3,
+            "value": 1.0037
+          }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.0012,
+  "notes": "The source table publishes normalized n_ij and weighted v_ij values. This fixture uses a normalization-equivalent positive input reconstructed from those published n_ij values so the executable engine reproduces the EAMR Table 7 appraisal scores and ranks."
+}

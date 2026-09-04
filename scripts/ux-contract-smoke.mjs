@@ -23,20 +23,21 @@ function check(name, passed, detail = '') {
 }
 
 const methodStep = functionBlock('MethodStep');
+const methodProcessGraphic = functionBlock('MethodProcessGraphic');
 const configureStep = functionBlock('ConfigureStep');
 const templateStep = functionBlock('TemplateStep');
 const uploadStep = functionBlock('UploadStep');
 const resultsStep = functionBlock('ResultsStep');
+const methodGuidePage = functionBlock('MethodGuidePage');
 const compareMethods = functionBlock('CompareMethods');
-const configurationSummary = functionBlock('ConfigurationSummary');
 
 check(
   'Method selection is focused',
-  methodStep.includes('methodChooser') && methodStep.includes('methodSelectLabel') && methodStep.includes('Continue with {selectedMethod.name}'),
+  methodStep.includes('proChooser') && methodStep.includes('methodList') && methodStep.includes('evidencePane') && methodStep.includes('MethodProcessGraphic') && methodProcessGraphic.includes('methodPath methodSignal') && methodStep.includes('Method library') && methodStep.includes('methods matched') && methodStep.includes('need DOI match') && !methodStep.includes('Academic names stay unchanged') && methodStep.includes('>Use {selectedMethod.name}') && methodStep.includes('>Math and sample '),
 );
 check(
   'Method selection supports family filtering',
-  source.includes('methodFamilies') && source.includes('methodFamilyById') && methodStep.includes('aria-label="Method family"'),
+  source.includes('methodFamilies') && source.includes('methodFamilyById') && methodStep.includes('aria-label="Decision type"'),
 );
 check(
   'Method family filter shows family counts',
@@ -44,7 +45,7 @@ check(
 );
 check(
   'Method selection has an empty state',
-  methodStep.includes('No methods match the current search, family, and validation filters'),
+  methodStep.includes('No methods match these filters'),
 );
 check(
   'First screen does not show template preview',
@@ -62,34 +63,82 @@ check(
   ].every((file) => !existsSync(file)),
 );
 check(
-  'Catalog is optional instead of dominant',
-  methodStep.includes('<details className="methodCatalog">') && methodStep.includes('Browse {filteredMethods.length} matching methods'),
+  'Method list is compact and primary',
+  methodStep.includes('methodListHeader') && methodStep.includes('role="listbox"') && methodStep.includes('role="option"') && methodStep.includes('methodRadio'),
 );
 check(
   'Method actions are accessible and specific',
-  methodStep.includes('aria-label="MCDM method"') && methodStep.includes('Continue with {selectedMethod.name}'),
+  methodStep.includes('aria-label="Matching MCDM methods"') && methodProcessGraphic.includes('aria-label="Reproducible method path"') && methodProcessGraphic.includes('signalGlyph') && methodStep.includes('Method library') && methodStep.includes('methods matched') && methodStep.includes('need DOI match') && !methodStep.includes('Academic names stay unchanged') && methodStep.includes('>Use {selectedMethod.name}') && methodStep.includes('>Math and sample '),
+);
+check(
+  'Method process graphic has restrained motion',
+  methodProcessGraphic.includes('Source') &&
+  methodProcessGraphic.includes('Data') &&
+  methodProcessGraphic.includes('Calculation') &&
+  methodProcessGraphic.includes('Result') &&
+  styles.includes('.methodSignal') &&
+  styles.includes('@keyframes signalTrace') &&
+  styles.includes('@keyframes barReveal') &&
+  styles.includes('@media (prefers-reduced-motion: reduce)'),
 );
 check(
   'Method selection exposes validation status',
   source.includes('externalValidationStatusFor') &&
   source.includes('externalValidationSummaryFor') &&
   methodStep.includes('evidenceCounts') &&
-  methodStep.includes('External validation coverage summary') &&
+  methodStep.includes('methods matched') &&
+  methodStep.includes('need DOI match') &&
+  methodStep.includes('Published evidence status') &&
   methodStep.includes('evidenceFilter') &&
-  methodStep.includes('Validation evidence') &&
-  methodStep.includes('methodWithCandidateCount') &&
-  methodStep.includes('externalValidationCandidatesFor(method.id).length > 0') &&
-  methodStep.includes('evidenceCounts.candidateFixtures') &&
-  validationEvidenceSource.includes('Validated with discrepancies tracked') &&
-  validationEvidenceSource.includes('tracked separately') &&
+  methodStep.includes('Evidence') &&
+  methodStep.includes('reviewMethodCount') &&
+  methodStep.includes("externalValidationStatusFor(method.id).tone === 'candidate'") &&
+  !methodStep.includes('evidenceCounts.candidateFixtures') &&
+  validationEvidenceSource.includes('Matched DOI example') &&
+  validationEvidenceSource.includes('reproduction is not matched yet') &&
   methodStep.includes('filteredMethods') &&
-  methodStep.includes('disabled={!filteredMethods.length}') &&
+  methodStep.includes('emptyMethodState') &&
   methodStep.includes('validationBadge') &&
-  methodStep.includes('validationSummary') &&
+  methodStep.includes('titleEvidence') &&
   methodStep.includes('catalogValidation') &&
+  methodStep.includes('selectedFixtureSample') &&
   styles.includes('.validationBadge') &&
-  styles.includes('.validationSummary') &&
-  styles.includes('.catalogValidation'),
+  styles.includes('.titleEvidence') &&
+  styles.includes('.catalogValidation') &&
+  methodStep.includes('selectedFixtures') &&
+  methodStep.includes('selectedCandidates') &&
+  methodStep.includes('evidenceLinks') &&
+  methodStep.includes('DOI {fixture.doi}'),
+);
+check(
+  'Method selection removes static workflow graphic',
+  !methodStep.includes('<MethodSignature method={selectedMethod} />') &&
+  !source.includes('function MethodSignature') &&
+  styles.includes('.evidenceLinks') &&
+  styles.includes('.studioFooter'),
+);
+check(
+  'Method pages expose math, evidence links, and sample files',
+  source.includes('guideMethodId') &&
+  source.includes('downloadMethodSampleFile') &&
+  methodGuidePage.includes('Calculation') &&
+  methodGuidePage.includes('Paper trail') &&
+  methodGuidePage.includes('guideBrief') &&
+  methodGuidePage.includes('guideReproLine') &&
+  methodGuidePage.includes('DOI {fixture.doi}') &&
+  methodGuidePage.includes('Download sample') &&
+  methodGuidePage.includes('Expected result') &&
+  methodGuidePage.includes('Data preview') &&
+  styles.includes('.methodGuidePage') &&
+  styles.includes('.guideBrief') &&
+  styles.includes('.guideReproLine') &&
+  styles.includes('.guideMath'),
+);
+check(
+  'Header removes local-only status and footer provides citation',
+  !source.includes('Works locally') &&
+  source.includes('Citation: Naved, M. (2026).') &&
+  styles.includes('.studioFooter'),
 );
 check(
   'Configure step supports add/remove criteria',
@@ -131,9 +180,15 @@ check(
   configureStep.includes('const currentValidation = method.validateWorkbook(input, config)') &&
   configureStep.includes('const preTemplateIssues = currentValidation.issues.filter(isPreTemplateIssue)') &&
   configureStep.includes('const canGenerateTemplate = !preTemplateIssues.some') &&
+  configureStep.includes('<SetupReadinessLine config={config} method={method} canGenerateTemplate={canGenerateTemplate} issueCount={preTemplateIssues.length} />') &&
+  source.includes('function SetupReadinessLine') &&
+  source.includes('Ready for Excel') && source.includes('Ready to build file') &&
+  source.includes('direct-relation matrix') &&
+  source.includes('decision matrix') &&
+  styles.includes('.setupReadiness') && styles.includes('.setupReadinessState') &&
   configureStep.includes('compactValidation') &&
   configureStep.includes('disabled={!canGenerateTemplate}') &&
-  configureStep.includes('Specifications and current data pass the pre-template check'),
+  configureStep.includes('Setup looks good. Create the Excel file when ready'),
 );
 check(
   'Automatic weights are explained without editable weight cells',
@@ -141,6 +196,17 @@ check(
   configureStep.includes('weights are calculated during analysis') &&
   !configureStep.includes('Weight source') &&
   !configureStep.includes('readonlyCell'),
+);check(
+  'Weighting selector groups academic options',
+  configureStep.includes('<WeightingSelect') &&
+  source.includes('function WeightingSelect') &&
+  source.includes('<optgroup') &&
+  source.includes("label: 'Objective data'") &&
+  source.includes("label: 'Judgment based'") &&
+  source.includes("label: 'Rank order'") &&
+  source.includes('Use known study weights.') &&
+  source.includes('Calculated from the data.') &&
+  styles.includes('.weightingControl em'),
 );
 check(
   'Manual weights remain editable only for manual weighting',
@@ -163,8 +229,8 @@ check(
 check(
   'Raw seed matrices are optional on the configure step',
   configureStep.includes('<details className="advancedSeedData">') &&
-  configureStep.includes('Optional in-app seed data') &&
-  configureStep.includes('The generated workbook is the main data-entry path') &&
+  configureStep.includes('Optional starting values') &&
+  configureStep.includes('Prefill the workbook if you want a starting point') &&
   styles.includes('.advancedSeedData'),
 );
 check(
@@ -185,14 +251,15 @@ check(
 );
 check(
   'Configure step explains group, weight, AHP, and fuzzy behavior',
-  configureStep.includes('ConfigurationSummary') &&
-  configurationSummary.includes('manual weight inputs are hidden') &&
-  configurationSummary.includes('respondent decision-matrix sheets will be generated') &&
-  configurationSummary.includes('expert sheets will be generated') &&
-  configurationSummary.includes('combined by geometric mean') &&
-  configurationSummary.includes('Triangular and trapezoidal entries') &&
-  styles.includes('.configurationSummary') &&
-  styles.includes('.capabilityStrip, .configurationSummary, .specSection'),
+  configureStep.includes('SetupReadinessLine') &&
+  configureStep.includes('workflowNote') &&
+  source.includes('weightingDisplayName(config.weightingId)') &&
+  source.includes('fuzzyModeLabel(fuzzyMode)') &&
+  source.includes('One decision table') &&
+  source.includes('One table per respondent') &&
+  source.includes('Criteria pairwise comparison') &&
+  styles.includes('.setupReadiness') &&
+  styles.includes('.specSection'),
 );
 check(
   'Method switching sanitizes incompatible data collection modes',
@@ -252,16 +319,26 @@ check(
   templateStep.includes('SamplePreview') && !uploadStep.includes('SamplePreview') && !resultsStep.includes('SamplePreview'),
 );
 check(
+  'Template and upload steps use a simple workbook handoff line',
+  source.includes('function TemplateHandoffLine') &&
+  templateStep.includes('<TemplateHandoffLine config={config} phase="template" />') &&
+  uploadStep.includes('<TemplateHandoffLine config={config} phase="upload" />') &&
+  source.includes('enter the ${matrixText}') &&
+  source.includes("isDematel ? 'direct-relation matrix' : 'decision matrix'") &&
+  styles.includes('.templateHandoff') &&
+  styles.includes('.templateDetails'),
+);
+check(
   'Configure step opens template screen before workbook download',
   source.includes('const openTemplateStep = () =>') &&
-  source.includes("transitionTo(3, 'Generating model-specific template...')") &&
+  source.includes("transitionTo(3, 'Creating your Excel file...')") &&
   source.includes('const downloadTemplateFile = async () =>') &&
   source.includes('onNext={openTemplateStep}') &&
   source.includes('onDownload={downloadTemplateFile}'),
 );
 check(
   'Upload step exposes validation state',
-  uploadStep.includes('TemplateSpecSummary') && uploadStep.includes('validation.issues') && uploadStep.includes('Validation passed') && uploadStep.includes('Upload completed template'),
+  uploadStep.includes('TemplateSpecSummary') && uploadStep.includes('validation.issues') && uploadStep.includes('File looks good') && uploadStep.includes('Upload data'),
 );
 check(
   'Configured analysis cannot bypass validation',
@@ -269,7 +346,7 @@ check(
   source.includes('const nextValidation = method.validateWorkbook(input, config)') &&
   source.includes('nextValidation.ok') &&
   source.includes('onSample={runConfiguredAnalysis}') &&
-  uploadStep.includes('Analyze current screen data') &&
+  uploadStep.includes('Try with example data') &&
   !uploadStep.includes('Run sample analysis'),
 );
 check(
@@ -296,16 +373,28 @@ check(
 );
 check(
   'Results step has recovery actions',
-  resultsStep.includes('Edit specifications') && resultsStep.includes('Re-upload') && resultsStep.includes('Project JSON') && resultsStep.includes('Full package'),
+  resultsStep.includes('Edit setup') && resultsStep.includes('Re-upload') && resultsStep.includes('Project file') && resultsStep.includes('Export all'),
 );
 check(
   'Results tabs avoid duplicate default table content',
-  resultsStep.includes("'Cleaned Input'") &&
+  resultsStep.includes("const tabs = ['Final Result', 'Charts'") &&
+  resultsStep.includes("'Your Data'") &&
   source.includes('function inputMatrixTable') &&
-  resultsStep.includes("activeTab === 'Cleaned Input'") &&
-  resultsStep.includes("(activeTab === 'Transformed Matrix' || activeTab === 'Final Result')") &&
-  resultsStep.includes("activeTab === 'Diagnostics'") &&
-  resultsStep.includes("activeTab === 'Method Tables'"),
+  resultsStep.includes("activeTab === 'Your Data'") &&
+  resultsStep.includes("(activeTab === 'Prepared Data' || activeTab === 'Final Result')") &&
+  resultsStep.includes("activeTab === 'Checks'") &&
+  resultsStep.includes("activeTab === 'Calculations'"),
+);check(
+  'Results screen presents the outcome before calculation detail',
+  source.includes('function OutcomeLine') &&
+  resultsStep.includes('<OutcomeLine analysis={analysis} isDematel={isDematel} />') &&
+  source.includes('Top option') &&
+  source.includes('Top factor') &&
+  source.includes('final ranking') &&
+  source.includes('cause-effect map') &&
+  styles.includes('.outcomeLine') &&
+  styles.includes('.outcomeLead') &&
+  styles.includes('.outcomeNode'),
 );
 check(
   'Method comparison is limited to compatible ranking studies',
@@ -317,7 +406,7 @@ check(
 );
 check(
   'Method comparison handles failed reruns gracefully',
-  compareMethods.includes('try {') && compareMethods.includes("top: 'Unavailable'") && compareMethods.includes('Select at least one compatible ranking method'),
+  compareMethods.includes('try {') && compareMethods.includes("top: 'Unavailable'") && compareMethods.includes('Select at least one method that can use this data'),
 );
 check(
   'Readiness panel shows selected-method external validation evidence',
@@ -326,12 +415,12 @@ check(
   source.includes("externalValidationStatusFor(method.id, 'readiness')") &&
   source.includes('externalValidationCoverageLabel(config.methodId)') &&
   source.includes('externalEvidencePanel') &&
-  source.includes('No published fixture registered for') &&
+  source.includes('No published example has been reproduced for') &&
   styles.includes('.externalEvidencePanel .validationBadge'),
 );
 check(
   'Readiness panel shows external validation candidates',
-  source.includes('evidenceNotice') && source.includes('Validation candidate tracked'),
+  source.includes('evidenceNotice') && source.includes('Additional DOI sources kept in review'),
 );
 check(
   'Compact responsive method chooser styles exist',
@@ -359,3 +448,14 @@ check(
 
 if (process.exitCode) process.exit(1);
 console.log('UX contract smoke OK.');
+
+
+
+
+
+
+
+
+
+
+

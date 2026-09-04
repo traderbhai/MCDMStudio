@@ -1,0 +1,297 @@
+{
+  "methodId": "grp",
+  "variant": "crisp-comparable-linguistic-hr-manager-ajbm-2012",
+  "source": "African Journal of Business Management 2012 human-resources manager grey relation projection example, DOI: 10.5897/AJBM10.1622, Tables 2-4 and projection values",
+  "sourceUrl": "https://www.yumpu.com/en/document/view/6854194/business-management-academic-journals/508",
+  "doi": "10.5897/AJBM10.1622",
+  "config": {
+    "title": "GRP validation: human-resources manager competency evaluation",
+    "weightingId": "manual",
+    "methodParams": {
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload",
+      "graZeta": 0.5,
+      "grpInputScale": "Use comparable values directly"
+    }
+  },
+  "input": {
+    "alternatives": [
+      {
+        "id": "A1",
+        "name": "Candidate a1"
+      },
+      {
+        "id": "A2",
+        "name": "Candidate a2"
+      },
+      {
+        "id": "A3",
+        "name": "Candidate a3"
+      },
+      {
+        "id": "A4",
+        "name": "Candidate a4"
+      }
+    ],
+    "criteria": [
+      {
+        "id": "B1",
+        "name": "B1",
+        "direction": "benefit",
+        "weight": 0.043
+      },
+      {
+        "id": "B2",
+        "name": "B2",
+        "direction": "benefit",
+        "weight": 0.033
+      },
+      {
+        "id": "B3",
+        "name": "B3",
+        "direction": "benefit",
+        "weight": 0.067
+      },
+      {
+        "id": "B4",
+        "name": "B4",
+        "direction": "benefit",
+        "weight": 0.062
+      },
+      {
+        "id": "B5",
+        "name": "B5",
+        "direction": "benefit",
+        "weight": 0.067
+      },
+      {
+        "id": "B6",
+        "name": "B6",
+        "direction": "benefit",
+        "weight": 0.048
+      },
+      {
+        "id": "B7",
+        "name": "B7",
+        "direction": "benefit",
+        "weight": 0.057
+      },
+      {
+        "id": "B8",
+        "name": "B8",
+        "direction": "benefit",
+        "weight": 0.053
+      },
+      {
+        "id": "B9",
+        "name": "B9",
+        "direction": "benefit",
+        "weight": 0.081
+      },
+      {
+        "id": "B10",
+        "name": "B10",
+        "direction": "benefit",
+        "weight": 0.072
+      },
+      {
+        "id": "B11",
+        "name": "B11",
+        "direction": "benefit",
+        "weight": 0.043
+      },
+      {
+        "id": "B12",
+        "name": "B12",
+        "direction": "benefit",
+        "weight": 0.053
+      },
+      {
+        "id": "B13",
+        "name": "B13",
+        "direction": "benefit",
+        "weight": 0.053
+      },
+      {
+        "id": "B14",
+        "name": "B14",
+        "direction": "benefit",
+        "weight": 0.081
+      },
+      {
+        "id": "B15",
+        "name": "B15",
+        "direction": "benefit",
+        "weight": 0.081
+      },
+      {
+        "id": "B16",
+        "name": "B16",
+        "direction": "benefit",
+        "weight": 0.053
+      },
+      {
+        "id": "B17",
+        "name": "B17",
+        "direction": "benefit",
+        "weight": 0.053
+      }
+    ],
+    "values": [
+      [
+        3.667,
+        3.667,
+        4.667,
+        4.667,
+        4,
+        3.667,
+        3.667,
+        5.667,
+        4,
+        3.333,
+        4,
+        5,
+        4.667,
+        4.333,
+        4,
+        4.667,
+        3
+      ],
+      [
+        4.333,
+        4,
+        3.333,
+        2.667,
+        4.667,
+        5.333,
+        4,
+        3.667,
+        5.333,
+        4.667,
+        3,
+        4.333,
+        5,
+        3.667,
+        4,
+        3.333,
+        3.333
+      ],
+      [
+        3.333,
+        4.667,
+        3.333,
+        3.333,
+        4,
+        2.667,
+        4.667,
+        4,
+        3.333,
+        3.333,
+        5.333,
+        3.333,
+        2.333,
+        4.333,
+        4.333,
+        4.333,
+        4
+      ],
+      [
+        3.333,
+        4.667,
+        4.667,
+        3.333,
+        4,
+        4,
+        2.333,
+        2.333,
+        3.667,
+        4,
+        4.667,
+        5,
+        3.667,
+        2,
+        5.667,
+        4.667,
+        2.333
+      ]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      {
+        "alternative": "Candidate a1",
+        "score": 0.526
+      },
+      {
+        "alternative": "Candidate a2",
+        "score": 0.52
+      },
+      {
+        "alternative": "Candidate a4",
+        "score": 0.471
+      },
+      {
+        "alternative": "Candidate a3",
+        "score": 0.458
+      }
+    ],
+    "tables": [
+      {
+        "id": "grp-positive-coefficients",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": 0.714
+          },
+          {
+            "row": 1,
+            "column": 1,
+            "value": 1
+          },
+          {
+            "row": 2,
+            "column": 11,
+            "value": 1
+          },
+          {
+            "row": 3,
+            "column": 8,
+            "value": 0.333
+          }
+        ]
+      },
+      {
+        "id": "grp-projection",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": 0.187
+          },
+          {
+            "row": 0,
+            "column": 2,
+            "value": 0.169
+          },
+          {
+            "row": 1,
+            "column": 1,
+            "value": 0.185
+          },
+          {
+            "row": 2,
+            "column": 2,
+            "value": 0.196
+          },
+          {
+            "row": 3,
+            "column": 3,
+            "value": 0.471
+          }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.0015
+}

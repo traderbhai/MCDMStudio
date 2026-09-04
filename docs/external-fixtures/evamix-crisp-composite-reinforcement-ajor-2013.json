@@ -1,0 +1,178 @@
+{
+  "methodId": "evamix",
+  "variant": "crisp-mixed-data-composite-reinforcement-ajor-2013",
+  "source": "American Journal of Operations Research 2013 AHP/EVAMIX composite-reinforcement selection example, DOI: 10.4236/ajor.2013.36053, Tables 7-12",
+  "sourceUrl": "https://file.scirp.org/Html/11-1040275_39747.htm",
+  "doi": "10.4236/ajor.2013.36053",
+  "config": {
+    "title": "EVAMIX validation: composite reinforcement selection",
+    "weightingId": "manual",
+    "methodParams": {
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload",
+      "evamixDataMode": "Ordinal + cardinal criteria",
+      "evamixOrdinalCriteria": "C4"
+    }
+  },
+  "input": {
+    "alternatives": [
+      {
+        "id": "A1",
+        "name": "Chopped glass fiber"
+      },
+      {
+        "id": "A2",
+        "name": "Chopped carbon fiber"
+      },
+      {
+        "id": "A3",
+        "name": "Chopped aramid fiber"
+      }
+    ],
+    "criteria": [
+      {
+        "id": "C1",
+        "name": "Tensile strength",
+        "direction": "benefit",
+        "weight": 0.2662
+      },
+      {
+        "id": "C2",
+        "name": "Tensile modulus",
+        "direction": "benefit",
+        "weight": 0.2517
+      },
+      {
+        "id": "C3",
+        "name": "Volume fraction",
+        "direction": "benefit",
+        "weight": 0.2842
+      },
+      {
+        "id": "C4",
+        "name": "Elongation",
+        "direction": "benefit",
+        "weight": 0.1979
+      }
+    ],
+    "values": [
+      [
+        1600,
+        35,
+        50,
+        4
+      ],
+      [
+        3528,
+        98,
+        40,
+        1.5
+      ],
+      [
+        2900,
+        18,
+        30,
+        4.4
+      ]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      {
+        "alternative": "Chopped carbon fiber",
+        "score": 0.8492
+      },
+      {
+        "alternative": "Chopped glass fiber",
+        "score": 0.5154
+      },
+      {
+        "alternative": "Chopped aramid fiber",
+        "score": 0.192
+      }
+    ],
+    "tables": [
+      {
+        "id": "evamix-normalized",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": 0
+          },
+          {
+            "row": 0,
+            "column": 2,
+            "value": 0.2125
+          },
+          {
+            "row": 1,
+            "column": 3,
+            "value": 0.5
+          },
+          {
+            "row": 2,
+            "column": 4,
+            "value": 1
+          }
+        ]
+      },
+      {
+        "id": "evamix-cardinal-dominance",
+        "cells": [
+          {
+            "row": 0,
+            "column": 2,
+            "value": -0.2337
+          },
+          {
+            "row": 1,
+            "column": 3,
+            "value": 0.8021
+          }
+        ]
+      },
+      {
+        "id": "evamix-standardized-dominance",
+        "cells": [
+          {
+            "row": 0,
+            "column": 2,
+            "value": 0.4821
+          },
+          {
+            "row": 1,
+            "column": 3,
+            "value": 0.8021
+          },
+          {
+            "row": 2,
+            "column": 1,
+            "value": 0.4641
+          }
+        ]
+      },
+      {
+        "id": "evamix-appraisal",
+        "cells": [
+          {
+            "row": 0,
+            "column": 3,
+            "value": 0.5154
+          },
+          {
+            "row": 1,
+            "column": 3,
+            "value": 0.8492
+          },
+          {
+            "row": 2,
+            "column": 3,
+            "value": 0.192
+          }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.00015
+}

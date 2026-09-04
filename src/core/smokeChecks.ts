@@ -855,7 +855,7 @@ export function runAlgorithmSmokeChecks(): SmokeCheckResult[] {
     vikor: 'Epsilon',
     copras: 'Epsilon',
     saw: 'Epsilon',
-    eamr: 'Epsilon',
+    eamr: 'Gamma',
     rawec: 'Epsilon',
     comet: 'Epsilon',
     wpm: 'Epsilon',

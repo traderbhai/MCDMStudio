@@ -1729,40 +1729,39 @@ function runFuzzyMoosra(input: DecisionMatrix, config: StudyConfig, method: Meth
 function runArlon(input: DecisionMatrix, config: StudyConfig, method: MethodDefinition): AnalysisResult {
   if (config.methodParams.fuzzyInputMode === 'Native fuzzy ARLON') return runFuzzyArlon(input, config, method);
   const criteria = resolveCriteria(input, config);
-  const gamma = Math.min(1, Math.max(0, Number(config.methodParams.arlonGamma ?? 0.5)));
+  const theta = Math.min(1, Math.max(0, Number(config.methodParams.arlonGamma ?? 0.5)));
+  const alternativeCount = input.alternatives.length || 1;
   const benefitCriteria = criteria.filter((criterion) => criterion.direction === 'benefit').length;
   const kappa = benefitCriteria / Math.max(criteria.length, 1);
-  const safeColumnValues = (column: number) => input.values.map((row) => Math.max(Math.abs(row[column]), 1e-12));
-  const firstLog = input.values.map((row) => row.map((value, column) => {
-    const columnValues = safeColumnValues(column);
-    const safeValue = Math.max(Math.abs(value), 1e-12);
-    if (criteria[column].direction === 'cost') {
-      const min = Math.min(...columnValues);
-      return Math.log1p(min) / Math.max(Math.log1p(safeValue), 1e-12);
-    }
-    const max = Math.max(...columnValues);
-    return Math.log1p(safeValue) / Math.max(Math.log1p(max), 1e-12);
+  const logarithmicRatios = criteria.map((_, column) => {
+    const logs = input.values.map((row) => Math.log(Math.max(Math.abs(row[column]), 1e-12)));
+    const denominator = logs.reduce((sum, value) => sum + value, 0);
+    if (Math.abs(denominator) <= 1e-12) return Array.from({ length: alternativeCount }, () => 1 / Math.max(alternativeCount, 1));
+    return logs.map((value) => value / denominator);
+  });
+  const firstLog = input.values.map((row, rowIndex) => row.map((_, column) => {
+    const ratio = logarithmicRatios[column][rowIndex];
+    return criteria[column].direction === 'cost' ? (1 - ratio) / Math.max(alternativeCount - 1, 1) : ratio;
   }));
-  const secondLog = firstLog.map((row) => row.map((value, column) => {
-    const columnValues = firstLog.map((item) => Math.max(item[column], 1e-12));
-    const safeValue = Math.max(value, 1e-12);
-    if (criteria[column].direction === 'cost') {
-      const min = Math.min(...columnValues);
-      return Math.log1p(min) / Math.max(Math.log1p(safeValue), 1e-12);
-    }
-    const max = Math.max(...columnValues);
-    return Math.log1p(safeValue) / Math.max(Math.log1p(max), 1e-12);
+  const secondLog = input.values.map((row, rowIndex) => row.map((_, column) => {
+    const ratio = logarithmicRatios[column][rowIndex];
+    return criteria[column].direction === 'cost' ? 1 - ratio : ratio;
   }));
   const aggregated = firstLog.map((row, rowIndex) =>
-    row.map((value, column) => gamma * value + (1 - gamma) * secondLog[rowIndex][column]),
+    row.map((value, column) => {
+      const first = Math.max(value, 0);
+      const second = Math.max(secondLog[rowIndex][column], 0);
+      return (1 - theta) * Math.sqrt(first * second) + theta * ((first + second) / 2);
+    }),
   );
   const weightedMatrix = weighted(aggregated, criteria);
   const benefit = weightedMatrix.map((row) => row.reduce((sum, value, column) => sum + (criteria[column].direction === 'benefit' ? value : 0), 0));
   const cost = weightedMatrix.map((row) => row.reduce((sum, value, column) => sum + (criteria[column].direction === 'cost' ? value : 0), 0));
-  const performance = benefit.map((value, index) => value ** kappa + cost[index] ** (1 - kappa));
-  const minPerformance = Math.min(...performance);
-  const maxPerformance = Math.max(...performance);
-  const scores = performance.map((value) => Math.abs(maxPerformance - minPerformance) <= 1e-12 ? 1 : (value - minPerformance) / (maxPerformance - minPerformance));
+  const performance = benefit.map((value, index) => {
+    if (benefitCriteria === 0) return cost[index];
+    if (benefitCriteria === criteria.length) return value;
+    return value ** kappa + cost[index] ** (1 - kappa);
+  });
   return result(method, { ...input, criteria }, [
     tableFromMatrix('arlon-first-log-normalized', 'ARLON First Log-Normalized Matrix', firstLog, input),
     tableFromMatrix('arlon-second-log-normalized', 'ARLON Second Log-Normalized Matrix', secondLog, input),
@@ -1778,12 +1777,11 @@ function runArlon(input: DecisionMatrix, config: StudyConfig, method: MethodDefi
         round(cost[index]),
         round(kappa),
         round(performance[index]),
-        round(scores[index]),
+        round(performance[index]),
       ]),
     },
-  ], scores, 'ARLON applies two-step logarithmic normalization and ranks alternatives using weighted benefit/cost performance components.');
+  ], performance, 'ARLON applies two logarithmic normalizations, combines them with the Heron mean, and ranks alternatives using weighted benefit/cost performance components.');
 }
-
 function runMacont(input: DecisionMatrix, config: StudyConfig, method: MethodDefinition): AnalysisResult {
   if (config.methodParams.fuzzyInputMode === 'Native fuzzy MACONT') return runFuzzyMacont(input, config, method);
   const criteria = resolveCriteria(input, config);
@@ -1827,12 +1825,12 @@ function runMacont(input: DecisionMatrix, config: StudyConfig, method: MethodDef
   const rho = weightedDeviation.map((row) => row.reduce((sum, value) => sum + value, 0));
   const q = integrated.map((row) => {
     const below = row.reduce((product, value, column) => {
-      const distance = Math.max(reference[column] - value, 1e-12);
-      return product * distance ** criteria[column].weight;
+      if (value >= reference[column]) return product;
+      return product * Math.max(reference[column] - value, 1e-12) ** criteria[column].weight;
     }, 1);
     const above = row.reduce((product, value, column) => {
-      const distance = Math.max(value - reference[column], 1e-12);
-      return product * distance ** criteria[column].weight;
+      if (value < reference[column]) return product;
+      return product * Math.max(value - reference[column], 1e-12) ** criteria[column].weight;
     }, 1);
     return below / Math.max(above, 1e-12);
   });
@@ -2460,89 +2458,72 @@ function runSeca(input: DecisionMatrix, config: StudyConfig, method: MethodDefin
 
 function runDear(input: DecisionMatrix, config: StudyConfig, method: MethodDefinition): AnalysisResult {
   if (config.methodParams.fuzzyInputMode === 'Native fuzzy DEAR') return runFuzzyDear(input, config, method);
+  const criteria = normalizeWeights(resolveCriteria(input, config));
   const responseWeights = input.values.map((row) => row.map((value, column) => {
     const columnValues = input.values.map((item) => Math.max(Math.abs(item[column]), 1e-12));
     const safeValue = Math.max(Math.abs(value), 1e-12);
-    if (input.criteria[column].direction === 'cost') {
+    if (criteria[column].direction === 'cost') {
       const reciprocalSum = columnValues.reduce((sum, item) => sum + 1 / item, 0) || 1;
       return (1 / safeValue) / reciprocalSum;
     }
     const sum = columnValues.reduce((total, item) => total + item, 0) || 1;
     return safeValue / sum;
   }));
-  const criteria = normalizeWeights(input.criteria);
-  const weightedResponseWeights = responseWeights.map((row) => row.map((value, column) => value * criteria[column].weight));
-  const unweightedMrpi = responseWeights.map((row) => row.reduce((sum, value) => sum + value, 0) / Math.max(row.length, 1));
-  const scores = weightedResponseWeights.map((row) => row.reduce((sum, value) => sum + value, 0));
+  const transformedResponses = input.values.map((row) => row.map((value, column) => {
+    const safeValue = Math.max(Math.abs(value), 1e-12);
+    return criteria[column].direction === 'cost' ? 1 / safeValue : safeValue;
+  }));
+  const weightedResponseData = responseWeights.map((row, rowIndex) => row.map((value, column) => value * transformedResponses[rowIndex][column] * criteria[column].weight));
+  const benefitSums = weightedResponseData.map((row) => row.reduce((sum, value, column) => sum + (criteria[column].direction === 'benefit' ? value : 0), 0));
+  const costSums = weightedResponseData.map((row) => row.reduce((sum, value, column) => sum + (criteria[column].direction === 'cost' ? value : 0), 0));
+  const scores = benefitSums.map((benefit, index) => benefit / Math.max(costSums[index], 1e-12));
   return result(method, { ...input, criteria }, [
     tableFromMatrix('dear-response-weights', 'DEAR Response Weights', responseWeights, input),
-    tableFromMatrix('dear-weighted-response-weights', 'DEAR Weighted Response Weights', weightedResponseWeights, { ...input, criteria }),
+    tableFromMatrix('dear-weighted-response-weights', 'DEAR Weighted Response Data', weightedResponseData, { ...input, criteria }),
     {
       id: 'dear-mrpi',
       title: 'DEAR Multi-Response Performance Index',
-      columns: ['Alternative', 'Unweighted MRPI', 'Weighted MRPI', 'Ranking rule'],
+      columns: ['Alternative', 'Benefit weighted sum', 'Cost weighted sum', 'MRPI', 'Ranking rule'],
       rows: input.alternatives.map((alternative, index) => [
         alternative.name,
-        round(unweightedMrpi[index]),
+        round(benefitSums[index]),
+        round(costSums[index]),
+        round(scores[index]),
+        'Higher MRPI is better',
+      ]),
+    },
+  ], scores, 'DEAR converts response data into response-weighted benefit and cost terms, then ranks alternatives by the multi-response performance index ratio.');
+}
+function runEamr(input: DecisionMatrix, config: StudyConfig, method: MethodDefinition): AnalysisResult {
+  if (config.methodParams.fuzzyInputMode === 'Native fuzzy EAMR') return runFuzzyEamr(input, config, method);
+  const criteria = normalizeWeights(resolveCriteria(input, config));
+  const normalized = input.values.map((row) => row.map((value, column) => {
+    const columnValues = input.values.map((item) => Math.max(Math.abs(item[column]), 1e-12));
+    const safeValue = Math.max(Math.abs(value), 1e-12);
+    return criteria[column].direction === 'cost'
+      ? Math.min(...columnValues) / safeValue
+      : safeValue / Math.max(...columnValues);
+  }));
+  const weightedMatrix = weighted(normalized, criteria);
+  const benefitSums = weightedMatrix.map((row) => row.reduce((sum, value, column) => sum + (criteria[column].direction === 'benefit' ? value : 0), 0));
+  const costSums = weightedMatrix.map((row) => row.reduce((sum, value, column) => sum + (criteria[column].direction === 'cost' ? value : 0), 0));
+  const scores = benefitSums.map((benefit, index) => benefit / Math.max(costSums[index], 1e-12));
+  return result(method, { ...input, criteria }, [
+    tableFromMatrix('eamr-normalized', 'EAMR Normalized Matrix', normalized, input),
+    tableFromMatrix('eamr-weighted', 'EAMR Weighted Matrix', weightedMatrix, { ...input, criteria }),
+    {
+      id: 'eamr-appraisal',
+      title: 'EAMR Benefit/Non-Benefit Appraisal',
+      columns: ['Alternative', 'G+ benefit sum', 'G- non-benefit sum', 'EAMR score', 'Ranking rule'],
+      rows: input.alternatives.map((alternative, index) => [
+        alternative.name,
+        round(benefitSums[index]),
+        round(costSums[index]),
         round(scores[index]),
         'Higher is better',
       ]),
     },
-  ], scores, 'DEAR converts each criterion response into a benefit/cost-aware desirability weight across alternatives and ranks alternatives by the weighted multi-response performance index.');
-}
-
-function runEamr(input: DecisionMatrix, config: StudyConfig, method: MethodDefinition): AnalysisResult {
-  if (config.methodParams.fuzzyInputMode === 'Native fuzzy EAMR') return runFuzzyEamr(input, config, method);
-  const criteria = normalizeWeights(resolveCriteria(input, config));
-  const beta = Number(config.methodParams.eamrBeta ?? 0.5);
-  const lambda = Number(config.methodParams.eamrLambda ?? 0.5);
-  const blend = Number.isFinite(beta) ? Math.min(1, Math.max(0, beta)) : 0.5;
-  const coefficient = Number.isFinite(lambda) ? Math.min(1, Math.max(0, lambda)) : 0.5;
-  const rangeNormalized = input.values.map((row) => row.map((value, column) => {
-    const columnValues = input.values.map((item) => item[column]).filter(Number.isFinite);
-    const min = Math.min(...columnValues);
-    const max = Math.max(...columnValues);
-    if (Math.abs(max - min) <= 1e-12) return 1;
-    return criteria[column].direction === 'cost'
-      ? (max - value) / (max - min)
-      : (value - min) / (max - min);
-  }));
-  const vectorRaw = vectorNormalize(input.values);
-  const vectorNormalized = vectorRaw.map((row) => row.map((value, column) => {
-    const columnValues = vectorRaw.map((item) => item[column]).filter(Number.isFinite);
-    const min = Math.min(...columnValues);
-    const max = Math.max(...columnValues);
-    if (Math.abs(max - min) <= 1e-12) return 1;
-    return criteria[column].direction === 'cost'
-      ? (max - value) / (max - min)
-      : (value - min) / (max - min);
-  }));
-  const blended = rangeNormalized.map((row, rowIndex) =>
-    row.map((value, column) => blend * value + (1 - blend) * vectorNormalized[rowIndex][column]),
-  );
-  const weightedMatrix = weighted(blended, criteria);
-  const benefitSums = weightedMatrix.map((row) => row.reduce((sum, value, column) => sum + (criteria[column].direction === 'benefit' ? value : 0), 0));
-  const costControlSums = weightedMatrix.map((row) => row.reduce((sum, value, column) => sum + (criteria[column].direction === 'cost' ? value : 0), 0));
-  const scores = benefitSums.map((benefit, index) => benefit ** coefficient + costControlSums[index] ** (1 - coefficient));
-  return result(method, { ...input, criteria }, [
-    tableFromMatrix('eamr-range-normalized', 'EAMR Range-Normalized Matrix', rangeNormalized, input),
-    tableFromMatrix('eamr-vector-normalized', 'EAMR Vector-Normalized Matrix', vectorNormalized, input),
-    tableFromMatrix('eamr-blended-normalized', 'EAMR Blended Normalized Matrix', blended, input),
-    tableFromMatrix('eamr-weighted', 'EAMR Weighted Matrix', weightedMatrix, { ...input, criteria }),
-    {
-      id: 'eamr-appraisal',
-      title: 'EAMR Benefit-Cost Appraisal',
-      columns: ['Alternative', 'Benefit sum', 'Cost-control sum', 'Beta', 'Lambda', 'EAMR score'],
-      rows: input.alternatives.map((alternative, index) => [
-        alternative.name,
-        round(benefitSums[index]),
-        round(costControlSums[index]),
-        round(blend),
-        round(coefficient),
-        round(scores[index]),
-      ]),
-    },
-  ], scores, 'EAMR blends range and vector normalization, applies criterion weights, and ranks alternatives by a benefit-cost appraisal score.');
+  ], scores, 'EAMR normalizes benefit and non-benefit criteria, applies criterion weights, and ranks alternatives by the appraisal ratio between benefit and non-benefit sums.');
 }
 
 function runRawec(input: DecisionMatrix, config: StudyConfig, method: MethodDefinition): AnalysisResult {
@@ -3948,50 +3929,86 @@ function runRegime(input: DecisionMatrix, config: StudyConfig, method: MethodDef
 
 function runEvamix(input: DecisionMatrix, config: StudyConfig, method: MethodDefinition): AnalysisResult {
   if (config.methodParams.fuzzyInputMode === 'Native fuzzy EVAMIX') return runFuzzyEvamix(input, config, method);
-  const criteria = resolveCriteria(input, config);
-  const normalized = minMaxNormalize({ ...input, criteria });
-  const rawDominance = input.alternatives.map((_, first) => input.alternatives.map((__, second) => {
+  const criteria = normalizeWeights(resolveCriteria(input, config));
+  const normalized = greyRangeNormalize({ ...input, criteria });
+  const ordinalCriteria = new Set(String(config.methodParams.evamixOrdinalCriteria ?? '')
+    .split(',')
+    .map((item) => item.trim())
+    .filter((item) => item && item.toLowerCase() !== 'none'));
+  const ordinalWeight = criteria.reduce((sum, criterion) => sum + (ordinalCriteria.has(criterion.id) ? criterion.weight : 0), 0);
+  const cardinalWeight = criteria.reduce((sum, criterion) => sum + (ordinalCriteria.has(criterion.id) ? 0 : criterion.weight), 0);
+  const dominance = (criterionType: 'ordinal' | 'cardinal') => input.alternatives.map((_, first) => input.alternatives.map((__, second) => {
     if (first === second) return 0;
-    return criteria.reduce((sum, criterion, column) =>
-      sum + criterion.weight * (normalized[first][column] - normalized[second][column]), 0);
+    return criteria.reduce((sum, criterion, column) => {
+      const isOrdinal = ordinalCriteria.has(criterion.id);
+      if ((criterionType === 'ordinal') !== isOrdinal) return sum;
+      const difference = normalized[first][column] - normalized[second][column];
+      const sign = Math.abs(difference) <= 1e-12 ? 0 : difference > 0 ? 1 : -1;
+      return sum + criterion.weight * sign;
+    }, 0);
   }));
-  const dominanceValues = rawDominance.flat().filter((value) => Math.abs(value) > 1e-12);
-  const minDominance = Math.min(...dominanceValues, 0);
-  const maxDominance = Math.max(...dominanceValues, 0);
-  const standardized = rawDominance.map((row) => row.map((value) => {
-    if (Math.abs(value) <= 1e-12) return 0;
-    if (Math.abs(maxDominance - minDominance) <= 1e-12) return value > 0 ? 1 : -1;
-    return ((value - minDominance) / (maxDominance - minDominance)) * 2 - 1;
+  const ordinalDominance = dominance('ordinal');
+  const cardinalDominance = dominance('cardinal');
+  const standardize = (matrix: number[][]) => {
+    const values = matrix.flat().filter((_, index) => {
+      const row = Math.floor(index / input.alternatives.length);
+      const column = index % input.alternatives.length;
+      return row !== column;
+    });
+    const minValue = Math.min(...values, 0);
+    const maxValue = Math.max(...values, 0);
+    return matrix.map((row, rowIndex) => row.map((value, columnIndex) => {
+      if (rowIndex === columnIndex) return 0;
+      if (Math.abs(maxValue - minValue) <= 1e-12) return Math.abs(value) <= 1e-12 ? 0.5 : value > 0 ? 1 : 0;
+      return (value - minValue) / (maxValue - minValue);
+    }));
+  };
+  const standardizedOrdinal = standardize(ordinalDominance);
+  const standardizedCardinal = standardize(cardinalDominance);
+  const overallDominance = input.alternatives.map((_, first) => input.alternatives.map((__, second) => {
+    if (first === second) return 0;
+    return ordinalWeight * standardizedOrdinal[first][second] + cardinalWeight * standardizedCardinal[first][second];
   }));
-  const positiveDominance = standardized.map((row) => row.reduce((sum, value) => sum + Math.max(value, 0), 0));
-  const negativeDominance = standardized[0].map((_, column) => standardized.reduce((sum, row) => sum + Math.max(row[column], 0), 0));
-  const scores = positiveDominance.map((value, index) => value - negativeDominance[index]);
+  const scores = input.alternatives.map((_, first) => {
+    const denominator = input.alternatives.reduce((sum, __, second) => {
+      if (first === second) return sum;
+      const outgoing = Math.max(overallDominance[first][second], 1e-12);
+      return sum + overallDominance[second][first] / outgoing;
+    }, 0);
+    return 1 / Math.max(denominator, 1e-12);
+  });
   return result(method, { ...input, criteria }, [
     tableFromMatrix('evamix-normalized', 'EVAMIX Normalized Matrix', normalized, input),
     {
-      id: 'evamix-raw-dominance',
-      title: 'EVAMIX Weighted Cardinal Dominance Matrix',
+      id: 'evamix-ordinal-dominance',
+      title: 'EVAMIX Ordinal Dominance Matrix',
       columns: ['Alternative', ...input.alternatives.map((alternative) => alternative.id)],
-      rows: input.alternatives.map((alternative, index) => [alternative.name, ...rawDominance[index].map((value) => round(value))]),
+      rows: input.alternatives.map((alternative, index) => [alternative.name, ...ordinalDominance[index].map((value) => round(value))]),
+    },
+    {
+      id: 'evamix-cardinal-dominance',
+      title: 'EVAMIX Cardinal Dominance Matrix',
+      columns: ['Alternative', ...input.alternatives.map((alternative) => alternative.id)],
+      rows: input.alternatives.map((alternative, index) => [alternative.name, ...cardinalDominance[index].map((value) => round(value))]),
     },
     {
       id: 'evamix-standardized-dominance',
-      title: 'EVAMIX Standardized Dominance Matrix',
+      title: 'EVAMIX Overall Dominance Matrix',
       columns: ['Alternative', ...input.alternatives.map((alternative) => alternative.id)],
-      rows: input.alternatives.map((alternative, index) => [alternative.name, ...standardized[index].map((value) => round(value))]),
+      rows: input.alternatives.map((alternative, index) => [alternative.name, ...overallDominance[index].map((value) => round(value))]),
     },
     {
       id: 'evamix-appraisal',
       title: 'EVAMIX Appraisal Scores',
-      columns: ['Alternative', 'Outgoing dominance', 'Incoming dominance', 'Net appraisal'],
+      columns: ['Alternative', 'Ordinal weight', 'Cardinal weight', 'Appraisal score'],
       rows: input.alternatives.map((alternative, index) => [
         alternative.name,
-        round(positiveDominance[index]),
-        round(negativeDominance[index]),
+        round(ordinalWeight),
+        round(cardinalWeight),
         round(scores[index]),
       ]),
     },
-  ], scores, 'EVAMIX evaluates alternatives through pairwise dominance after benefit/cost-aware normalization; this cardinal-data implementation reports standardized dominance and net appraisal scores.');
+  ], scores, 'EVAMIX evaluates mixed ordinal and cardinal criteria through standardized pairwise dominance; higher appraisal scores rank higher.');
 }
 
 function runLexicographic(input: DecisionMatrix, config: StudyConfig, method: MethodDefinition): AnalysisResult {
@@ -5852,10 +5869,13 @@ function runGrp(input: DecisionMatrix, config: StudyConfig, method: MethodDefini
   if (config.methodParams.fuzzyInputMode === 'Native fuzzy GRP') {
     return runFuzzyGrp(input, config, method);
   }
-  const criteria = resolveCriteria(input, config);
-  const normalized = greyRangeNormalize({ ...input, criteria });
-  const positiveIdeal = criteria.map(() => 1);
-  const negativeIdeal = criteria.map(() => 0);
+  const criteria = normalizeWeights(resolveCriteria(input, config));
+  const inputScale = String(config.methodParams.grpInputScale ?? 'Normalize raw values');
+  const normalized = inputScale === 'Use comparable values directly'
+    ? input.values.map((row) => row.slice())
+    : greyRangeNormalize({ ...input, criteria });
+  const positiveIdeal = criteria.map((_, column) => Math.max(...normalized.map((row) => row[column])));
+  const negativeIdeal = criteria.map((_, column) => Math.min(...normalized.map((row) => row[column])));
   const zeta = Number(config.methodParams.graZeta ?? 0.5);
   const positiveDeviations = normalized.flatMap((row) => row.map((value, column) => Math.abs(positiveIdeal[column] - value)));
   const negativeDeviations = normalized.flatMap((row) => row.map((value, column) => Math.abs(value - negativeIdeal[column])));
@@ -5872,8 +5892,8 @@ function runGrp(input: DecisionMatrix, config: StudyConfig, method: MethodDefini
     return (minNegative + zeta * maxNegative) / (deviation + zeta * maxNegative || 1);
   }));
   const weightNorm = Math.sqrt(criteria.reduce((sum, criterion) => sum + criterion.weight ** 2, 0)) || 1;
-  const positiveProjection = positiveCoefficients.map((row) => row.reduce((sum, value, column) => sum + value * criteria[column].weight, 0) / weightNorm);
-  const negativeProjection = negativeCoefficients.map((row) => row.reduce((sum, value, column) => sum + value * criteria[column].weight, 0) / weightNorm);
+  const positiveProjection = positiveCoefficients.map((row) => row.reduce((sum, value, column) => sum + value * criteria[column].weight ** 2, 0) / weightNorm);
+  const negativeProjection = negativeCoefficients.map((row) => row.reduce((sum, value, column) => sum + value * criteria[column].weight ** 2, 0) / weightNorm);
   const scores = positiveProjection.map((value, index) => value / (value + negativeProjection[index] || 1));
   return result(method, { ...input, criteria }, [
     tableFromMatrix('grp-normalized', 'GRP Normalized Matrix', normalized, input),
@@ -5919,8 +5939,8 @@ function runFuzzyGrp(input: DecisionMatrix, config: StudyConfig, method: MethodD
     row.map((deviation) => (minNegative + zeta * maxNegative) / (deviation + zeta * maxNegative || 1)),
   );
   const weightNorm = Math.sqrt(normalizedCriteria.reduce((sum, criterion) => sum + criterion.weight ** 2, 0)) || 1;
-  const positiveProjection = positiveCoefficients.map((row) => row.reduce((sum, value, column) => sum + value * normalizedCriteria[column].weight, 0) / weightNorm);
-  const negativeProjection = negativeCoefficients.map((row) => row.reduce((sum, value, column) => sum + value * normalizedCriteria[column].weight, 0) / weightNorm);
+  const positiveProjection = positiveCoefficients.map((row) => row.reduce((sum, value, column) => sum + value * normalizedCriteria[column].weight ** 2, 0) / weightNorm);
+  const negativeProjection = negativeCoefficients.map((row) => row.reduce((sum, value, column) => sum + value * normalizedCriteria[column].weight ** 2, 0) / weightNorm);
   const scores = positiveProjection.map((value, index) => value / (value + negativeProjection[index] || 1));
   const analysis = result(method, { ...input, criteria: normalizedCriteria, fuzzyValues: fuzzyMatrix }, [
     {
@@ -6493,11 +6513,62 @@ function runFuzzyLmaw(input: DecisionMatrix, config: StudyConfig, method: Method
   return analysis;
 }
 
+function dnmaAdjustedWeights(values: number[][], criteria: DecisionMatrix['criteria']): number[] {
+  const standardDeviations = criteria.map((_, column) => {
+    const maximum = Math.max(...values.map((row) => Math.abs(row[column])), 1e-12);
+    const comparable = values.map((row) => row[column] / maximum);
+    const mean = comparable.reduce((sum, value) => sum + value, 0) / Math.max(comparable.length, 1);
+    return Math.sqrt(comparable.reduce((sum, value) => sum + (value - mean) ** 2, 0) / Math.max(comparable.length, 1));
+  });
+  const deviationTotal = standardDeviations.reduce((sum, value) => sum + value, 0) || 1;
+  const deviationWeights = standardDeviations.map((value) => value / deviationTotal);
+  const adjusted = criteria.map((criterion, index) => Math.sqrt(Math.max(deviationWeights[index], 1e-12) * Math.max(criterion.weight, 1e-12)));
+  const total = adjusted.reduce((sum, value) => sum + value, 0) || 1;
+  return adjusted.map((value) => value / total);
+}
+
+function rankUtility(values: number[], descending = true): number[] {
+  const sorted = [...values].sort((a, b) => descending ? b - a : a - b);
+  return values.map((value) => sorted.findIndex((candidate) => Math.abs(candidate - value) <= 1e-10) + 1);
+}
+
+function dnmaModelWeights(config: StudyConfig): [number, number, number] {
+  const parsed = parseNumberList(config.methodParams.dnmaModelWeights, 3, Number.NaN);
+  const positive = parsed.map((value, index) => Number.isFinite(value) && value > 0 ? value : [0.6, 0.1, 0.3][index]);
+  const total = positive.reduce((sum, value) => sum + value, 0) || 1;
+  return [positive[0] / total, positive[1] / total, positive[2] / total];
+}
+
+function dnmaSubordinateUtilities(linear: number[][], vector: number[][], criteria: DecisionMatrix['criteria'], config: StudyConfig) {
+  const maxLinear = criteria.map((_, column) => Math.max(...linear.map((row) => row[column]), 1e-12));
+  const maxVector = criteria.map((_, column) => Math.max(...vector.map((row) => row[column]), 1e-12));
+  const completeCompensatory = linear.map((row) => row.reduce((sum, value, column) => sum + criteria[column].weight * value / maxLinear[column], 0));
+  const uncompensatory = linear.map((row) => Math.max(...row.map((value, column) => criteria[column].weight * (1 - value) / maxLinear[column])));
+  const incompleteCompensatory = vector.map((row) => row.reduce((product, value, column) => product * Math.max(value / maxVector[column], 1e-12) ** criteria[column].weight, 1));
+  const ccmRanks = rankUtility(completeCompensatory, true);
+  const ucmRanks = rankUtility(uncompensatory, false);
+  const icmRanks = rankUtility(incompleteCompensatory, true);
+  const m = linear.length || 1;
+  const phi = Math.max(0, Math.min(1, Number(config.methodParams.dnmaPhi ?? 0.5)));
+  const [ccmWeight, ucmWeight, icmWeight] = dnmaModelWeights(config);
+  const maxCcm = Math.max(...completeCompensatory.map((value) => Math.abs(value)), 1e-12);
+  const maxUcm = Math.max(...uncompensatory.map((value) => Math.abs(value)), 1e-12);
+  const maxIcm = Math.max(...incompleteCompensatory.map((value) => Math.abs(value)), 1e-12);
+  const scores = completeCompensatory.map((_, index) =>
+    ccmWeight * Math.sqrt(phi * (completeCompensatory[index] / maxCcm) ** 2 + (1 - phi) * ((m - ccmRanks[index] + 1) / m) ** 2)
+    - ucmWeight * Math.sqrt(phi * (uncompensatory[index] / maxUcm) ** 2 + (1 - phi) * (ucmRanks[index] / m) ** 2)
+    + icmWeight * Math.sqrt(phi * (incompleteCompensatory[index] / maxIcm) ** 2 + (1 - phi) * ((m - icmRanks[index] + 1) / m) ** 2),
+  );
+  return { completeCompensatory, uncompensatory, incompleteCompensatory, ccmRanks, ucmRanks, icmRanks, scores, modelWeights: [ccmWeight, ucmWeight, icmWeight], phi };
+}
+
 function runDnma(input: DecisionMatrix, config: StudyConfig, method: MethodDefinition): AnalysisResult {
   if (config.methodParams.fuzzyInputMode === 'Native fuzzy DNMA') {
     return runFuzzyDnma(input, config, method);
   }
-  const criteria = resolveCriteria(input, config);
+  const baseCriteria = normalizeWeights(resolveCriteria(input, config));
+  const adjustedWeights = dnmaAdjustedWeights(input.values, baseCriteria);
+  const criteria = baseCriteria.map((criterion, index) => ({ ...criterion, weight: adjustedWeights[index] }));
   const target = criteria.map((criterion, column) => {
     const values = input.values.map((row) => row[column]);
     return criterion.direction === 'benefit' ? Math.max(...values) : Math.min(...values);
@@ -6510,52 +6581,44 @@ function runDnma(input: DecisionMatrix, config: StudyConfig, method: MethodDefin
     }),
   );
   const vectorDenominators = criteria.map((_, column) =>
-    Math.sqrt(input.values.reduce((sum, row) => sum + Math.abs(row[column] - target[column]) ** 2, 0)) || 1,
+    Math.sqrt(input.values.reduce((sum, row) => sum + row[column] ** 2, 0) + target[column] ** 2) || 1,
   );
   const vector = input.values.map((row) =>
     row.map((value, column) => 1 - Math.abs(value - target[column]) / vectorDenominators[column]),
   );
-  const completeCompensatory = linear.map((row) => row.reduce((sum, value, column) => sum + value * criteria[column].weight, 0));
-  const uncompensatory = linear.map((row) => row.reduce((product, value, column) => product * Math.max(value, 1e-9) ** criteria[column].weight, 1));
-  const incompleteCompensatory = vector.map((row) => 1 - Math.sqrt(row.reduce((sum, value, column) => sum + criteria[column].weight * (1 - value) ** 2, 0)));
-  const subordinate = [completeCompensatory, uncompensatory, incompleteCompensatory];
-  const ranks = subordinate.map((scores) => rankScores(scores, input).reduce<Record<string, number>>((acc, row) => {
-    acc[row.alternativeId] = row.rank;
-    return acc;
-  }, {}));
-  const m = input.alternatives.length || 1;
-  const scores = input.alternatives.map((alternative, index) =>
-    subordinate.reduce((sum, values, modelIndex) => {
-      const maxValue = Math.max(...values.map((value) => Math.abs(value)), 1e-12);
-      const utilityComponent = values[index] / maxValue;
-      const rankComponent = (m - (ranks[modelIndex][alternative.id] ?? m) + 1) / m;
-      return sum + Math.sqrt(0.5 * (utilityComponent ** 2 + rankComponent ** 2));
-    }, 0) / subordinate.length,
-  );
+  const utilities = dnmaSubordinateUtilities(linear, vector, criteria, config);
   return result(method, { ...input, criteria }, [
     {
       id: 'dnma-targets',
-      title: 'DNMA Target Values',
-      columns: ['Criterion', 'Name', 'Direction', 'Target value'],
-      rows: criteria.map((criterion, index) => [criterion.id, criterion.name, criterion.direction, round(target[index])]),
+      title: 'DNMA Target Values and Adjusted Weights',
+      columns: ['Criterion', 'Name', 'Direction', 'Target value', 'Base weight', 'Adjusted weight'],
+      rows: criteria.map((criterion, index) => [criterion.id, criterion.name, criterion.direction, round(target[index]), round(baseCriteria[index].weight), round(criterion.weight)]),
     },
     tableFromMatrix('linear-normalized', 'DNMA Target-Based Linear Normalization', linear, input),
     tableFromMatrix('vector-normalized', 'DNMA Target-Based Vector Normalization', vector, input),
     {
       id: 'dnma-subordinate-utilities',
       title: 'DNMA Subordinate Aggregation Utilities',
-      columns: ['Alternative', 'Complete compensatory', 'Uncompensatory', 'Incomplete compensatory', 'Integrated DNMA score'],
-      rows: input.alternatives.map((alternative, index) => [alternative.name, round(completeCompensatory[index]), round(uncompensatory[index]), round(incompleteCompensatory[index]), round(scores[index])]),
+      columns: ['Alternative', 'CCM utility', 'CCM rank', 'UCM utility', 'UCM rank', 'ICM utility', 'ICM rank', 'Integrated DNMA score'],
+      rows: input.alternatives.map((alternative, index) => [alternative.name, round(utilities.completeCompensatory[index]), utilities.ccmRanks[index], round(utilities.uncompensatory[index]), utilities.ucmRanks[index], round(utilities.incompleteCompensatory[index]), utilities.icmRanks[index], round(utilities.scores[index])]),
     },
-  ], scores, 'DNMA ranks alternatives by combining target-based linear and vector normalization with complete, uncompensatory, and incomplete compensatory aggregation utilities.');
+    {
+      id: 'dnma-integration-settings',
+      title: 'DNMA Integration Settings',
+      columns: ['Setting', 'Value'],
+      rows: [['CCM/UCM/ICM weights', utilities.modelWeights.map((value) => round(value)).join(', ')], ['phi', round(utilities.phi)]],
+    },
+  ], utilities.scores, 'DNMA ranks alternatives with adjusted criterion weights, target-based linear and vector normalization, complete/uncompensatory/incomplete subordinate utilities, and weighted utility-rank integration.');
 }
 
 function runFuzzyDnma(input: DecisionMatrix, config: StudyConfig, method: MethodDefinition): AnalysisResult {
-  const criteria = resolveCriteria(input, config);
+  const baseCriteria = normalizeWeights(resolveCriteria(input, config));
   const fuzzyMatrix = input.fuzzyValues?.length
     ? input.fuzzyValues
     : input.values.map((row) => row.map((value) => crispFuzzy(value)));
-  const normalizedCriteria = normalizeWeights(criteria);
+  const crispMatrix = fuzzyToCrispMatrix(fuzzyMatrix);
+  const adjustedWeights = dnmaAdjustedWeights(crispMatrix, baseCriteria);
+  const normalizedCriteria = baseCriteria.map((criterion, index) => ({ ...criterion, weight: adjustedWeights[index] }));
   const target = normalizedCriteria.map((criterion, column) => {
     const values = fuzzyMatrix.map((row) => row[column]);
     return criterion.direction === 'benefit'
@@ -6566,44 +6629,28 @@ function runFuzzyDnma(input: DecisionMatrix, config: StudyConfig, method: Method
     Math.max(...fuzzyMatrix.map((row) => fuzzyDistance(row[column], target[column])), 1e-9),
   );
   const linear = fuzzyMatrix.map((row) => row.map((value, column) => 1 - fuzzyDistance(value, target[column]) / maxDistance[column]));
-  const vectorDenominators = normalizedCriteria.map((_, column) =>
-    Math.sqrt(fuzzyMatrix.reduce((sum, row) => sum + fuzzyDistance(row[column], target[column]) ** 2, 0)) || 1,
-  );
+  const vectorDenominators = normalizedCriteria.map((_, column) => {
+    const targetValue = defuzzify(target[column]);
+    return Math.sqrt(crispMatrix.reduce((sum, row) => sum + row[column] ** 2, 0) + targetValue ** 2) || 1;
+  });
   const vector = fuzzyMatrix.map((row) => row.map((value, column) => 1 - fuzzyDistance(value, target[column]) / vectorDenominators[column]));
-  const completeCompensatory = linear.map((row) => row.reduce((sum, value, column) => sum + value * normalizedCriteria[column].weight, 0));
-  const uncompensatory = linear.map((row) => row.reduce((product, value, column) => product * Math.max(value, 1e-9) ** normalizedCriteria[column].weight, 1));
-  const incompleteCompensatory = vector.map((row) => 1 - Math.sqrt(row.reduce((sum, value, column) => sum + normalizedCriteria[column].weight * (1 - value) ** 2, 0)));
-  const subordinate = [completeCompensatory, uncompensatory, incompleteCompensatory];
-  const rankedInput = { ...input, criteria: normalizedCriteria };
-  const ranks = subordinate.map((scores) => rankScores(scores, rankedInput).reduce<Record<string, number>>((acc, row) => {
-    acc[row.alternativeId] = row.rank;
-    return acc;
-  }, {}));
-  const m = input.alternatives.length || 1;
-  const scores = input.alternatives.map((alternative, index) =>
-    subordinate.reduce((sum, values, modelIndex) => {
-      const maxValue = Math.max(...values.map((value) => Math.abs(value)), 1e-12);
-      const utilityComponent = values[index] / maxValue;
-      const rankComponent = (m - (ranks[modelIndex][alternative.id] ?? m) + 1) / m;
-      return sum + Math.sqrt(0.5 * (utilityComponent ** 2 + rankComponent ** 2));
-    }, 0) / subordinate.length,
-  );
+  const utilities = dnmaSubordinateUtilities(linear, vector, normalizedCriteria, config);
   const analysis = result(method, { ...input, criteria: normalizedCriteria, fuzzyValues: fuzzyMatrix }, [
     {
       id: 'fuzzy-dnma-targets',
-      title: 'Fuzzy DNMA Target Values',
-      columns: ['Criterion', 'Name', 'Direction', 'Fuzzy target'],
-      rows: normalizedCriteria.map((criterion, index) => [criterion.id, criterion.name, criterion.direction, fuzzyLabel(target[index])]),
+      title: 'Fuzzy DNMA Target Values and Adjusted Weights',
+      columns: ['Criterion', 'Name', 'Direction', 'Fuzzy target', 'Base weight', 'Adjusted weight'],
+      rows: normalizedCriteria.map((criterion, index) => [criterion.id, criterion.name, criterion.direction, fuzzyLabel(target[index]), round(baseCriteria[index].weight), round(criterion.weight)]),
     },
     tableFromMatrix('fuzzy-dnma-linear-normalized', 'Fuzzy DNMA Target-Based Linear Normalization', linear, input),
     tableFromMatrix('fuzzy-dnma-vector-normalized', 'Fuzzy DNMA Target-Based Vector Normalization', vector, input),
     {
       id: 'fuzzy-dnma-subordinate-utilities',
       title: 'Fuzzy DNMA Subordinate Aggregation Utilities',
-      columns: ['Alternative', 'Complete compensatory', 'Uncompensatory', 'Incomplete compensatory', 'Integrated DNMA score'],
-      rows: input.alternatives.map((alternative, index) => [alternative.name, round(completeCompensatory[index]), round(uncompensatory[index]), round(incompleteCompensatory[index]), round(scores[index])]),
+      columns: ['Alternative', 'CCM utility', 'CCM rank', 'UCM utility', 'UCM rank', 'ICM utility', 'ICM rank', 'Integrated DNMA score'],
+      rows: input.alternatives.map((alternative, index) => [alternative.name, round(utilities.completeCompensatory[index]), utilities.ccmRanks[index], round(utilities.uncompensatory[index]), utilities.ucmRanks[index], round(utilities.incompleteCompensatory[index]), utilities.icmRanks[index], round(utilities.scores[index])]),
     },
-  ], scores, 'Native fuzzy DNMA preserves triangular/trapezoidal uploaded values, selects fuzzy target references, applies fuzzy-distance linear and vector normalization, and integrates compensatory utility and rank components.');
+  ], utilities.scores, 'Native fuzzy DNMA preserves triangular/trapezoidal uploaded values, selects fuzzy target references, applies fuzzy-distance linear and vector normalization, and integrates subordinate utility and rank components.');
   analysis.diagnostics.push({ label: 'Native fuzzy DNMA', value: 'Fuzzy target references with double-normalization aggregation', status: 'pass' });
   analysis.reproducibility = { ...analysis.reproducibility, fuzzyMode: 'Native fuzzy DNMA', fuzzyDnma: 'Fuzzy target references, vertex-distance linear/vector normalization, integrated utility-rank aggregation' };
   return analysis;
@@ -7727,7 +7774,7 @@ export const methodRegistry: MethodDefinition[] = [
   withBase({ id: 'oreste', name: 'ORESTE', fullName: 'Organisation, Rangement Et Synthese De Donnees Relationnelles', description: 'Rank-preference method using criterion and alternative orders.', parameters: ['oresteRankModel'], specificationFields: [{ key: 'oresteRankModel', label: 'Rank model', type: 'select', defaultValue: 'Besson projection ranks', options: ['Besson projection ranks'] }], outputs: ['Criterion ranks', 'Alternative ranks', 'Projection distances', 'Global projection ranks', 'Final rank'], supportsWeights: true, runAnalysis: (input, config) => runOreste(input, config, getMethod('oreste')) }),
   withBase({ id: 'qualiflex', name: 'QUALIFLEX', fullName: 'Qualitative Flexible Multiple Criteria Method', description: 'Permutation outranking method based on concordance and discordance.', parameters: ['qualiflexExactLimit'], specificationFields: [{ key: 'qualiflexExactLimit', label: 'Exact permutation limit', type: 'number', defaultValue: 7 }], outputs: ['Pairwise concordance/discordance', 'Permutation summary', 'Best ranking order'], supportsWeights: true, runAnalysis: (input, config) => runQualiflex(input, config, getMethod('qualiflex')) }),
   withBase({ id: 'regime', name: 'REGIME', fullName: 'REGIME Analysis', description: 'Pairwise dominance ranking using weighted criterion signs.', parameters: ['regimePreferenceModel'], specificationFields: [{ key: 'regimePreferenceModel', label: 'Preference model', type: 'select', defaultValue: 'Weighted sign dominance', options: ['Weighted sign dominance'] }], outputs: ['Dominance matrix', 'Positive flow', 'Negative flow', 'Net dominance rank'], supportsWeights: true, runAnalysis: (input, config) => runRegime(input, config, getMethod('regime')) }),
-  withBase({ id: 'evamix', name: 'EVAMIX', fullName: 'Evaluation of Mixed Data', description: 'Pairwise dominance appraisal for mixed-data decision problems.', parameters: ['evamixDataMode'], specificationFields: [{ key: 'evamixDataMode', label: 'Data mode', type: 'select', defaultValue: 'Cardinal numeric criteria', options: ['Cardinal numeric criteria'] }], outputs: ['Normalized matrix', 'Cardinal dominance matrix', 'Standardized dominance matrix', 'Net appraisal rank'], supportsWeights: true, runAnalysis: (input, config) => runEvamix(input, config, getMethod('evamix')) }),
+  withBase({ id: 'evamix', name: 'EVAMIX', fullName: 'Evaluation of Mixed Data', description: 'Pairwise dominance appraisal for mixed-data decision problems.', parameters: ['evamixDataMode', 'evamixOrdinalCriteria'], specificationFields: [{ key: 'evamixDataMode', label: 'Data mode', type: 'select', defaultValue: 'Cardinal numeric criteria', options: ['Cardinal numeric criteria', 'Ordinal + cardinal criteria'] }, { key: 'evamixOrdinalCriteria', label: 'Ordinal criterion IDs', type: 'text', defaultValue: 'none' }], outputs: ['Normalized matrix', 'Ordinal/cardinal dominance matrices', 'Overall dominance matrix', 'Appraisal score rank'], supportsWeights: true, runAnalysis: (input, config) => runEvamix(input, config, getMethod('evamix')) }),
   withBase({ id: 'lexicographic', name: 'Lexicographic', fullName: 'Lexicographic Decision Rule', description: 'Strict priority-order ranking without compensatory trade-offs.', parameters: ['lexicographicOrder'], specificationFields: [{ key: 'lexicographicOrder', label: 'Criterion priority order', type: 'text', defaultValue: 'C1,C2,C3,C4,C5,C6,C7' }], outputs: ['Criterion priority order', 'Direction-adjusted matrix', 'Sequential comparison evidence', 'Final rank'], supportsWeights: false, runAnalysis: (input, config) => runLexicographic(input, config, getMethod('lexicographic')) }),
   withBase({ id: 'marcos', name: 'MARCOS', fullName: 'Measurement of Alternatives and Ranking according to Compromise Solution', description: 'Ideal and anti-ideal utility ranking.', parameters: ['normalization', 'marcosScoreMode'], specificationFields: [{ key: 'normalization', label: 'Normalization', type: 'select', defaultValue: 'Utility normalization', options: ['Utility normalization'] }, { key: 'marcosScoreMode', label: 'Ranking convention', type: 'select', defaultValue: 'Standard utility function f(K)', options: ['Standard utility function f(K)', 'Published range-scaled f(K+) convention'] }], outputs: ['Extended matrix', 'Utility degrees', 'Final rank'], supportsWeights: true, runAnalysis: (input, config) => runMarcos(input, config, getMethod('marcos')) }),
   withBase({ id: 'mairca', name: 'MAIRCA', fullName: 'Multi-Attributive Ideal-Real Comparative Analysis', description: 'Ideal-real assessment gap ranking.', parameters: ['normalization'], specificationFields: [{ key: 'normalization', label: 'Normalization', type: 'select', defaultValue: 'Linear normalization', options: ['Linear normalization'] }], outputs: ['Normalized matrix', 'Theoretical assessment matrix', 'Real assessment matrix', 'Gap matrix', 'Final rank'], supportsWeights: true, runAnalysis: (input, config) => runMairca(input, config, getMethod('mairca')) }),
@@ -7747,13 +7794,13 @@ export const methodRegistry: MethodDefinition[] = [
   withBase({ id: 'todim', name: 'TODIM', fullName: 'Interactive and Multi-Criteria Decision Making', description: 'Prospect-theory pairwise dominance ranking.', parameters: ['todimTheta'], specificationFields: [{ key: 'todimTheta', label: 'Loss attenuation theta', type: 'number', defaultValue: 1 }], outputs: ['Normalized matrix', 'Pairwise dominance matrix', 'Dominance score', 'Final rank'], supportsWeights: true, runAnalysis: (input, config) => runTodim(input, config, getMethod('todim')) }),
   withBase({ id: 'ram', name: 'RAM', fullName: 'Root Assessment Method', description: 'Benefit-cost utility assessment ranking.', parameters: ['normalization'], specificationFields: [{ key: 'normalization', label: 'Normalization', type: 'select', defaultValue: 'Column-sum normalization', options: ['Column-sum normalization'] }], outputs: ['Normalized matrix', 'Weighted matrix', 'Benefit/cost utility', 'Final rank'], supportsWeights: true, runAnalysis: (input, config) => runRam(input, config, getMethod('ram')) }),
   withBase({ id: 'gra', name: 'GRA', fullName: 'Grey Relational Analysis', description: 'Grey relational grade ranking against an ideal sequence.', parameters: ['graZeta'], specificationFields: [{ key: 'graZeta', label: 'Distinguishing coefficient zeta', type: 'number', defaultValue: 0.5 }], outputs: ['Normalized matrix', 'Grey relational coefficients', 'Weighted coefficients', 'Final rank'], supportsWeights: true, runAnalysis: (input, config) => runGra(input, config, getMethod('gra')) }),
-  withBase({ id: 'grp', name: 'GRP', fullName: 'Grey Relational Projection', description: 'Grey projection ranking against positive and negative ideals.', parameters: ['graZeta'], specificationFields: [{ key: 'graZeta', label: 'Distinguishing coefficient zeta', type: 'number', defaultValue: 0.5 }], outputs: ['Normalized matrix', 'Positive grey coefficients', 'Negative grey coefficients', 'Projection closeness rank'], supportsWeights: true, runAnalysis: (input, config) => runGrp(input, config, getMethod('grp')) }),
+  withBase({ id: 'grp', name: 'GRP', fullName: 'Grey Relational Projection', description: 'Grey projection ranking against positive and negative ideals.', parameters: ['graZeta', 'grpInputScale'], specificationFields: [{ key: 'graZeta', label: 'Distinguishing coefficient zeta', type: 'number', defaultValue: 0.5 }, { key: 'grpInputScale', label: 'Input scale', type: 'select', defaultValue: 'Normalize raw values', options: ['Normalize raw values', 'Use comparable values directly'] }], outputs: ['Normalized matrix', 'Positive grey coefficients', 'Negative grey coefficients', 'Projection closeness rank'], supportsWeights: true, runAnalysis: (input, config) => runGrp(input, config, getMethod('grp')) }),
   withBase({ id: 'spotis', name: 'SPOTIS', fullName: 'Stable Preference Ordering Towards Ideal Solution', description: 'Rank-reversal-resistant ideal-bound distance ranking.', parameters: ['spotisBounds', 'spotisLowerBounds', 'spotisUpperBounds'], specificationFields: [{ key: 'spotisBounds', label: 'Criterion bounds', type: 'select', defaultValue: 'Observed data range', options: ['Observed data range', 'Manual bounds'] }, { key: 'spotisLowerBounds', label: 'Manual lower bounds', type: 'text', defaultValue: '50,60,5,60,10,50,5' }, { key: 'spotisUpperBounds', label: 'Manual upper bounds', type: 'text', defaultValue: '100,100,20,100,25,100,10' }], outputs: ['Criterion bounds', 'Ideal point', 'Normalized distances', 'Weighted distances', 'Final rank'], supportsWeights: true, runAnalysis: (input, config) => runSpotis(input, config, getMethod('spotis')) }),
   withBase({ id: 'espSpotis', name: 'ESP-SPOTIS', fullName: 'Expected Solution Point SPOTIS', description: 'Target-distance SPOTIS variant using a researcher-defined expected solution point.', parameters: ['espSpotisPoint', 'espSpotisBounds', 'spotisLowerBounds', 'spotisUpperBounds'], specificationFields: [{ key: 'espSpotisPoint', label: 'Expected solution point', type: 'text', defaultValue: '70,85,100,88,75,80,28' }, { key: 'espSpotisBounds', label: 'Criterion bounds', type: 'select', defaultValue: 'Observed data range', options: ['Observed data range', 'Manual bounds'] }, { key: 'spotisLowerBounds', label: 'Manual lower bounds', type: 'text', defaultValue: '50,60,5,60,10,50,5' }, { key: 'spotisUpperBounds', label: 'Manual upper bounds', type: 'text', defaultValue: '100,100,20,100,25,100,10' }], outputs: ['Criterion bounds', 'Expected solution point', 'Normalized distances', 'Weighted distances', 'Final rank'], supportsWeights: true, runAnalysis: (input, config) => runEspSpotis(input, config, getMethod('espSpotis')) }),
   withBase({ id: 'balancedSpotis', name: 'B-SPOTIS', fullName: 'Balanced Stable Preference Ordering Towards Ideal Solution', description: 'Balanced distance ranking from ideal and expected solution points.', parameters: ['balancedSpotisAlpha', 'espSpotisPoint', 'balancedSpotisBounds', 'spotisLowerBounds', 'spotisUpperBounds'], specificationFields: [{ key: 'balancedSpotisAlpha', label: 'ESP confidence alpha', type: 'number', defaultValue: 0.5 }, { key: 'espSpotisPoint', label: 'Expected solution point', type: 'text', defaultValue: '70,85,100,88,75,80,28' }, { key: 'balancedSpotisBounds', label: 'Criterion bounds', type: 'select', defaultValue: 'Observed data range', options: ['Observed data range', 'Manual bounds'] }, { key: 'spotisLowerBounds', label: 'Manual lower bounds', type: 'text', defaultValue: '50,60,5,60,10,50,5' }, { key: 'spotisUpperBounds', label: 'Manual upper bounds', type: 'text', defaultValue: '100,100,20,100,25,100,10' }], outputs: ['Criterion bounds', 'Ideal and expected points', 'Distance from ISP', 'Distance from ESP', 'Balanced distance rank'], supportsWeights: true, runAnalysis: (input, config) => runBalancedSpotis(input, config, getMethod('balancedSpotis')) }),
   withBase({ id: 'wedba', name: 'WEDBA', fullName: 'Weighted Euclidean Distance-Based Approach', description: 'Weighted Euclidean distance ranking from ideal and anti-ideal reference points.', parameters: ['wedbaNormalization'], specificationFields: [{ key: 'wedbaNormalization', label: 'Normalization', type: 'select', defaultValue: 'Ratio normalization', options: ['Ratio normalization'] }], outputs: ['Normalized matrix', 'Standardized matrix', 'Ideal and anti-ideal points', 'Distance index', 'Final rank'], supportsWeights: true, runAnalysis: (input, config) => runWedba(input, config, getMethod('wedba')) }),
   withBase({ id: 'lmaw', name: 'LMAW', fullName: 'Logarithm Methodology of Additive Weights', description: 'Logarithmic additive weighting and alternative ranking.', parameters: ['lmawScaling', 'lmawScoreMode'], specificationFields: [{ key: 'lmawScaling', label: 'Scaling', type: 'select', defaultValue: 'Log additive scaling', options: ['Log additive scaling'] }, { key: 'lmawScoreMode', label: 'Scoring convention', type: 'select', defaultValue: 'Nonlinear Q utility', options: ['Nonlinear Q utility', 'Weighted log sum'] }], outputs: ['Positive standardized matrix', 'Logarithmic additive matrix', 'Weighted matrix', 'Final rank'], supportsWeights: true, runAnalysis: (input, config) => runLmaw(input, config, getMethod('lmaw')) }),
-  withBase({ id: 'dnma', name: 'DNMA', fullName: 'Double Normalization-Based Multiple Aggregation', description: 'Double-normalization ranking with multiple aggregation utilities.', parameters: ['dnmaIntegration'], specificationFields: [{ key: 'dnmaIntegration', label: 'Integration', type: 'select', defaultValue: 'Utility and rank integration', options: ['Utility and rank integration'] }], outputs: ['Target values', 'Linear normalized matrix', 'Vector normalized matrix', 'Subordinate utilities', 'Final rank'], supportsWeights: true, runAnalysis: (input, config) => runDnma(input, config, getMethod('dnma')) }),
+  withBase({ id: 'dnma', name: 'DNMA', fullName: 'Double Normalization-Based Multiple Aggregation', description: 'Double-normalization ranking with multiple aggregation utilities.', parameters: ['dnmaIntegration', 'dnmaModelWeights', 'dnmaPhi'], specificationFields: [{ key: 'dnmaIntegration', label: 'Integration', type: 'select', defaultValue: 'Utility and rank integration', options: ['Utility and rank integration'] }, { key: 'dnmaModelWeights', label: 'CCM/UCM/ICM weights', type: 'text', defaultValue: '0.6,0.1,0.3' }, { key: 'dnmaPhi', label: 'Utility-rank balance phi', type: 'number', defaultValue: 0.5 }], outputs: ['Target values', 'Linear normalized matrix', 'Vector normalized matrix', 'Subordinate utilities', 'Final rank'], supportsWeights: true, runAnalysis: (input, config) => runDnma(input, config, getMethod('dnma')) }),
   withBase({ id: 'probid', name: 'PROBID', fullName: 'Preference Ranking on the Basis of Ideal-Average Distance', description: 'Ideal-average distance ranking with weighted reference solutions.', parameters: ['probidReference'], specificationFields: [{ key: 'probidReference', label: 'Reference model', type: 'select', defaultValue: 'Ideal-average distance', options: ['Ideal-average distance'] }], outputs: ['Vector normalized matrix', 'Weighted matrix', 'Reference solutions', 'Distance measures', 'Final rank'], supportsWeights: true, runAnalysis: (input, config) => runProbid(input, config, getMethod('probid')) }),
   withBase({ id: 'sprobid', name: 'SPROBID', fullName: 'Simplified Preference Ranking on the Basis of Ideal-Average Distance', description: 'Simplified PROBID ranking using first and last quarters of ideal reference solutions.', parameters: ['sprobidReference'], specificationFields: [{ key: 'sprobidReference', label: 'Reference model', type: 'select', defaultValue: 'First/last-quarter ideal distance', options: ['First/last-quarter ideal distance'] }], outputs: ['Vector normalized matrix', 'Weighted matrix', 'Quarter ideal reference distances', 'Final rank'], supportsWeights: true, runAnalysis: (input, config) => runSprobid(input, config, getMethod('sprobid')) }),
   withBase({ id: 'rim', name: 'RIM', fullName: 'Reference Ideal Method', description: 'Reference ideal interval ranking for target-based decisions.', parameters: ['rimReference', 'rimDomainLower', 'rimDomainUpper', 'rimIdealLower', 'rimIdealUpper'], specificationFields: [{ key: 'rimReference', label: 'Reference ideal', type: 'select', defaultValue: 'Observed ideal point', options: ['Observed ideal point', 'Manual ideal interval'] }, { key: 'rimDomainLower', label: 'Manual domain lower bounds', type: 'text', defaultValue: '50,70,80,70,60,65,15' }, { key: 'rimDomainUpper', label: 'Manual domain upper bounds', type: 'text', defaultValue: '90,100,140,100,90,95,40' }, { key: 'rimIdealLower', label: 'Manual ideal lower interval', type: 'text', defaultValue: '60,90,95,90,80,85,25' }, { key: 'rimIdealUpper', label: 'Manual ideal upper interval', type: 'text', defaultValue: '65,90,100,90,80,85,28' }], outputs: ['Criterion ranges', 'Reference ideal intervals', 'Closeness matrix', 'Weighted closeness matrix', 'Final rank'], supportsWeights: true, runAnalysis: (input, config) => runRim(input, config, getMethod('rim')) }),

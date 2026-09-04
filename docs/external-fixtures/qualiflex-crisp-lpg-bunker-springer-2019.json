@@ -1,0 +1,125 @@
+{
+  "methodId": "qualiflex",
+  "variant": "crisp-lpg-bunker-springer-2019",
+  "source": "QUALIFLEX Method chapter in New Methods and Applications in Multiple Attribute Decision Making (MADM), Springer, 2019, DOI: 10.1007/978-3-030-15009-9_6, Figures 6.1-6.2 and Table 6.1",
+  "sourceUrl": "https://link.springer.com/chapter/10.1007/978-3-030-15009-9_6",
+  "doi": "10.1007/978-3-030-15009-9_6",
+  "config": {
+    "title": "QUALIFLEX validation: LPG bunker selection",
+    "weightingId": "manual",
+    "methodParams": {
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload",
+      "qualiflexExactLimit": 7
+    }
+  },
+  "input": {
+    "alternatives": [
+      {
+        "id": "A1",
+        "name": "A1"
+      },
+      {
+        "id": "A2",
+        "name": "A2"
+      },
+      {
+        "id": "A3",
+        "name": "A3"
+      }
+    ],
+    "criteria": [
+      {
+        "id": "C1",
+        "name": "Price",
+        "direction": "cost",
+        "weight": 0.3333333333333333
+      },
+      {
+        "id": "C2",
+        "name": "Working pressure",
+        "direction": "benefit",
+        "weight": 0.3333333333333333
+      },
+      {
+        "id": "C3",
+        "name": "Capacity",
+        "direction": "benefit",
+        "weight": 0.3333333333333333
+      }
+    ],
+    "values": [
+      [
+        1.2,
+        18,
+        32000
+      ],
+      [
+        2,
+        23,
+        24000
+      ],
+      [
+        2,
+        15,
+        25000
+      ]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      {
+        "alternative": "A1"
+      },
+      {
+        "alternative": "A2"
+      },
+      {
+        "alternative": "A3"
+      }
+    ],
+    "tables": [
+      {
+        "id": "qualiflex-permutation-summary",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": 6
+          },
+          {
+            "row": 0,
+            "column": 2,
+            "value": 1.333
+          },
+          {
+            "row": 0,
+            "column": 3,
+            "value": "A1 > A2 > A3"
+          }
+        ]
+      },
+      {
+        "id": "qualiflex-pairwise",
+        "cells": [
+          {
+            "row": 0,
+            "column": 2,
+            "value": 0.3333
+          },
+          {
+            "row": 0,
+            "column": 3,
+            "value": 1
+          },
+          {
+            "row": 2,
+            "column": 1,
+            "value": -1
+          }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.0015
+}

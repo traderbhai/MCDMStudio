@@ -74,6 +74,6 @@ export function hasBundledBenchmark(methodId: MethodId): boolean {
 
 export function benchmarkCoverageLabel(methodId: MethodId): string {
   return hasBundledBenchmark(methodId)
-    ? 'Selected method has bundled numerical benchmark coverage'
-    : 'Selected method has internal workflow QA; add published numerical benchmark before certification';
+    ? 'This method has built-in benchmark checks'
+    : 'This method runs internal checks, but still needs a published benchmark before certification';
 }

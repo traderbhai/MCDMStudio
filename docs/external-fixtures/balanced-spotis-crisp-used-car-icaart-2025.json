@@ -1,0 +1,331 @@
+{
+  "methodId": "balancedSpotis",
+  "variant": "crisp-used-car-isp-esp-alpha-0.5-icaart-2025",
+  "source": "Enhancing Personalized Decision-Making with the Balanced SPOTIS Algorithm, ICAART 2025, DOI: 10.5220/0013119800003890, Tables 1-3",
+  "sourceUrl": "https://www.scitepress.org/publishedPapers/2025/131198/pdf/index.html",
+  "doi": "10.5220/0013119800003890",
+  "config": {
+    "title": "B-SPOTIS validation: ICAART 2025 used-car ISP/ESP example",
+    "weightingId": "manual",
+    "methodParams": {
+      "balancedSpotisBounds": "Manual bounds",
+      "balancedSpotisAlpha": 0.5,
+      "espSpotisPoint": "110,45,2018",
+      "spotisLowerBounds": "70,35,2013",
+      "spotisUpperBounds": "360,70,2018",
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      {
+        "id": "A1",
+        "name": "A1"
+      },
+      {
+        "id": "A2",
+        "name": "A2"
+      },
+      {
+        "id": "A3",
+        "name": "A3"
+      },
+      {
+        "id": "A4",
+        "name": "A4"
+      },
+      {
+        "id": "A5",
+        "name": "A5"
+      },
+      {
+        "id": "A6",
+        "name": "A6"
+      },
+      {
+        "id": "A7",
+        "name": "A7"
+      },
+      {
+        "id": "A8",
+        "name": "A8"
+      }
+    ],
+    "criteria": [
+      {
+        "id": "C1",
+        "name": "Mileage",
+        "direction": "cost",
+        "weight": 0.33
+      },
+      {
+        "id": "C2",
+        "name": "Price",
+        "direction": "cost",
+        "weight": 0.56
+      },
+      {
+        "id": "C3",
+        "name": "Year",
+        "direction": "benefit",
+        "weight": 0.11
+      }
+    ],
+    "values": [
+      [
+        94,
+        69.9,
+        2017
+      ],
+      [
+        297,
+        42,
+        2013
+      ],
+      [
+        205,
+        68.9,
+        2015
+      ],
+      [
+        360,
+        36.9,
+        2014
+      ],
+      [
+        86,
+        59.9,
+        2017
+      ],
+      [
+        79.6,
+        63.8,
+        2017
+      ],
+      [
+        113,
+        56.9,
+        2015
+      ],
+      [
+        171,
+        58,
+        2016
+      ]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      {
+        "alternative": "A7",
+        "score": 0.3626
+      },
+      {
+        "alternative": "A5",
+        "score": 0.3632
+      },
+      {
+        "alternative": "A8",
+        "score": 0.4242
+      },
+      {
+        "alternative": "A2",
+        "score": 0.4256
+      },
+      {
+        "alternative": "A6",
+        "score": 0.4256
+      },
+      {
+        "alternative": "A4",
+        "score": 0.4752
+      },
+      {
+        "alternative": "A1",
+        "score": 0.5232
+      },
+      {
+        "alternative": "A3",
+        "score": 0.6593
+      }
+    ],
+    "scores": [
+      {
+        "alternative": "A1",
+        "score": 0.5232
+      },
+      {
+        "alternative": "A2",
+        "score": 0.4256
+      },
+      {
+        "alternative": "A3",
+        "score": 0.6593
+      },
+      {
+        "alternative": "A4",
+        "score": 0.4752
+      },
+      {
+        "alternative": "A5",
+        "score": 0.3632
+      },
+      {
+        "alternative": "A6",
+        "score": 0.4256
+      },
+      {
+        "alternative": "A7",
+        "score": 0.3626
+      },
+      {
+        "alternative": "A8",
+        "score": 0.4242
+      }
+    ],
+    "tables": [
+      {
+        "id": "balanced-spotis-bounds",
+        "cells": [
+          {
+            "row": 0,
+            "column": 4,
+            "value": 70
+          },
+          {
+            "row": 0,
+            "column": 5,
+            "value": 360
+          },
+          {
+            "row": 0,
+            "column": 6,
+            "value": 70
+          },
+          {
+            "row": 0,
+            "column": 7,
+            "value": 110
+          },
+          {
+            "row": 2,
+            "column": 6,
+            "value": 2018
+          },
+          {
+            "row": 2,
+            "column": 7,
+            "value": 2018
+          }
+        ]
+      },
+      {
+        "id": "balanced-spotis-ideal-distance",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": 0.0828
+          },
+          {
+            "row": 0,
+            "column": 2,
+            "value": 0.9971
+          },
+          {
+            "row": 0,
+            "column": 3,
+            "value": 0.2
+          },
+          {
+            "row": 6,
+            "column": 1,
+            "value": 0.1483
+          },
+          {
+            "row": 6,
+            "column": 2,
+            "value": 0.6257
+          },
+          {
+            "row": 6,
+            "column": 3,
+            "value": 0.6
+          }
+        ]
+      },
+      {
+        "id": "balanced-spotis-expected-distance",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": 0.0552
+          },
+          {
+            "row": 0,
+            "column": 2,
+            "value": 0.7114
+          },
+          {
+            "row": 0,
+            "column": 3,
+            "value": 0.2
+          },
+          {
+            "row": 6,
+            "column": 1,
+            "value": 0.0103
+          },
+          {
+            "row": 6,
+            "column": 2,
+            "value": 0.34
+          },
+          {
+            "row": 6,
+            "column": 3,
+            "value": 0.6
+          }
+        ]
+      },
+      {
+        "id": "balanced-spotis-score",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": 0.6077
+          },
+          {
+            "row": 0,
+            "column": 2,
+            "value": 0.4386
+          },
+          {
+            "row": 0,
+            "column": 4,
+            "value": 0.5232
+          },
+          {
+            "row": 6,
+            "column": 1,
+            "value": 0.4653
+          },
+          {
+            "row": 6,
+            "column": 2,
+            "value": 0.2598
+          },
+          {
+            "row": 6,
+            "column": 4,
+            "value": 0.3626
+          }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.0002
+}

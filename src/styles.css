@@ -102,9 +102,8 @@ button { cursor: pointer; }
 .wizardStepper .locked span { background: #f6f8f9; color: #9aa4ad; border-color: #e3e8ec; }
 .wizardStepper em { font-style: normal; }
 
-.workflowGrid { display: grid; grid-template-columns: minmax(0, 1fr) 286px; gap: 12px; }
-.primaryPanel, .singlePanel, .samplePanel, .nextPanel, .resultsPanel { background: #fff; border: 1px solid #dfe4e8; border-radius: 7px; }
-.primaryPanel, .singlePanel, .resultsPanel { padding: 24px 26px; }
+.singlePanel, .samplePanel, .resultsPanel { background: #fff; border: 1px solid #dfe4e8; border-radius: 7px; }
+.singlePanel, .resultsPanel { padding: 24px 26px; }
 .sectionTitle h1, .templateHero h1, .resultsHeader h1 { margin: 0; font-size: 22px; line-height: 1.2; letter-spacing: 0; color: #15202b; }
 .sectionTitle p, .templateHero p, .resultsHeader p { margin: 8px 0 0; color: #65717d; font-size: 13px; line-height: 1.5; }
 .searchBox {
@@ -255,13 +254,7 @@ button { cursor: pointer; }
   line-height: 1.45;
   font-weight: 680;
 }
-.eyebrow {
-  color: #65717d;
-  font-size: 11px;
-  font-weight: 760;
-  text-transform: uppercase;
-  letter-spacing: .04em;
-}
+
 .methodCatalog {
   margin-top: 14px;
   border-top: 1px solid #e8edf0;
@@ -323,20 +316,6 @@ button { cursor: pointer; }
   line-height: 1.35;
 }
 
-.methodTable { border-top: 1px solid #e5e9ed; }
-.methodHead, .methodRow {
-  display: grid;
-  grid-template-columns: 150px minmax(240px, 1fr) minmax(260px, 1fr) 132px;
-  gap: 14px;
-  align-items: center;
-  min-height: 46px;
-  border-bottom: 1px solid #e8edf0;
-  padding: 7px 12px;
-  font-size: 12px;
-}
-.methodHead { color: #515b66; font-weight: 760; background: #fbfcfd; }
-.methodRow strong { color: #00766f; font-size: 13px; }
-.methodRow span { color: #4f5b66; }
 .methodSupport { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
 .methodSupport em {
   color: #384551;
@@ -353,26 +332,7 @@ button { cursor: pointer; }
   padding: 3px 7px;
   line-height: 1;
 }
-.methodRow button {
-  height: 28px;
-  border: 1px solid #7bb8b4;
-  color: #006f69;
-  background: #fff;
-  border-radius: 5px;
-  font-size: 12px;
-  font-weight: 700;
-  padding: 0 10px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
 
-.nextPanel { padding: 26px 22px; display: grid; align-content: start; gap: 24px; }
-.nextPanel h2, .samplePanel h2, .cleanTableWrap h2, .rankingBars h2 { margin: 0; font-size: 15px; color: #17212b; }
-.nextPanel div { display: grid; grid-template-columns: 42px 1fr; gap: 4px 12px; align-items: start; }
-.nextPanel svg { grid-row: span 2; width: 42px; height: 42px; padding: 11px; border-radius: 50%; color: #00766f; background: #eaf6f5; }
-.nextPanel strong { color: #00766f; font-size: 14px; }
-.nextPanel span { color: #65717d; font-size: 13px; line-height: 1.45; }
 
 .samplePanel { margin-top: 12px; padding: 16px 18px; }
 .sampleNote { margin: 6px 0 0; color: #65717d; font-size: 12px; }
@@ -1055,11 +1015,11 @@ td input, td select, .configGrid input, .configGrid select {
   .headerActions .ghostButton { flex: 1 1 140px; }
   .wizardShell { padding: 16px 12px 24px; }
   .wizardStepper { overflow-x: auto; justify-content: start; max-width: 100%; padding-bottom: 6px; }
-  .workflowGrid, .methodChooser, .methodCatalogGrid, .configGrid, .resultsGridSimple, .resultCards, .templateSpecs, .templateSheetGrid, .diagnostics, .summaryGrid, .visualPanel, .capabilityStrip, .configurationSummary, .specSection, .workflowNote, .helpGrid, .helpTimeline { grid-template-columns: 1fr; }
+  .methodChooser, .methodCatalogGrid, .configGrid, .resultsGridSimple, .resultCards, .templateSpecs, .templateSheetGrid, .diagnostics, .summaryGrid, .visualPanel, .capabilityStrip, .configurationSummary, .specSection, .workflowNote, .helpGrid, .helpTimeline { grid-template-columns: 1fr; }
   .helpHero { flex-direction: column; padding: 18px 14px; }
   .helpActions { width: 100%; justify-content: stretch; }
   .helpActions button { flex: 1 1 180px; }
-  .primaryPanel, .singlePanel, .resultsPanel { padding: 18px 14px; }
+  .singlePanel, .resultsPanel { padding: 18px 14px; }
   .resultsHeader { align-items: stretch; flex-direction: column; gap: 12px; }
   .exportActions { justify-content: stretch; }
   .exportActions button { flex: 1 1 128px; }
@@ -1067,8 +1027,6 @@ td input, td select, .configGrid input, .configGrid select {
   .flowActions button { flex: 1 1 180px; }
   .resultTabs button { flex: 0 0 auto; }
   .segmentedControl { grid-auto-flow: row; }
-  .methodHead { display: none; }
-  .methodRow { grid-template-columns: 1fr; gap: 6px; padding: 12px; }
   .searchBox { width: 100%; }
 }
 
@@ -1080,4 +1038,5002 @@ td input, td select, .configGrid input, .configGrid select {
   .simpleBar, .weightBar, .sensitivityRow { grid-template-columns: 28px minmax(82px, 1fr) minmax(80px, 1fr) 48px; gap: 6px; }
   .readinessGrid { grid-template-columns: 1fr; }
   .validationItem { grid-template-columns: 1fr; }
+}
+
+/* Remove decorative wash; keep the workbench calm and inspectable. */
+body {
+  background:
+    linear-gradient(90deg, rgba(15, 104, 116, .035) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(48, 71, 88, .035) 1px, transparent 1px),
+    #f7f9fb;
+  background-size: 42px 42px, 42px 42px, auto;
+}
+/* Minimal modern method selection */
+.studioHeader {
+  height: 64px;
+  padding: 0 28px;
+}
+.wizardShell {
+  max-width: 1280px;
+  padding: 22px 24px 34px;
+}
+.wizardStepper {
+  max-width: none;
+  padding: 8px 0 14px;
+  background: transparent;
+}
+.wizardStepper button::before { background: #cfd8df; }
+.wizardStepper span {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+.methodWorkbench {
+  border: 1px solid #dce4ea;
+  background: #ffffff;
+}
+.methodWorkbench .sectionTitle {
+  display: block;
+  padding: 28px 32px 18px;
+  background:
+    linear-gradient(90deg, rgba(0, 122, 120, .05) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(55, 77, 91, .045) 1px, transparent 1px),
+    #fff;
+  background-size: 30px 30px, 30px 30px, auto;
+}
+.methodWorkbench .sectionTitle h1 {
+  font-size: 25px;
+  font-weight: 780;
+}
+.methodWorkbench .sectionTitle p {
+  max-width: 680px;
+  font-size: 13px;
+}
+.methodChooser {
+  grid-template-columns: 292px minmax(0, 1fr);
+  min-height: 0;
+}
+.methodPickPanel {
+  padding: 22px 18px;
+  border-right: 1px solid #dfe6eb;
+}
+.methodPickPanel .searchBox {
+  box-shadow: none;
+  height: 38px;
+}
+.selectedMethodPanel {
+  padding: 28px 32px 22px;
+  gap: 13px;
+}
+.selectedMethodPanel h2 {
+  font-size: 32px;
+  font-weight: 790;
+}
+.selectedMethodPanel p { max-width: 760px; }
+.validationSummary {
+  width: min(100%, 720px);
+  margin-top: 4px;
+}
+.validationSummary span {
+  min-height: 46px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+.methodSupport.large {
+  max-width: 780px;
+  border-top: 1px solid #e7edf1;
+  padding-top: 12px;
+}
+.methodCatalog {
+  margin: 0 32px 26px 324px;
+  border-top: 1px solid #dfe6eb;
+}
+.methodCatalog summary {
+  padding: 0 0 10px;
+  color: #1d303d;
+}
+.methodCatalogGrid {
+  max-height: 420px;
+  overflow: auto;
+}
+.methodCatalogGrid button {
+  grid-template-columns: minmax(122px, 160px) 136px minmax(0, 1fr);
+  padding: 10px 14px;
+}
+.methodCatalogGrid strong { margin-bottom: 0; }
+.methodCatalogGrid span { -webkit-line-clamp: 1; }
+@media (max-width: 900px) {
+  .studioHeader { padding: 12px 14px; }
+  .wizardShell { padding: 14px 12px 24px; }
+  .methodChooser { grid-template-columns: 1fr; }
+  .methodPickPanel { border-right: 0; border-bottom: 1px solid #dfe6eb; }
+  .methodCatalog { margin: 0 16px 18px; }
+  .selectedMethodPanel { padding: 22px 16px; }
+}
+/* Minimal workbench foundation */
+.studioHeader {
+  height: 64px;
+  padding: 0 28px;
+  border-bottom-color: #d9e1e7;
+  background: rgba(255,255,255,.96);
+  box-shadow: none;
+}
+.studioBrand { gap: 12px; min-width: 0; }
+.studioMark {
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  color: #007a78;
+  border-color: rgba(0, 122, 120, .24);
+  background: #ffffff;
+  box-shadow: none;
+}
+.brandText { display: grid; gap: 1px; min-width: 0; }
+.brandText strong { font-size: 19px; line-height: 1; color: #0f1c27; }
+.brandText span { color: #64717e; font-size: 11px; font-weight: 720; letter-spacing: 0; }
+.localStatus {
+  justify-self: center;
+  color: #263946;
+  font-weight: 720;
+  background: transparent;
+}
+.localStatus span { background: #14a06f; }
+.ghostButton, .primaryAction, .secondaryAction, .textAction {
+  border-radius: 6px;
+  box-shadow: none;
+  transition: background .16s ease, border-color .16s ease, color .16s ease;
+}
+.ghostButton, .secondaryAction {
+  background: transparent;
+  border-color: transparent;
+}
+.ghostButton:hover, .secondaryAction:hover, .textAction:hover {
+  background: #f3f7f8;
+  border-color: #dce6eb;
+}
+.primaryAction {
+  background: #007a78;
+  border-color: #007a78;
+  box-shadow: none;
+}
+.primaryAction:hover { background: #006d70; }
+.singlePanel, .resultsPanel {
+  border-color: #dce4ea;
+  background: #ffffff;
+  box-shadow: none;
+}
+.capabilityProfile span, .configurationSummary span, .readinessGrid span, .externalEvidencePanel span, .capabilityStrip span { letter-spacing: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .ghostButton, .primaryAction, .secondaryAction, .textAction, .methodCatalogGrid button { transition: none; }
+}
+/* Minimal workflow surfaces */
+.configGrid {
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 14px 18px;
+  margin-top: 0;
+  padding: 22px 32px;
+  border: 0;
+  border-bottom: 1px solid #e1e7eb;
+  border-radius: 0;
+  background: #fff;
+}
+.configGrid label,
+.orderEditor > span,
+.vectorEditor > span {
+  color: #314655;
+  font-size: 11px;
+  font-weight: 760;
+}
+td input, td select, .configGrid input, .configGrid select {
+  height: 32px;
+  border-color: #d4dee5;
+  border-radius: 4px;
+  background: #fff;
+}
+.configGrid input:focus,
+.configGrid select:focus,
+td input:focus,
+td select:focus {
+  outline: 2px solid rgba(0, 122, 120, .16);
+  border-color: #007a78;
+}
+.specSection {
+  margin: 0;
+  padding: 18px 32px;
+  border: 0;
+  border-bottom: 1px solid #e1e7eb;
+  border-radius: 0;
+  background: #fff;
+}
+.segmentedControl {
+  border-radius: 999px;
+  background: #f2f6f8;
+}
+.segmentedControl button { border-radius: 999px; }
+.segmentedControl button.active {
+  color: #006d70;
+  box-shadow: none;
+}
+.configurationSummary {
+  gap: 0;
+  margin-top: 0;
+  padding: 0 32px;
+  border-bottom: 1px solid #e1e7eb;
+}
+.configurationSummary div {
+  min-height: 68px;
+  border: 0;
+  border-right: 1px solid #e1e7eb;
+  border-radius: 0;
+  background: #fff;
+  padding: 12px 14px 12px 0;
+}
+.configurationSummary div:last-child { border-right: 0; padding-left: 14px; }
+.workflowNote {
+  margin: 16px 32px 0;
+  border: 0;
+  border-left: 3px solid #007a78;
+  border-radius: 0;
+  background: #f7fbfb;
+  padding: 10px 12px;
+}
+.calculatedWeightNotice { border-left-color: #607383; background: #f8fafb; }
+.cleanTableWrap {
+  border: 0;
+  border-top: 1px solid #dfe6eb;
+  border-bottom: 1px solid #dfe6eb;
+  border-radius: 0;
+  margin: 18px 32px 0;
+  background: #fff;
+}
+.advancedSeedData {
+  margin: 18px 32px 0;
+  border: 0;
+  border-top: 1px solid #dfe6eb;
+  border-bottom: 1px solid #dfe6eb;
+  border-radius: 0;
+  background: #fff;
+}
+.advancedSeedData summary { padding: 0; }
+.advancedSeedData > p { padding: 0 0 10px; }
+.advancedSeedData .cleanTableWrap { margin: 0 0 12px; }
+.tableToolbar {
+  min-height: 44px;
+  padding: 0;
+  border-bottom-color: #e1e7eb;
+  background: #fff;
+}
+.tableToolbar h2 { font-size: 14px; }
+table { min-width: 680px; }
+th, td {
+  border-right: 0;
+  padding: 9px 12px;
+}
+th { background: #f8fafb; }
+tbody tr:hover td { background: #fbfdfd; }
+.readyNote {
+  margin: 16px 32px 0;
+  border: 0;
+  border-left: 3px solid #007a78;
+  border-radius: 0;
+  background: #f7fbfb;
+}
+.validationList { margin: 16px 32px 0; }
+.validationItem {
+  border-radius: 0;
+  border-width: 0 0 0 3px;
+  background: #fff;
+}
+.flowActions {
+  margin: 20px 32px 28px;
+}
+.resultsHeader {
+  padding-bottom: 16px;
+  border-bottom: 1px solid #dfe6eb;
+}
+.resultTabs {
+  gap: 16px;
+  margin-top: 12px;
+  border-bottom-color: #dfe6eb;
+}
+.resultTabs button {
+  padding: 0 0 2px;
+  height: 36px;
+}
+.resultCards,
+.summaryGrid,
+.readinessGrid,
+.visualPanel,
+.diagnostics { gap: 0; }
+.metric {
+  border: 0;
+  border-bottom: 1px solid #e3e9ed;
+  border-radius: 0;
+  background: #fff;
+  padding: 12px 14px 12px 0;
+}
+.metric strong { font-size: 16px; }
+.readinessPanel {
+  border: 0;
+  border-top: 1px solid #dfe6eb;
+  border-bottom: 1px solid #dfe6eb;
+  border-radius: 0;
+  padding: 0;
+}
+.readinessPanel .tableToolbar { padding: 0 0 0 0; }
+.readinessGrid div {
+  border: 0;
+  border-bottom: 1px solid #e7edf1;
+  border-radius: 0;
+  background: #fff;
+}
+.externalEvidencePanel {
+  border: 0;
+  border-top: 1px solid #dfe6eb;
+  border-radius: 0;
+  background: #fff;
+  padding: 12px 0;
+}
+.externalEvidencePanel .validationBadge { background: transparent; }
+.externalEvidencePanel .evidenceNotice {
+  border-radius: 0;
+  margin: 4px 0 0;
+}
+.rankingBars {
+  border: 0;
+  border-top: 1px solid #dfe6eb;
+  border-radius: 0;
+  padding: 14px 0 0;
+}
+.simpleBar div,
+.sensitivityRow div {
+  border-radius: 999px;
+  background: #eaf0f3;
+}
+.simpleBar i,
+.sensitivityRow i {
+  border-radius: inherit;
+  background: linear-gradient(90deg, #007a78, #1768b8);
+}
+.diagnostics div,
+.causeRow {
+  border: 0;
+  border-bottom: 1px solid #e3e9ed;
+  border-radius: 0;
+  background: #fff;
+}
+@media (max-width: 900px) {
+  .configGrid,
+  .specSection,
+  .configurationSummary { padding-left: 16px; padding-right: 16px; }
+  .workflowNote,
+  .cleanTableWrap,
+  .advancedSeedData,
+  .readyNote,
+  .validationList,
+  .flowActions { margin-left: 16px; margin-right: 16px; }
+  .configurationSummary div { border-right: 0; border-bottom: 1px solid #edf2f4; }
+  .configurationSummary div:last-child { padding-left: 0; }
+}
+/* Final workbench polish: minimal, academic, and calmer than card-heavy UI. */
+:root {
+  --surface: #ffffff;
+  --surface-soft: #f8fafb;
+  --ink: #101820;
+  --ink-muted: #596674;
+  --line: #dce4ea;
+  --line-soft: #edf1f4;
+  --accent: #007a78;
+  --accent-strong: #006a6c;
+  --accent-soft: #eff8f7;
+  --focus: rgba(0, 122, 120, .18);
+}
+
+body {
+  background: #f8fafc;
+}
+
+.studio {
+  color: var(--ink);
+  background: linear-gradient(180deg, #ffffff 0, #f8fafc 230px, #ffffff 100%);
+}
+
+.studioHeader {
+  backdrop-filter: blur(18px);
+  grid-template-columns: minmax(220px, 1fr) auto minmax(300px, 1fr);
+}
+
+.brandText span {
+  font-weight: 650;
+}
+
+.headerActions {
+  gap: 4px;
+}
+
+.ghostButton,
+.secondaryAction,
+.textAction,
+.primaryAction,
+.miniAction,
+.iconAction,
+.resultTabs button,
+.methodCatalogGrid button,
+.wizardStepper button {
+  transition: background .18s ease, border-color .18s ease, color .18s ease, transform .18s ease, box-shadow .18s ease;
+}
+
+.primaryAction:hover,
+.secondaryAction:hover,
+.ghostButton:hover,
+.textAction:hover,
+.miniAction:hover,
+.iconAction:hover {
+  transform: translateY(-1px);
+}
+
+.primaryAction:active,
+.secondaryAction:active,
+.ghostButton:active,
+.textAction:active,
+.miniAction:active,
+.iconAction:active {
+  transform: translateY(0);
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.wizardShell {
+  max-width: 1240px;
+}
+
+.wizardStepper {
+  margin-bottom: 18px;
+}
+
+.wizardStepper button {
+  gap: 7px;
+}
+
+.wizardStepper button::before {
+  top: 14px;
+  background: var(--line-soft);
+}
+
+.wizardStepper .active::before,
+.wizardStepper .done::before {
+  background: linear-gradient(90deg, var(--accent), var(--line-soft));
+}
+
+.wizardStepper span {
+  width: 28px;
+  height: 28px;
+  background: #fff;
+}
+
+.wizardStepper .active span {
+  box-shadow: 0 0 0 5px var(--accent-soft);
+}
+
+.methodWorkbench,
+.resultsPanel,
+.helpPage {
+  overflow: hidden;
+  border-color: var(--line);
+  border-radius: 8px;
+  box-shadow: 0 18px 42px rgba(27, 43, 58, .055);
+}
+
+.methodWorkbench .sectionTitle {
+  position: relative;
+  padding: 26px 32px 16px;
+  background: #fff;
+}
+
+.methodWorkbench .sectionTitle::after {
+  content: "";
+  position: absolute;
+  left: 32px;
+  right: 32px;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent), var(--line-soft) 46%, transparent);
+}
+
+.methodWorkbench .sectionTitle h1,
+.resultsHeader h1,
+.templateHero h1 {
+  color: var(--ink);
+  font-weight: 780;
+}
+
+.methodWorkbench .sectionTitle p,
+.resultsHeader p,
+.templateHero p,
+.sampleNote,
+.specSection p {
+  color: var(--ink-muted);
+}
+
+.methodChooser {
+  grid-template-columns: 286px minmax(0, 1fr);
+  margin-top: 0;
+}
+
+.methodPickPanel,
+.selectedMethodPanel {
+  border: 0;
+  border-radius: 0;
+}
+
+.methodPickPanel {
+  background: var(--surface-soft);
+  border-right: 1px solid var(--line);
+  padding: 22px 18px 20px;
+}
+
+.methodSelectLabel span,
+.configGrid label span,
+.orderEditor > span,
+.vectorEditor > span,
+.tableToolbar span,
+.templateSpecs span,
+.capabilityStrip span,
+.configurationSummary span,
+.readinessGrid span,
+.externalEvidencePanel span,
+.metric span {
+  color: #556371;
+}
+
+.methodSelectLabel select,
+.searchBox,
+.configGrid input,
+.configGrid select,
+td input,
+td select {
+  border-color: #d7e0e6;
+}
+
+.searchBox:focus-within,
+.methodSelectLabel:focus-within select,
+.configGrid label:focus-within input,
+.configGrid label:focus-within select,
+td:focus-within input,
+td:focus-within select {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--focus);
+}
+
+.selectedMethodPanel {
+  position: relative;
+  min-height: 294px;
+  padding: 30px 34px 24px;
+  background: #fff;
+}
+
+.selectedMethodPanel::after {
+  content: "";
+  position: absolute;
+  right: 28px;
+  bottom: 24px;
+  width: 210px;
+  height: 96px;
+  pointer-events: none;
+  opacity: .52;
+  background:
+    linear-gradient(135deg, transparent 0 42%, rgba(0, 122, 120, .18) 42.5% 44%, transparent 44.5%),
+    linear-gradient(155deg, transparent 0 52%, rgba(23, 104, 184, .13) 52.5% 54%, transparent 54.5%),
+    repeating-linear-gradient(90deg, transparent 0 33px, rgba(26, 48, 64, .08) 34px 35px),
+    repeating-linear-gradient(180deg, transparent 0 23px, rgba(26, 48, 64, .06) 24px 25px);
+  mask-image: linear-gradient(90deg, transparent 0, #000 28%, #000 100%);
+}
+
+.selectedMethodPanel > * {
+  position: relative;
+  z-index: 1;
+}
+
+.selectedMethodPanel h2 {
+  letter-spacing: 0;
+}
+
+.validationBadge,
+.validationSummary span,
+.methodSupport i,
+.templatePreviewMeta span,
+.sheetInventory span,
+.catalogValidation {
+  border-radius: 999px;
+}
+
+.validationSummary span {
+  background: #fff;
+}
+
+.methodCatalog {
+  margin: 0 32px 24px 318px;
+  padding-top: 14px;
+}
+
+.methodCatalog[open] summary {
+  color: var(--accent-strong);
+}
+
+.methodCatalogGrid {
+  gap: 0;
+  border-top: 1px solid var(--line-soft);
+}
+
+.methodCatalogGrid button {
+  min-height: 54px;
+  border: 0;
+  border-bottom: 1px solid var(--line-soft);
+  border-radius: 0;
+  background: #fff;
+}
+
+.methodCatalogGrid button::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 10px;
+  bottom: 10px;
+  width: 2px;
+  background: transparent;
+}
+
+.methodCatalogGrid button:hover {
+  background: #fbfdfd;
+  transform: none;
+}
+
+.methodCatalogGrid button.active {
+  background: var(--accent-soft);
+  border-color: var(--line-soft);
+}
+
+.methodCatalogGrid button.active::before {
+  background: var(--accent);
+}
+
+.specSection,
+.configGrid,
+.configurationSummary,
+.workflowNote,
+.calculatedWeightNotice,
+.cleanTableWrap,
+.advancedSeedData,
+.templateSpecs,
+.capabilityStrip,
+.resultCards,
+.summaryGrid,
+.readinessPanel,
+.externalEvidencePanel,
+.visualPanel,
+.diagnostics {
+  animation: workbenchReveal .28s ease both;
+}
+
+.configGrid,
+.specSection,
+.configurationSummary,
+.templateSpecs,
+.capabilityStrip {
+  background: #fff;
+}
+
+.segmentedControl {
+  border-radius: 7px;
+}
+
+.segmentedControl button {
+  border-radius: 5px;
+}
+
+.segmentedControl button.active {
+  box-shadow: 0 1px 4px rgba(19, 35, 45, .10);
+}
+
+.configurationSummary div,
+.capabilityStrip div,
+.templateSpecs div,
+.readinessGrid div,
+.metric,
+.diagnostics div,
+.causeRow {
+  background: #fff;
+}
+
+.cleanTableWrap,
+.advancedSeedData,
+.readinessPanel,
+.rankingBars,
+.visualPanel {
+  border-color: var(--line);
+}
+
+.tableToolbar {
+  background: #fff;
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+tbody tr {
+  transition: background .14s ease;
+}
+
+.simpleBar i,
+.sensitivityRow i {
+  background: linear-gradient(90deg, var(--accent), #1768b8);
+}
+
+.uploadZone {
+  margin: 18px 32px 0;
+  border-style: dashed;
+  border-color: #bfd3dc;
+  background: linear-gradient(180deg, #fff, #f8fbfc);
+  transition: border-color .18s ease, background .18s ease, transform .18s ease;
+}
+
+.uploadZone:hover,
+.uploadZone:focus-within {
+  border-color: var(--accent);
+  background: #f6fbfb;
+  transform: translateY(-1px);
+}
+
+.resultTabs button.active {
+  color: var(--accent-strong);
+}
+
+.resultTabs button.active::after {
+  height: 2px;
+}
+
+@keyframes workbenchReveal {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 900px) {
+  .studioHeader {
+    height: auto;
+    grid-template-columns: 1fr;
+    justify-items: stretch;
+    gap: 10px;
+  }
+  .localStatus {
+    justify-self: start;
+  }
+  .headerActions {
+    justify-self: stretch;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .headerActions .ghostButton {
+    min-width: 0;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  .wizardStepper {
+    overflow-x: auto;
+    padding-bottom: 12px;
+  }
+  .wizardStepper button {
+    min-width: 76px;
+  }
+  .methodWorkbench,
+  .resultsPanel,
+  .helpPage {
+    border-radius: 6px;
+    box-shadow: none;
+  }
+  .methodChooser {
+    grid-template-columns: 1fr;
+  }
+  .methodPickPanel {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .selectedMethodPanel::after {
+    width: 130px;
+    height: 70px;
+    right: 12px;
+    bottom: 14px;
+    opacity: .32;
+  }
+  .methodCatalog {
+    margin: 0 16px 18px;
+  }
+  .methodCatalogGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .specSection,
+  .configGrid,
+  .configurationSummary,
+  .workflowNote,
+  .calculatedWeightNotice,
+  .cleanTableWrap,
+  .advancedSeedData,
+  .templateSpecs,
+  .capabilityStrip,
+  .resultCards,
+  .summaryGrid,
+  .readinessPanel,
+  .externalEvidencePanel,
+  .visualPanel,
+  .diagnostics {
+    animation: none;
+  }
+  .primaryAction:hover,
+  .secondaryAction:hover,
+  .ghostButton:hover,
+  .textAction:hover,
+  .miniAction:hover,
+  .iconAction:hover,
+  .uploadZone:hover,
+  .uploadZone:focus-within {
+    transform: none;
+  }
+}
+/* Open ledger refinement: fewer boxes, clearer method evidence. */
+.validationBadge {
+  grid-template-columns: auto minmax(0, 1fr);
+  width: min(100%, 760px);
+  border: 0;
+  border-left: 2px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+  padding: 2px 0 2px 12px;
+}
+.validationBadge.validated,
+.validationBadge.candidate,
+.validationBadge.internal {
+  background: transparent;
+}
+.validationBadge.validated { border-left-color: var(--accent); }
+.validationBadge.candidate { border-left-color: #b68116; }
+.validationBadge.internal { border-left-color: #9aa7b2; }
+.validationBadge span {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+.validationSummary {
+  gap: 0;
+  width: min(100%, 760px);
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+}
+.validationSummary span {
+  min-height: 34px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 0 16px 0 0;
+  margin-right: 16px;
+  position: relative;
+}
+.validationSummary span:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 9px;
+  bottom: 9px;
+  width: 1px;
+  background: var(--line-soft);
+}
+.methodSupport.large {
+  gap: 10px 14px;
+  border-top: 0;
+  padding-top: 0;
+}
+.methodSupport i,
+.methodSupport em {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  color: #44525f;
+}
+.methodSupport i {
+  position: relative;
+  padding-left: 12px;
+}
+.methodSupport i::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #8da0ae;
+  transform: translateY(-50%);
+}
+.capabilityStrip,
+.configurationSummary,
+.templateSpecs {
+  gap: 0;
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+}
+.capabilityStrip div,
+.configurationSummary div,
+.templateSpecs div {
+  min-height: 0;
+  border: 0;
+  border-right: 1px solid var(--line-soft);
+  border-radius: 0;
+  background: transparent;
+  padding: 12px 14px;
+}
+.capabilityStrip div:last-child,
+.configurationSummary div:last-child,
+.templateSpecs div:last-child {
+  border-right: 0;
+}
+.capabilityStrip span,
+.configurationSummary span,
+.templateSpecs span {
+  text-transform: none;
+  font-size: 11px;
+  font-weight: 760;
+}
+.capabilityStrip strong,
+.configurationSummary strong,
+.templateSpecs strong {
+  font-size: 12px;
+  line-height: 1.35;
+}
+.methodCatalogGrid button {
+  transition: background .14s ease, color .14s ease;
+}
+.methodCatalogGrid button:focus-visible,
+.methodPickPanel select:focus-visible,
+.searchBox:focus-within {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+@media (max-width: 900px) {
+  .validationSummary span,
+  .capabilityStrip div,
+  .configurationSummary div,
+  .templateSpecs div {
+    border-right: 0;
+  }
+  .capabilityStrip,
+  .configurationSummary,
+  .templateSpecs {
+    border-bottom: 0;
+  }
+  .capabilityStrip div,
+  .configurationSummary div,
+  .templateSpecs div {
+    border-bottom: 1px solid var(--line-soft);
+  }
+}
+
+/* Outcome-first results: answer before calculation tables. */
+.outcomeLine {
+  display: grid;
+  grid-template-columns: minmax(280px, 1.25fr) repeat(2, minmax(170px, .75fr));
+  align-items: stretch;
+  margin: 0 0 14px;
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+  background: linear-gradient(90deg, rgba(0, 122, 120, .035), transparent 42%);
+}
+.outcomeLead,
+.outcomeNode {
+  display: grid;
+  align-content: center;
+  gap: 4px;
+  min-height: 96px;
+  padding: 16px 18px 16px 0;
+  border-right: 1px solid var(--line-soft);
+}
+.outcomeNode:last-child {
+  border-right: 0;
+}
+.outcomeLead span,
+.outcomeNode span {
+  color: #596674;
+  font-size: 11px;
+  font-weight: 760;
+}
+.outcomeLead strong {
+  color: var(--ink);
+  font-size: 30px;
+  line-height: 1.05;
+  font-weight: 790;
+  letter-spacing: 0;
+}
+.outcomeLead em,
+.outcomeNode strong {
+  color: #314250;
+  font-size: 12px;
+  line-height: 1.4;
+  font-style: normal;
+  font-weight: 690;
+}
+.outcomeNode {
+  padding-left: 18px;
+}
+@media (max-width: 900px) {
+  .outcomeLine {
+    grid-template-columns: 1fr;
+    background: transparent;
+  }
+  .outcomeLead,
+  .outcomeNode {
+    min-height: 0;
+    padding: 12px 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .outcomeNode {
+    padding-left: 0;
+  }
+  .outcomeNode:last-child {
+    border-bottom: 0;
+  }
+  .outcomeLead strong {
+    font-size: 24px;
+  }
+}
+
+/* Template handoff: one clear path from workbook to analysis. */
+.templateHandoff {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0 32px 16px;
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+}
+.templateHandoff div {
+  position: relative;
+  display: grid;
+  gap: 4px;
+  min-height: 72px;
+  align-content: center;
+  padding: 12px 18px 12px 0;
+  border-right: 1px solid var(--line-soft);
+}
+.templateHandoff div:last-child {
+  border-right: 0;
+}
+.templateHandoff div::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -1px;
+  width: 38px;
+  height: 2px;
+  background: transparent;
+}
+.templateHandoff div.active::before {
+  background: var(--accent);
+}
+.templateHandoff span {
+  color: #596674;
+  font-size: 11px;
+  font-weight: 760;
+}
+.templateHandoff strong {
+  color: #243441;
+  font-size: 12px;
+  line-height: 1.38;
+  font-weight: 690;
+}
+.templateDetails {
+  margin: 0 32px 16px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.templateDetails summary {
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  color: #2f414f;
+  font-size: 12px;
+  font-weight: 760;
+  cursor: pointer;
+}
+.templateDetails .templateSpecs,
+.templateDetails .capabilityStrip {
+  margin-top: 0;
+}
+.templateDetails .capabilityStrip {
+  border-top: 0;
+}
+.uploadDetails {
+  margin-bottom: 0;
+}
+@media (max-width: 900px) {
+  .templateHandoff {
+    grid-template-columns: 1fr;
+    margin-left: 16px;
+    margin-right: 16px;
+  }
+  .templateHandoff div {
+    min-height: 0;
+    padding: 12px 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .templateHandoff div:last-child {
+    border-bottom: 0;
+  }
+  .templateDetails {
+    margin-left: 16px;
+    margin-right: 16px;
+  }
+}
+
+/* Setup readiness: expose progress without adding another panel. */
+.setupReadiness {
+  display: grid;
+  grid-template-columns: minmax(240px, 1fr) minmax(240px, 1fr) auto;
+  align-items: center;
+  gap: 18px;
+  padding: 14px 32px;
+  border-bottom: 1px solid var(--line-soft);
+  background: #fff;
+}
+.setupReadiness div {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+.setupReadiness span {
+  color: #596674;
+  font-size: 11px;
+  font-weight: 760;
+}
+.setupReadiness strong {
+  color: #243441;
+  font-size: 12px;
+  line-height: 1.38;
+  font-weight: 690;
+}
+.setupReadiness.ready span:first-child {
+  color: var(--accent-strong);
+}
+.setupReadiness.blocked {
+  border-bottom-color: #efd6cb;
+}
+.setupReadiness.blocked span:first-child {
+  color: #8a3b22;
+}
+.setupReadiness .primaryAction {
+  white-space: nowrap;
+}
+@media (max-width: 900px) {
+  .setupReadiness {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 14px 16px;
+  }
+  .setupReadiness .primaryAction {
+    width: 100%;
+  }
+}
+
+/* Progressive disclosure and mobile text safety. */
+.methodCatalog:not([open]) .methodCatalogGrid {
+  display: none;
+}
+
+.methodCatalogGrid button {
+  min-height: 68px;
+}
+
+.methodCatalogGrid span {
+  min-height: 2.7em;
+}
+
+.methodPickPanel,
+.methodSelectLabel,
+.methodSelectLabel select,
+.searchBox,
+.searchBox input {
+  min-width: 0;
+}
+
+.signatureLabels span {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 700px) {
+  .signatureLabels span {
+    font-size: 10px;
+  }
+}
+
+.methodSelectLabel select {
+  width: 100%;
+  max-width: 100%;
+}
+
+.methodPickPanel {
+  overflow-x: hidden;
+}
+
+
+/* Minimal workspace polish: fewer boxes, clearer decision flow. */
+.methodWorkbench.singlePanel {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 4px 0 0;
+}
+.methodWorkbench .sectionTitle {
+  max-width: 760px;
+}
+.methodWorkbench .sectionTitle h1 {
+  font-size: 28px;
+  font-weight: 780;
+}
+.methodWorkbench .sectionTitle p {
+  max-width: 620px;
+  font-size: 14px;
+}
+.methodWorkbench .methodChooser {
+  grid-template-columns: minmax(250px, 318px) minmax(0, 1fr);
+  gap: 30px;
+  margin-top: 28px;
+  align-items: stretch;
+}
+.methodWorkbench .methodPickPanel,
+.methodWorkbench .selectedMethodPanel {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+}
+.methodWorkbench .methodPickPanel {
+  border-right: 1px solid #d9e1e5;
+  padding-right: 26px;
+}
+.methodWorkbench .selectedMethodPanel {
+  min-height: 376px;
+  padding: 2px 0 0 4px;
+  gap: 14px;
+}
+.methodWorkbench .selectedMethodPanel h2 {
+  font-size: 36px;
+  font-weight: 780;
+  letter-spacing: 0;
+}
+.methodWorkbench .selectedMethodPanel p {
+  font-size: 15px;
+  line-height: 1.55;
+  color: #42505b;
+}
+.methodWorkbench .searchBox,
+.methodWorkbench .methodSelectLabel select {
+  height: 40px;
+  border-color: #c7d1d7;
+  background: #fff;
+}
+.methodWorkbench .methodPickPanel,
+.methodWorkbench .methodSelectLabel,
+.methodWorkbench .searchBox,
+.methodWorkbench .searchBox input,
+.methodWorkbench .methodSelectLabel select {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+.methodWorkbench .methodSelectLabel span {
+  color: #5b6670;
+  font-size: 11px;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+}
+.methodWorkbench .methodContinue {
+  margin-top: 4px;
+  height: 42px;
+}
+.methodWorkbench .validationBadge {
+  display: flex;
+  width: 100%;
+  gap: 9px;
+  align-items: baseline;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+}
+.methodWorkbench .validationBadge::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #8b98a2;
+  transform: translateY(-1px);
+  flex: 0 0 auto;
+}
+.methodWorkbench .validationBadge.validated::before { background: #008a7c; }
+.methodWorkbench .validationBadge.candidate::before { background: #b87500; }
+.methodWorkbench .validationBadge.internal::before { background: #87919a; }
+.methodWorkbench .validationBadge strong,
+.methodWorkbench .validationBadge.validated strong,
+.methodWorkbench .validationBadge.candidate strong,
+.methodWorkbench .validationBadge.internal strong {
+  color: #15202b;
+}
+.methodWorkbench .validationBadge span {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+.methodWorkbench .validationSummary {
+  gap: 16px;
+  padding: 10px 0;
+  border-top: 1px solid #e3e9ed;
+  border-bottom: 1px solid #e3e9ed;
+}
+.methodWorkbench .validationSummary span {
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  color: #56636e;
+  font-weight: 640;
+}
+.methodWorkbench .validationSummary strong {
+  color: #00766f;
+  font-size: 13px;
+}
+.methodWorkbench .methodSupport {
+  gap: 12px;
+  color: #596672;
+  font-size: 12px;
+}
+.methodWorkbench .methodSupport em,
+.methodWorkbench .methodSupport i {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  color: #4d5a65;
+  font-weight: 680;
+}
+.methodWorkbench .methodSupport i::before {
+  content: "/";
+  color: #a5b0b8;
+  margin-right: 12px;
+  font-weight: 500;
+}
+.methodWorkbench .methodCatalog {
+  margin-left: 348px;
+  border-top-color: #dfe7eb;
+}
+.methodWorkbench .methodCatalogGrid button {
+  border: 0;
+  border-left: 2px solid #d9e1e5;
+  border-radius: 0;
+  background: transparent;
+  padding: 9px 10px 9px 12px;
+}
+.methodWorkbench .methodCatalogGrid button.active {
+  border-color: #00766f;
+  background: #f7fbfa;
+}
+.methodWorkbench .catalogValidation {
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+}
+.configGrid,
+.specSection,
+.capabilityStrip div,
+.configurationSummary div {
+  border-radius: 0;
+  background: transparent;
+}
+.configGrid {
+  border-width: 1px 0;
+  padding: 14px 0;
+}
+.specSection {
+  border-width: 1px 0 0;
+  padding: 14px 0;
+}
+.capabilityStrip div,
+.configurationSummary div {
+  border-width: 1px 0 0;
+  padding: 10px 0;
+}
+@media (max-width: 900px) {
+  .methodWorkbench .methodChooser {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  .methodWorkbench .methodPickPanel {
+    border-right: 0;
+    border-bottom: 1px solid #d9e1e5;
+    padding: 0 0 20px;
+  }
+  .methodWorkbench .methodCatalog {
+    margin-left: 0;
+  }
+  .methodWorkbench .selectedMethodPanel h2 {
+    font-size: 30px;
+  }
+}
+@media (max-width: 560px) {
+  .methodWorkbench .sectionTitle h1 {
+    font-size: 24px;
+  }
+  .methodWorkbench .selectedMethodPanel h2 {
+    font-size: 28px;
+  }
+  .methodWorkbench .validationBadge {
+    align-items: flex-start;
+  }
+  .methodWorkbench .validationBadge::before {
+    margin-top: 5px;
+  }
+}
+
+/* Final compact-screen text-fit guardrails. */
+.methodWorkbench .searchBox input {
+  flex: 1 1 0;
+  width: 0;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 560px) {
+  .wizardStepper {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    overflow-x: hidden;
+  }
+  .wizardStepper button {
+    min-width: 0;
+    padding-inline: 2px;
+    font-size: 10px;
+  }
+  .wizardStepper span {
+    width: 24px;
+    height: 24px;
+    font-size: 11px;
+  }
+}
+
+.fileButton input {
+  width: 1px;
+  height: 1px;
+  font-size: 0;
+  color: transparent;
+  pointer-events: none;
+}
+
+/* Keep result tables inside the workspace pane. */
+.resultsPanel .cleanTableWrap,
+.methodWorkbench .cleanTableWrap {
+  max-width: 100%;
+  min-width: 0;
+}
+.resultsPanel .cleanTableWrap table,
+.methodWorkbench .cleanTableWrap table {
+  min-width: 560px;
+}
+.resultsPanel .cleanTableWrap {
+  overflow-x: auto;
+}
+@media (max-width: 700px) {
+  .resultsPanel .cleanTableWrap table,
+  .methodWorkbench .cleanTableWrap table {
+    min-width: 520px;
+  }
+}
+
+
+/* Minimal Excel preview and results polish. */
+.samplePanel {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+}
+.samplePanel > h2 {
+  margin: 0;
+  font-size: 18px;
+  letter-spacing: 0;
+}
+.samplePanel .sampleNote {
+  max-width: 720px;
+  color: #53616c;
+}
+.templatePreviewMeta {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  margin-top: 14px;
+  border-top: 1px solid #dde6ea;
+  border-bottom: 1px solid #dde6ea;
+}
+.templatePreviewMeta span {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  border: 0;
+  border-right: 1px solid #e5ecef;
+  border-radius: 0;
+  background: transparent;
+  padding: 8px 14px 8px 0;
+  color: #25323d;
+  font-size: 12px;
+  font-weight: 720;
+}
+.templatePreviewMeta span:last-child {
+  border-right: 0;
+  padding-left: 14px;
+}
+.sheetInventory {
+  display: flex;
+  gap: 10px 18px;
+  margin-top: 14px;
+  padding: 12px 0 2px;
+  border-top: 1px solid #edf1f3;
+}
+.sheetInventory span {
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  color: #53616c;
+  font-size: 11px;
+  font-weight: 720;
+}
+.templateSheetGrid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  margin-top: 18px;
+  border-top: 1px solid #dde6ea;
+  border-bottom: 1px solid #dde6ea;
+}
+.templateSheetCard {
+  max-height: none;
+  overflow: hidden;
+  border: 0;
+  border-right: 1px solid #e5ecef;
+  border-radius: 0;
+  background: transparent;
+  padding: 0 14px 12px 0;
+}
+.templateSheetCard:last-child {
+  border-right: 0;
+  padding-left: 14px;
+}
+.templateSheetCard .tableToolbar {
+  min-height: 42px;
+  padding: 0;
+  border-bottom: 1px solid #edf1f3;
+}
+.templateSheetCard .tableToolbar h2 {
+  font-size: 13px;
+}
+.templateSheetCard table {
+  min-width: 0;
+  width: 100%;
+  table-layout: fixed;
+  font-size: 11px;
+}
+.templateSheetCard td {
+  max-width: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.previewMatrix {
+  margin-left: 0;
+  margin-right: 0;
+}
+.resultsPanel {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding-top: 4px;
+}
+.resultsHeader {
+  padding-bottom: 14px;
+  border-bottom: 1px solid #dde6ea;
+}
+.exportActions {
+  gap: 4px;
+}
+.exportActions .secondaryAction,
+.exportActions .primaryAction {
+  min-height: 34px;
+  height: 34px;
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+  padding-inline: 8px;
+}
+.exportActions .primaryAction {
+  border-color: #0a8178;
+  background: #0a8178;
+}
+.exportActions .secondaryAction:hover {
+  border-color: #cbd8dd;
+  background: #f7fafb;
+}
+@media (max-width: 1000px) {
+  .templatePreviewMeta,
+  .templateSheetGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .templatePreviewMeta span:nth-child(2),
+  .templateSheetCard:nth-child(2) {
+    border-right: 0;
+    padding-left: 14px;
+  }
+  .templatePreviewMeta span:nth-child(n + 3),
+  .templateSheetCard:nth-child(n + 3) {
+    border-top: 1px solid #e5ecef;
+  }
+}
+@media (max-width: 620px) {
+  .templatePreviewMeta,
+  .templateSheetGrid {
+    grid-template-columns: 1fr;
+  }
+  .templatePreviewMeta span,
+  .templatePreviewMeta span:last-child,
+  .templatePreviewMeta span:nth-child(2),
+  .templateSheetCard,
+  .templateSheetCard:last-child,
+  .templateSheetCard:nth-child(2) {
+    border-right: 0;
+    padding-left: 0;
+  }
+  .templatePreviewMeta span + span,
+  .templateSheetCard + .templateSheetCard {
+    border-top: 1px solid #e5ecef;
+  }
+  .exportActions .secondaryAction,
+  .exportActions .primaryAction {
+    width: auto;
+    flex: 1 1 120px;
+  }
+}
+
+
+/* Minimal help guide: readable without boxed-card clutter. */
+.helpPage {
+  gap: 22px;
+}
+.helpHero {
+  border: 0;
+  border-bottom: 1px solid #dde6ea;
+  border-radius: 0;
+  background: transparent;
+  padding: 4px 0 18px;
+}
+.helpHero h1 {
+  font-size: 30px;
+  font-weight: 780;
+  letter-spacing: 0;
+}
+.helpHero p {
+  max-width: 640px;
+  font-size: 14px;
+  color: #53616c;
+}
+.helpGrid {
+  grid-template-columns: minmax(0, 1.15fr) minmax(280px, .85fr);
+  gap: 0 34px;
+}
+.helpCard,
+.helpCard.wide {
+  grid-column: auto;
+  border: 0;
+  border-top: 1px solid #dde6ea;
+  border-radius: 0;
+  background: transparent;
+  padding: 18px 0;
+}
+.helpCard.wide {
+  grid-column: 1 / -1;
+  padding-top: 0;
+  border-top: 0;
+}
+.helpCard h2 {
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 760;
+}
+.helpCard ul {
+  display: grid;
+  gap: 8px;
+  padding-left: 0;
+  list-style: none;
+}
+.helpCard li {
+  position: relative;
+  padding-left: 16px;
+}
+.helpCard li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: .72em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #0a8178;
+}
+.helpCard li + li {
+  margin-top: 0;
+}
+.helpTimeline {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0;
+  border-top: 1px solid #dde6ea;
+  border-bottom: 1px solid #dde6ea;
+}
+.helpTimeline div {
+  border: 0;
+  border-right: 1px solid #e5ecef;
+  border-radius: 0;
+  background: transparent;
+  padding: 14px 18px 14px 0;
+}
+.helpTimeline div:last-child {
+  border-right: 0;
+  padding-left: 18px;
+}
+.helpTimeline span {
+  width: auto;
+  height: auto;
+  display: block;
+  border-radius: 0;
+  background: transparent;
+  color: #0a8178;
+  font-size: 11px;
+  font-weight: 820;
+}
+.helpTimeline strong {
+  margin-top: 7px;
+  font-size: 13px;
+}
+.helpTimeline p {
+  color: #5d6a75;
+}
+@media (max-width: 900px) {
+  .helpGrid,
+  .helpTimeline {
+    grid-template-columns: 1fr;
+  }
+  .helpTimeline div,
+  .helpTimeline div:last-child {
+    border-right: 0;
+    border-bottom: 1px solid #e5ecef;
+    padding: 13px 0;
+  }
+  .helpTimeline div:last-child {
+    border-bottom: 0;
+  }
+}
+
+
+/* Trust links and footer. */
+.evidenceLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin-top: 5px;
+  font-size: 12px;
+}
+.evidenceLinks a {
+  color: #00766f;
+  font-weight: 760;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(0, 118, 111, .35);
+}
+.evidenceLinks a:hover {
+  border-bottom-color: #00766f;
+}
+.evidenceLinks em {
+  color: #6c7781;
+  font-style: normal;
+  font-weight: 680;
+}
+.studioFooter {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px 32px 24px;
+  border-top: 1px solid #dde6ea;
+  color: #5b6873;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.studioFooter em {
+  color: #27333d;
+}
+@media (max-width: 760px) {
+  .studioFooter {
+    flex-direction: column;
+    padding-inline: 24px;
+  }
+}
+
+
+/* Method reference pages. */
+.methodGuideAction {
+  align-self: flex-start;
+  margin-top: 2px;
+  padding-inline: 0;
+}
+.methodGuidePage {
+  display: grid;
+  gap: 26px;
+}
+.guideHero {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 22px;
+  padding: 4px 0 20px;
+  border-bottom: 1px solid #dde6ea;
+}
+.guideHero h1 {
+  margin: 0;
+  color: #0f1d27;
+  font-size: 34px;
+  line-height: 1.12;
+  letter-spacing: 0;
+}
+.guideHero p {
+  max-width: 780px;
+  margin: 9px 0 0;
+  color: #53616c;
+  font-size: 14px;
+  line-height: 1.55;
+}
+.guideActions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.guideGrid {
+  display: grid;
+  grid-template-columns: minmax(0, .88fr) minmax(0, 1.12fr);
+  gap: 0 34px;
+}
+.guideSection {
+  min-width: 0;
+  border-top: 1px solid #dde6ea;
+  padding: 18px 0;
+}
+.guideSection h2 {
+  margin: 0 0 12px;
+  color: #17242e;
+  font-size: 16px;
+  letter-spacing: 0;
+}
+.guideSection p {
+  margin: 0;
+  color: #53616c;
+  font-size: 13px;
+  line-height: 1.58;
+}
+.guideEvidence {
+  border-top: 0;
+}
+.guideEvidence a {
+  display: grid;
+  gap: 3px;
+  padding: 12px 0;
+  border-bottom: 1px solid #edf1f3;
+  color: inherit;
+  text-decoration: none;
+}
+.guideEvidence a strong {
+  color: #00766f;
+  font-size: 13px;
+}
+.guideEvidence a span {
+  color: #5d6a75;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.guideFacts {
+  display: grid;
+  gap: 0;
+  margin: 14px 0 0;
+}
+.guideFacts div {
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr);
+  gap: 12px;
+  padding: 9px 0;
+  border-top: 1px solid #edf1f3;
+}
+.guideFacts dt {
+  color: #6b7781;
+  font-size: 11px;
+  font-weight: 760;
+  text-transform: uppercase;
+}
+.guideFacts dd {
+  margin: 0;
+  color: #1f2d37;
+  font-size: 13px;
+  line-height: 1.45;
+}
+.guideMath {
+  grid-column: 1 / -1;
+}
+.guideMath article {
+  display: grid;
+  grid-template-columns: minmax(160px, .35fr) minmax(220px, .45fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+  padding: 14px 0;
+  border-top: 1px solid #edf1f3;
+}
+.guideMath article:first-of-type {
+  border-top: 0;
+}
+.guideMath h3 {
+  margin: 0;
+  color: #15202b;
+  font-size: 13px;
+}
+.guideMath code {
+  white-space: normal;
+  color: #0b6f68;
+  background: transparent;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.sampleDataSection {
+  grid-column: 1 / -1;
+}
+.sampleDataGrid {
+  display: grid;
+  margin-top: 12px;
+  border-top: 1px solid #dde6ea;
+  border-bottom: 1px solid #dde6ea;
+  overflow-x: auto;
+}
+.sampleDataGrid strong,
+.sampleDataGrid span {
+  min-width: 0;
+  padding: 9px 10px 9px 0;
+  border-bottom: 1px solid #edf1f3;
+  color: #27333d;
+  font-size: 12px;
+}
+.sampleDataGrid strong {
+  color: #65717d;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+@media (max-width: 900px) {
+  .guideHero,
+  .guideGrid,
+  .guideMath article {
+    grid-template-columns: 1fr;
+  }
+  .guideActions {
+    justify-content: flex-start;
+  }
+}
+
+
+.guideRunPreview {
+  grid-column: 1 / -1;
+}
+.guideRunPreview p strong {
+  color: #17242e;
+}
+.guideResultList {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0;
+  margin: 12px 0;
+  border-top: 1px solid #dde6ea;
+  border-bottom: 1px solid #dde6ea;
+}
+.guideResultList span {
+  min-width: 0;
+  padding: 10px 12px 10px 0;
+  border-right: 1px solid #e5ecef;
+  color: #1f2d37;
+  font-size: 12px;
+  font-weight: 720;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.guideResultList span:last-child {
+  border-right: 0;
+}
+.guideTableNote {
+  color: #65717d !important;
+  font-size: 12px !important;
+}
+@media (max-width: 760px) {
+  .guideResultList {
+    grid-template-columns: 1fr;
+  }
+  .guideResultList span {
+    border-right: 0;
+    border-bottom: 1px solid #edf1f3;
+  }
+  .guideResultList span:last-child {
+    border-bottom: 0;
+  }
+}
+
+/* Professional compact workbench redesign */
+:root {
+  --ink: #101923;
+  --ink-2: #2a3845;
+  --muted: #657180;
+  --line: #d8e0e6;
+  --line-soft: #e9eef2;
+  --paper: #ffffff;
+  --canvas: #f6f8fa;
+  --teal: #007a78;
+  --teal-dark: #006766;
+  --teal-soft: #e7f5f3;
+  --amber: #a96800;
+  --amber-soft: #fff4d7;
+}
+body {
+  background: var(--canvas);
+  color: var(--ink);
+}
+.studio {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.studioHeader {
+  height: 58px;
+  grid-template-columns: minmax(220px, 1fr) auto;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(255,255,255,.98);
+  backdrop-filter: blur(12px);
+}
+.studioBrand {
+  gap: 11px;
+}
+.studioMark {
+  width: 32px;
+  height: 32px;
+  border-radius: 5px;
+  color: var(--teal);
+  border-color: rgba(0,122,120,.24);
+}
+.brandText strong {
+  font-size: 18px;
+  font-weight: 780;
+}
+.brandText span {
+  font-size: 11px;
+  color: var(--muted);
+}
+.headerActions {
+  gap: 4px;
+}
+.ghostButton,
+.secondaryAction,
+.textAction,
+.primaryAction {
+  min-height: 34px;
+  height: 34px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 740;
+  letter-spacing: 0;
+}
+.ghostButton {
+  color: var(--ink-2);
+  border-color: transparent;
+  background: transparent;
+}
+.ghostButton:hover,
+.secondaryAction:hover,
+.textAction:hover {
+  color: var(--teal-dark);
+  background: #f0f6f6;
+  border-color: #d8e9e8;
+}
+.primaryAction {
+  background: var(--teal);
+  border-color: var(--teal);
+}
+.primaryAction:hover {
+  background: var(--teal-dark);
+}
+.wizardShell {
+  width: 100%;
+  max-width: 1440px;
+  flex: 1;
+  padding: 0;
+}
+.appWorkspace {
+  display: grid;
+  grid-template-columns: 232px minmax(0, 1fr);
+  min-height: calc(100vh - 112px);
+}
+.workflowCanvas {
+  min-width: 0;
+  padding: 22px 28px 26px;
+  border-left: 1px solid var(--line);
+}
+.wizardStepper {
+  position: sticky;
+  top: 58px;
+  align-self: start;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  max-width: none;
+  margin: 0;
+  padding: 34px 24px 24px 26px;
+  background: var(--paper);
+}
+.wizardStepper button {
+  min-width: 0;
+  min-height: 82px;
+  justify-items: start;
+  grid-template-columns: 30px minmax(0, 1fr);
+  grid-template-areas: "step label";
+  align-items: start;
+  gap: 12px;
+  padding: 0;
+  color: var(--ink-2);
+  text-align: left;
+}
+.wizardStepper button::before {
+  top: 28px;
+  left: 14px;
+  width: 1px;
+  height: calc(100% - 24px);
+  background: var(--line);
+}
+.wizardStepper button:first-child::before {
+  display: block;
+}
+.wizardStepper button:last-child::before {
+  display: none;
+}
+.wizardStepper span {
+  grid-area: step;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 780;
+  background: #fff;
+  border-color: #cbd5dc;
+}
+.wizardStepper em {
+  grid-area: label;
+  display: block;
+  padding-top: 5px;
+  font-size: 13px;
+  font-weight: 780;
+  color: inherit;
+}
+.wizardStepper .active {
+  color: var(--teal-dark);
+}
+.wizardStepper .active span,
+.wizardStepper .done span {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: #fff;
+  box-shadow: 0 0 0 5px rgba(0,122,120,.08);
+}
+.singlePanel.methodWorkbench {
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 0;
+  box-shadow: none;
+  overflow: hidden;
+}
+.methodWorkbench .compactTitle {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: end;
+  padding: 26px 28px 20px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+}
+.methodWorkbench .compactTitle h1 {
+  font-size: 25px;
+  line-height: 1.1;
+}
+.methodWorkbench .compactTitle p {
+  max-width: 640px;
+  font-size: 13px;
+}
+.titleEvidence {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(92px, 1fr));
+  gap: 0;
+  min-width: min(420px, 46vw);
+  border: 1px solid var(--line-soft);
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fbfcfd;
+}
+.titleEvidence span {
+  display: grid;
+  gap: 2px;
+  padding: 9px 12px;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.2;
+  text-transform: none;
+}
+.titleEvidence span:not(:last-child) {
+  border-right: 1px solid var(--line-soft);
+}
+.titleEvidence strong {
+  color: var(--teal-dark);
+  font-size: 17px;
+}
+.methodChooser.proChooser {
+  grid-template-columns: minmax(540px, 1.25fr) minmax(330px, .75fr);
+  gap: 0;
+  margin: 0;
+}
+.methodIndexPanel,
+.evidencePane {
+  border: 0;
+  border-radius: 0;
+  background: var(--paper);
+}
+.methodIndexPanel {
+  padding: 20px 28px 24px;
+  border-right: 1px solid var(--line);
+}
+.methodFilters {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) 180px 180px;
+  gap: 10px;
+  align-items: end;
+  margin-bottom: 18px;
+}
+.methodFilters .searchBox,
+.methodFilters select {
+  height: 40px;
+}
+.methodFilters .searchBox {
+  width: 100%;
+  margin: 0;
+  border-radius: 5px;
+}
+.methodSelectLabel span,
+.methodListHeader span {
+  color: #344553;
+  font-size: 10px;
+  font-weight: 780;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.methodListHeader {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 174px;
+  gap: 14px;
+  padding: 0 12px 9px 44px;
+  border-bottom: 1px solid var(--line);
+}
+.methodList {
+  max-height: min(520px, calc(100vh - 275px));
+  overflow: auto;
+}
+.methodList button {
+  width: 100%;
+  min-height: 70px;
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) 174px;
+  gap: 14px;
+  align-items: center;
+  padding: 11px 12px 11px 8px;
+  border: 0;
+  border-bottom: 1px solid var(--line-soft);
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+  transition: background .16s ease, box-shadow .16s ease;
+}
+.methodList button:hover,
+.methodList button.active {
+  background: linear-gradient(90deg, rgba(0,122,120,.08), rgba(0,122,120,.025));
+}
+.methodList button.active {
+  box-shadow: inset 3px 0 0 var(--teal);
+}
+.methodRadio {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid #94a5ae;
+  display: inline-block;
+  position: relative;
+}
+.methodList button.active .methodRadio {
+  border-color: var(--teal);
+}
+.methodList button.active .methodRadio::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  background: var(--teal);
+}
+.methodListName {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+.methodListName strong {
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.1;
+}
+.methodListName em {
+  color: var(--muted);
+  font-size: 12px;
+  font-style: normal;
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.methodList .catalogValidation {
+  justify-self: start;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 780;
+  padding: 5px 8px;
+  line-height: 1;
+}
+.emptyMethodState {
+  margin: 24px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+.evidencePane {
+  min-height: 560px;
+  padding: 32px 34px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.methodDetailHeader {
+  display: grid;
+  gap: 7px;
+}
+.methodDetailHeader > span {
+  color: var(--teal-dark);
+  font-size: 11px;
+  font-weight: 780;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.evidencePane h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 34px;
+  font-weight: 790;
+  letter-spacing: 0;
+}
+.methodDetailHeader p,
+.methodPlainText {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+.evidencePane .validationBadge {
+  margin-top: 4px;
+  padding: 0 0 16px 18px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+}
+.evidencePane .validationBadge::before {
+  top: 2px;
+  left: 0;
+}
+.evidenceLinks {
+  margin-top: 10px;
+}
+.evidenceMiniTable {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.evidenceMiniTable div {
+  display: grid;
+  grid-template-columns: minmax(120px, .8fr) minmax(0, 1.2fr);
+  gap: 14px;
+  padding: 10px 0;
+}
+.evidenceMiniTable div:not(:last-child) {
+  border-bottom: 1px solid var(--line-soft);
+}
+.evidenceMiniTable span {
+  color: var(--muted);
+  font-size: 12px;
+}
+.evidenceMiniTable strong {
+  color: var(--ink-2);
+  font-size: 12px;
+  font-weight: 760;
+}
+.methodPrimaryActions {
+  margin-top: auto;
+  display: grid;
+  gap: 10px;
+}
+.methodPrimaryActions .methodContinue {
+  width: 100%;
+  justify-content: center;
+  height: 44px;
+}
+.methodPrimaryActions .methodGuideAction {
+  justify-self: start;
+}
+.methodCatalog {
+  display: none;
+}
+.studioFooter {
+  margin-top: 0;
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 12px 24px;
+  border-top: 1px solid var(--line);
+  background: #fff;
+}
+.guideHero,
+.guideGrid {
+  max-width: none;
+}
+.methodGuidePage {
+  padding: 0;
+}
+@media (max-width: 1120px) {
+  .appWorkspace {
+    grid-template-columns: 1fr;
+  }
+  .workflowCanvas {
+    border-left: 0;
+    padding: 14px;
+  }
+  .wizardStepper {
+    position: static;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(82px, 1fr));
+    overflow-x: auto;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .wizardStepper button {
+    min-height: 56px;
+    justify-items: center;
+    grid-template-columns: 1fr;
+    grid-template-areas: "step" "label";
+    gap: 5px;
+    text-align: center;
+  }
+  .wizardStepper button::before {
+    top: 15px;
+    left: -50%;
+    width: 100%;
+    height: 1px;
+  }
+  .methodChooser.proChooser {
+    grid-template-columns: 1fr;
+  }
+  .methodIndexPanel {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .evidencePane {
+    min-height: 0;
+  }
+}
+@media (max-width: 760px) {
+  .studioHeader {
+    height: auto;
+    grid-template-columns: 1fr;
+    align-items: start;
+    padding: 12px 14px;
+  }
+  .headerActions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .headerActions .ghostButton {
+    width: 100%;
+  }
+  .methodWorkbench .compactTitle {
+    display: grid;
+    padding: 20px 16px 16px;
+  }
+  .titleEvidence {
+    min-width: 0;
+    width: 100%;
+  }
+  .methodIndexPanel,
+  .evidencePane {
+    padding: 18px 16px;
+  }
+  .methodFilters {
+    grid-template-columns: 1fr;
+  }
+  .methodListHeader {
+    display: none;
+  }
+  .methodList button {
+    grid-template-columns: 22px minmax(0, 1fr);
+  }
+  .methodList .catalogValidation {
+    grid-column: 2;
+  }
+  .methodListName em {
+    white-space: normal;
+  }
+  .evidencePane h2 {
+    font-size: 28px;
+  }
+  .studioFooter {
+    display: grid;
+    justify-items: start;
+    padding: 14px 16px;
+  }
+}
+
+/* 9/10 compact research-console refinement */
+:root {
+  --focus-ring: 0 0 0 3px rgba(0,122,120,.14);
+}
+.studioHeader {
+  box-shadow: 0 1px 0 rgba(16,25,35,.03);
+}
+.workflowCanvas {
+  padding: 18px 24px 24px;
+}
+.singlePanel.methodWorkbench {
+  min-height: calc(100vh - 148px);
+  border-color: #dce4ea;
+  background: #fff;
+}
+.methodWorkbench .compactTitle {
+  min-height: 86px;
+  padding: 20px 24px 16px;
+  align-items: center;
+}
+.methodWorkbench .compactTitle h1 {
+  font-size: 22px;
+  font-weight: 790;
+}
+.methodWorkbench .compactTitle p {
+  margin-top: 7px;
+  max-width: 430px;
+  color: #566473;
+  font-size: 12px;
+  line-height: 1.35;
+}
+.titleEvidence {
+  min-width: 330px;
+  border-radius: 4px;
+  background: #fff;
+}
+.titleEvidence span {
+  padding: 8px 10px;
+  font-size: 10px;
+}
+.titleEvidence strong {
+  font-size: 16px;
+}
+.methodChooser.proChooser {
+  grid-template-columns: minmax(610px, 1fr) 420px;
+}
+.methodIndexPanel {
+  padding: 18px 20px 22px;
+}
+.methodFilters {
+  grid-template-columns: minmax(240px, 1fr) 168px 154px;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.methodFilters .searchBox,
+.methodFilters select {
+  height: 38px;
+  border-color: #cfd9e1;
+  background: #fff;
+}
+.methodFilters input,
+.methodFilters select {
+  font-size: 12px;
+}
+.methodListHeader {
+  grid-template-columns: minmax(0, 1fr) 116px 108px;
+  gap: 12px;
+  padding: 0 10px 8px 43px;
+}
+.methodList {
+  max-height: min(590px, calc(100vh - 252px));
+  scrollbar-width: thin;
+}
+.methodList button {
+  min-height: 56px;
+  grid-template-columns: 22px minmax(0, 1fr) 116px 108px;
+  gap: 12px;
+  padding: 8px 10px 8px 8px;
+}
+.methodList button:hover,
+.methodList button.active {
+  background: #f4faf9;
+}
+.methodList button:focus-visible {
+  outline: none;
+  box-shadow: inset 3px 0 0 var(--teal), var(--focus-ring);
+}
+.methodListName strong {
+  font-size: 13px;
+}
+.methodListName em,
+.methodListFamily {
+  color: #5f6d7a;
+  font-size: 11px;
+  line-height: 1.25;
+}
+.methodListFamily {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.methodList .catalogValidation {
+  border-radius: 4px;
+  padding: 4px 7px;
+  border: 1px solid currentColor;
+  background: transparent;
+  font-size: 10px;
+}
+.evidencePane {
+  min-height: 0;
+  padding: 28px 30px 24px;
+  gap: 17px;
+}
+.methodDetailHeader {
+  gap: 6px;
+}
+.methodDetailHeader > span {
+  color: #006c6a;
+  font-size: 10px;
+}
+.evidencePane h2 {
+  font-size: 31px;
+  line-height: 1;
+}
+.methodDetailHeader p {
+  max-width: 340px;
+  color: #596877;
+  font-size: 12px;
+  line-height: 1.35;
+}
+.inspectorFacts {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.inspectorFacts div {
+  display: grid;
+  grid-template-columns: 78px minmax(0, 1fr);
+  gap: 14px;
+  padding: 10px 0;
+}
+.inspectorFacts div:not(:last-child) {
+  border-bottom: 1px solid var(--line-soft);
+}
+.inspectorFacts span,
+.methodPath span {
+  color: #657180;
+  font-size: 10px;
+  font-weight: 780;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.inspectorFacts strong {
+  color: #1b2a36;
+  font-size: 12px;
+  font-weight: 680;
+  line-height: 1.35;
+}
+.evidencePane .compactEvidence {
+  padding: 0 0 0 16px;
+  border-bottom: 0;
+}
+.evidencePane .compactEvidence strong {
+  font-size: 12px;
+}
+.evidencePane .compactEvidence span {
+  font-size: 12px;
+}
+.methodPath {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  padding-top: 4px;
+}
+.methodPath::before {
+  content: "";
+  position: absolute;
+  left: 11px;
+  right: 11px;
+  top: 15px;
+  height: 1px;
+  background: #cfd9de;
+}
+.methodPath div {
+  position: relative;
+  display: grid;
+  gap: 5px;
+  padding-top: 24px;
+}
+.methodPath div::before {
+  content: "";
+  position: absolute;
+  top: 7px;
+  left: 0;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 1px solid #007a78;
+  background: #fff;
+  box-shadow: inset 0 0 0 4px #e7f5f3;
+}
+.methodPath strong {
+  color: #12202a;
+  font-size: 11px;
+  line-height: 1.15;
+}
+.methodPath em {
+  color: #657180;
+  font-size: 10px;
+  font-style: normal;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+.methodPrimaryActions {
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 10px;
+}
+.methodPrimaryActions .methodContinue,
+.methodPrimaryActions .methodGuideAction {
+  width: 100%;
+  justify-content: center;
+  height: 42px;
+}
+.methodPrimaryActions .methodGuideAction {
+  border: 1px solid #b7c7ce;
+  color: #102533;
+}
+.studioFooter {
+  min-height: 44px;
+  font-size: 11px;
+}
+@media (max-width: 1120px) {
+  .workflowCanvas { padding: 14px; }
+  .singlePanel.methodWorkbench { min-height: 0; }
+  .methodChooser.proChooser { grid-template-columns: 1fr; }
+  .methodList { max-height: 430px; }
+}
+@media (max-width: 760px) {
+  .methodWorkbench .compactTitle { min-height: 0; }
+  .titleEvidence { min-width: 0; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .methodFilters { grid-template-columns: 1fr; }
+  .methodList button { grid-template-columns: 20px minmax(0, 1fr) 76px; }
+  .methodListFamily { display: none; }
+  .methodList .catalogValidation { grid-column: auto; justify-self: end; }
+  .methodPath { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 14px; }
+  .methodPath::before { display: none; }
+  .methodPrimaryActions { grid-template-columns: 1fr; }
+}
+
+/* Results and workbook refinement: outcome first, detail on demand */
+.resultStatusStrip {
+  display: grid;
+  grid-template-columns: minmax(180px, 1.1fr) minmax(210px, 1.15fr) minmax(160px, .85fr) minmax(150px, .8fr);
+  align-items: stretch;
+  border-bottom: 1px solid var(--line);
+  margin: -2px 0 16px;
+}
+.resultStatusStrip div {
+  display: grid;
+  align-content: center;
+  gap: 4px;
+  min-height: 58px;
+  padding: 10px 18px 10px 0;
+  border-right: 1px solid var(--line-soft);
+  min-width: 0;
+}
+.resultStatusStrip div + div {
+  padding-left: 18px;
+}
+.resultStatusStrip div:last-child {
+  border-right: 0;
+}
+.resultStatusStrip span {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 780;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.resultStatusStrip strong,
+.resultStatusStrip a {
+  color: var(--ink-2);
+  font-size: 12px;
+  line-height: 1.3;
+  font-weight: 700;
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.resultStatusStrip a {
+  color: var(--teal-dark);
+}
+.resultsPanel .resultsQaStrip {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0;
+  margin-top: 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.resultsPanel .resultsQaStrip .metric {
+  border: 0;
+  border-right: 1px solid var(--line-soft);
+  border-radius: 0;
+  background: transparent;
+  padding: 10px 12px 10px 0;
+}
+.resultsPanel .resultsQaStrip .metric:last-child {
+  border-right: 0;
+}
+.resultsPanel .resultsQaStrip .metric span {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.resultsPanel .resultsQaStrip .metric strong {
+  font-size: 12px;
+  line-height: 1.25;
+}
+.readinessPanel {
+  border: 0;
+  border-radius: 0;
+  border-top: 1px solid var(--line);
+  margin-top: 18px;
+  padding: 14px 0 0;
+  background: transparent;
+}
+.readinessPanel .tableToolbar {
+  min-height: 32px;
+}
+.readinessGrid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  margin-top: 6px;
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+}
+.readinessGrid div {
+  border: 0;
+  border-right: 1px solid var(--line-soft);
+  border-radius: 0;
+  background: transparent;
+  padding: 9px 12px 9px 0;
+}
+.readinessGrid div:last-child {
+  border-right: 0;
+}
+.externalEvidencePanel {
+  margin-top: 14px;
+  padding: 0;
+  border: 0;
+  border-top: 1px solid var(--line-soft);
+  display: grid;
+  grid-template-columns: minmax(200px, .9fr) minmax(170px, .7fr) minmax(0, 1.2fr);
+  gap: 0;
+}
+.externalEvidencePanel > * {
+  padding: 12px 14px 12px 0;
+  border-right: 1px solid var(--line-soft);
+}
+.externalEvidencePanel > *:last-child {
+  border-right: 0;
+}
+.externalEvidencePanel .validationBadge {
+  margin: 0;
+  border: 0;
+  background: transparent;
+}
+.externalEvidencePanel a {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 12px 14px 12px 0;
+}
+.capabilityProfile {
+  border-top: 1px solid var(--line-soft);
+  margin-top: 0;
+}
+.workbookPreviewDetails {
+  margin-top: 16px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.workbookPreviewDetails summary {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  color: var(--ink-2);
+  font-size: 12px;
+  font-weight: 780;
+  cursor: pointer;
+}
+.workbookPreviewDetails[open] {
+  padding-bottom: 16px;
+}
+.workbookPreviewDetails .sheetInventory,
+.workbookPreviewDetails .templateSheetGrid {
+  margin-top: 0;
+}
+@media (max-width: 1120px) {
+  .resultStatusStrip,
+  .resultsPanel .resultsQaStrip,
+  .readinessGrid,
+  .externalEvidencePanel {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .resultStatusStrip div:nth-child(2n),
+  .resultsPanel .resultsQaStrip .metric:nth-child(2n),
+  .readinessGrid div:nth-child(2n),
+  .externalEvidencePanel > *:nth-child(2n) {
+    border-right: 0;
+    padding-left: 14px;
+  }
+}
+@media (max-width: 700px) {
+  .resultStatusStrip,
+  .resultsPanel .resultsQaStrip,
+  .readinessGrid,
+  .externalEvidencePanel {
+    grid-template-columns: 1fr;
+  }
+  .resultStatusStrip div,
+  .resultStatusStrip div + div,
+  .resultsPanel .resultsQaStrip .metric,
+  .resultsPanel .resultsQaStrip .metric:nth-child(2n),
+  .readinessGrid div,
+  .readinessGrid div:nth-child(2n),
+  .externalEvidencePanel > *,
+  .externalEvidencePanel > *:nth-child(2n) {
+    border-right: 0;
+    border-bottom: 1px solid var(--line-soft);
+    padding-left: 0;
+  }
+  .resultStatusStrip div:last-child,
+  .resultsPanel .resultsQaStrip .metric:last-child,
+  .readinessGrid div:last-child,
+  .externalEvidencePanel > *:last-child {
+    border-bottom: 0;
+  }
+}
+.workbookPreviewDetails:not([open]) > :not(summary) {
+  display: none !important;
+}
+
+/* Text-fit refinement: keep the compact UI readable without clipping meaning. */
+.methodListName em {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  line-height: 1.3;
+}
+.methodList button {
+  align-items: center;
+}
+.resultStatusStrip strong,
+.resultStatusStrip a,
+.resultsPanel .resultsQaStrip .metric strong,
+.externalEvidencePanel a,
+.externalEvidencePanel strong,
+.externalEvidencePanel em {
+  min-width: 0;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  overflow-wrap: anywhere;
+}
+.resultsPanel .resultsQaStrip .metric {
+  min-width: 0;
+}
+/* Method index density: keep the left side fast to scan, move explanation to the inspector. */
+.methodList button {
+  min-height: 44px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+.methodListName {
+  gap: 0;
+}
+.methodListName strong {
+  font-size: 13px;
+  line-height: 1.15;
+}
+/* Method pages: compact research brief before detailed math. */
+.guideBrief {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.guideBrief div {
+  min-width: 0;
+  padding: 11px 18px 11px 0;
+  border-right: 1px solid var(--line-soft);
+}
+.guideBrief div + div {
+  padding-left: 18px;
+}
+.guideBrief div:last-child {
+  border-right: 0;
+}
+.guideBrief span {
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 780;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.guideBrief strong {
+  display: block;
+  margin-top: 4px;
+  color: var(--ink-2);
+  font-size: 12px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+.guideHero p strong {
+  color: var(--ink-2);
+  font-weight: 760;
+}
+@media (max-width: 760px) {
+  .guideBrief {
+    grid-template-columns: 1fr;
+  }
+  .guideBrief div,
+  .guideBrief div + div {
+    border-right: 0;
+    border-bottom: 1px solid var(--line-soft);
+    padding-left: 0;
+  }
+  .guideBrief div:last-child {
+    border-bottom: 0;
+  }
+}
+/* Setup refinement: one clear action and mobile-safe controls. */
+input,
+select,
+textarea {
+  min-width: 0;
+  box-sizing: border-box;
+}
+.setupReadinessState {
+  justify-items: end;
+  text-align: right;
+}
+@media (max-width: 720px) {
+  .setupReadinessState {
+    justify-items: start;
+    text-align: left;
+  }
+}
+/* Mobile setup readability: let long option/criterion names breathe inside scrollable tables. */
+@media (max-width: 700px) {
+  .cleanTableWrap td input:not([type]) {
+    min-width: 180px;
+  }
+}
+/* Final 9/10 pass: quieter research-console density, no decorative boxes. */
+.appWorkspace {
+  grid-template-columns: 206px minmax(0, 1fr);
+}
+.workflowCanvas {
+  padding: 18px 22px 22px;
+}
+.wizardStepper {
+  padding-inline: 22px;
+}
+.wizardStepper button {
+  min-height: 74px;
+}
+.singlePanel.methodWorkbench {
+  border-color: #e0e6eb;
+}
+.methodWorkbench .compactTitle {
+  padding: 18px 22px 14px;
+}
+.methodWorkbench .compactTitle h1 {
+  font-size: 21px;
+}
+.titleEvidence {
+  min-width: 300px;
+  border: 0;
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+  border-radius: 0;
+}
+.titleEvidence span {
+  padding: 7px 12px;
+}
+.methodChooser.proChooser {
+  grid-template-columns: minmax(560px, 1fr) 380px;
+}
+.methodIndexPanel {
+  padding: 16px 18px 20px;
+}
+.methodFilters {
+  grid-template-columns: minmax(220px, 1fr) 154px 142px;
+  margin-bottom: 12px;
+}
+.methodFilters .searchBox,
+.methodFilters select {
+  height: 36px;
+}
+.methodListHeader {
+  grid-template-columns: minmax(0, 1fr) 102px 92px;
+  padding-left: 39px;
+}
+.methodList button {
+  min-height: 48px;
+  grid-template-columns: 18px minmax(0, 1fr) 102px 92px;
+  gap: 10px;
+}
+.methodRadio {
+  width: 13px;
+  height: 13px;
+}
+.methodList button.active .methodRadio::after {
+  inset: 3px;
+}
+.evidencePane {
+  padding: 26px 28px 22px;
+  gap: 15px;
+  background: linear-gradient(180deg, #fff, #fbfcfd);
+}
+.evidencePane h2 {
+  font-size: 30px;
+}
+.inspectorFacts div {
+  grid-template-columns: 66px minmax(0, 1fr);
+  padding: 8px 0;
+}
+.evidencePane .compactEvidence {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 5px;
+  padding: 0 0 0 14px;
+}
+.evidencePane .compactEvidence::before {
+  position: absolute;
+  margin-top: 4px;
+  margin-left: -14px;
+}
+.evidenceLinks {
+  gap: 7px 10px;
+  margin-top: 2px;
+}
+.methodPath {
+  display: grid;
+  grid-template-columns: 1fr;
+  padding: 6px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.methodPath::before {
+  left: 6px;
+  right: auto;
+  top: 18px;
+  bottom: 18px;
+  width: 1px;
+  height: auto;
+  background: linear-gradient(180deg, var(--teal), #b7c7cf);
+}
+.methodPath div {
+  display: grid;
+  grid-template-columns: 26px 72px minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+  min-height: 36px;
+  padding: 6px 0 6px 0;
+}
+.methodPath div::before {
+  top: 50%;
+  left: 0;
+  width: 13px;
+  height: 13px;
+  transform: translateY(-50%);
+  box-shadow: inset 0 0 0 3px #e7f5f3;
+}
+.methodPath span,
+.methodPath strong,
+.methodPath em {
+  min-width: 0;
+}
+.methodPath span {
+  grid-column: 2;
+}
+.methodPath strong {
+  grid-column: 2;
+  grid-row: 2;
+}
+.methodPath em {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  align-self: center;
+  font-size: 11px;
+}
+.methodPrimaryActions {
+  gap: 8px;
+}
+.methodPrimaryActions .methodContinue,
+.methodPrimaryActions .methodGuideAction {
+  height: 38px;
+}
+.guideHero h1 {
+  font-size: 30px;
+}
+.guideHero p,
+.guideSection p {
+  max-width: 720px;
+}
+.guideMath article {
+  grid-template-columns: minmax(150px, .32fr) minmax(200px, .4fr) minmax(0, 1fr);
+  gap: 14px;
+  padding-block: 12px;
+}
+.studioFooter {
+  color: #63707b;
+}
+@media (max-width: 1120px) {
+  .appWorkspace { grid-template-columns: 1fr; }
+  .methodChooser.proChooser { grid-template-columns: 1fr; }
+  .methodIndexPanel { border-right: 0; }
+  .evidencePane { background: #fff; }
+}
+@media (max-width: 760px) {
+  .workflowCanvas { padding: 12px; }
+  .methodWorkbench .compactTitle { padding: 18px 14px 14px; }
+  .titleEvidence { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .methodIndexPanel,
+  .evidencePane { padding: 16px 14px; }
+  .methodList button { grid-template-columns: 18px minmax(0, 1fr) 78px; }
+  .methodPath div { grid-template-columns: 24px 70px minmax(0, 1fr); }
+}
+
+/* Editorial polish pass: compact, professional, end-user first. */
+:root {
+  --surface-clean: #ffffff;
+  --page-clean: #f5f7f8;
+  --ink-strong: #101820;
+  --accent-calm: #007a78;
+  --accent-soft: #e8f5f3;
+}
+body {
+  background: var(--page-clean);
+}
+.studioHeader {
+  height: 56px;
+  grid-template-columns: minmax(220px, 1fr) auto;
+  padding: 0 22px;
+  background: rgba(255,255,255,.97);
+  backdrop-filter: blur(10px);
+}
+.studioBrand {
+  gap: 9px;
+}
+.studioMark {
+  width: 29px;
+  height: 29px;
+  border-radius: 5px;
+  background: #fff;
+  border-color: #c8d7d9;
+}
+.brandText strong {
+  font-size: 16px;
+  line-height: 1.1;
+}
+.brandText span {
+  margin-top: 1px;
+  color: #687682;
+  font-size: 11px;
+  line-height: 1.1;
+}
+.headerActions {
+  gap: 4px;
+}
+.ghostButton,
+.primaryAction,
+.secondaryAction,
+.textAction {
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 760;
+  letter-spacing: 0;
+}
+.ghostButton {
+  height: 32px;
+  border-color: transparent;
+  background: transparent;
+  color: #263642;
+  padding-inline: 10px;
+}
+.ghostButton:hover {
+  background: #eef4f4;
+  border-color: transparent;
+}
+.appWorkspace {
+  grid-template-columns: 188px minmax(0, 1fr);
+  min-height: calc(100vh - 110px);
+}
+.wizardStepper {
+  top: 56px;
+  padding: 26px 18px 18px;
+  background: #fbfcfd;
+}
+.wizardStepper button {
+  min-height: 64px;
+  grid-template-columns: 26px minmax(0, 1fr);
+  gap: 10px;
+}
+.wizardStepper span {
+  width: 26px;
+  height: 26px;
+  font-size: 11px;
+}
+.wizardStepper em {
+  padding-top: 4px;
+  font-size: 12px;
+}
+.workflowCanvas {
+  padding: 16px 18px 20px;
+  background: var(--page-clean);
+}
+.singlePanel.methodWorkbench {
+  min-height: calc(100vh - 142px);
+  border: 1px solid #e3e8ed;
+  background: var(--surface-clean);
+}
+.methodWorkbench .compactTitle {
+  min-height: 72px;
+  padding: 15px 18px 13px;
+  background: #fff;
+}
+.methodWorkbench .compactTitle h1 {
+  color: var(--ink-strong);
+  font-size: 20px;
+  font-weight: 800;
+}
+.methodWorkbench .compactTitle p {
+  max-width: 360px;
+  color: #65717d;
+  font-size: 12px;
+  line-height: 1.3;
+}
+.titleEvidence {
+  min-width: 280px;
+  border: 0;
+  background: transparent;
+}
+.titleEvidence span {
+  padding: 2px 14px;
+  border-right: 1px solid #e2e8ec;
+  color: #76828d;
+  text-align: right;
+}
+.titleEvidence span:last-child {
+  border-right: 0;
+}
+.titleEvidence strong {
+  color: var(--accent-calm);
+  font-size: 15px;
+  line-height: 1;
+}
+.methodChooser.proChooser {
+  grid-template-columns: minmax(560px, 1fr) 392px;
+  min-height: calc(100vh - 216px);
+}
+.methodIndexPanel {
+  padding: 14px 16px 18px;
+  background: #fff;
+}
+.methodFilters {
+  grid-template-columns: minmax(220px, 1fr) 148px 142px;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.methodFilters .searchBox,
+.methodFilters select {
+  height: 34px;
+  border-color: #d5dee4;
+  border-radius: 4px;
+  box-shadow: none;
+}
+.methodSelectLabel span,
+.methodListHeader span {
+  color: #5b6873;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .045em;
+}
+.methodListHeader {
+  grid-template-columns: minmax(0, 1fr) 96px 86px;
+  padding: 0 10px 7px 12px;
+  color: #66737e;
+}
+.methodList {
+  max-height: min(560px, calc(100vh - 258px));
+  scrollbar-width: thin;
+}
+.methodList button {
+  min-height: 42px;
+  grid-template-columns: minmax(0, 1fr) 96px 86px;
+  gap: 10px;
+  padding: 8px 10px 8px 12px;
+  border-bottom-color: #edf1f4;
+}
+.methodList button:hover,
+.methodList button.active {
+  background: #f6fbfa;
+}
+.methodList button.active {
+  box-shadow: inset 2px 0 0 var(--accent-calm);
+}
+.methodRadio {
+  display: none;
+}
+.methodListName strong {
+  font-size: 14px;
+  font-weight: 790;
+}
+.methodListFamily {
+  color: #687581;
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.methodList .catalogValidation {
+  justify-self: end;
+  min-width: 70px;
+  justify-content: center;
+  border-radius: 4px;
+  padding: 4px 6px;
+  font-size: 9px;
+  background: #f1f4f6;
+}
+.catalogValidation.validated {
+  color: #006f69;
+  background: #e6f4f2;
+}
+.catalogValidation.candidate {
+  color: #7a5400;
+  background: #fff6db;
+}
+.catalogValidation.internal {
+  color: #5f6870;
+  background: #eef1f3;
+}
+.evidencePane {
+  min-height: 0;
+  padding: 22px 24px 20px;
+  gap: 14px;
+  background: #fbfcfd;
+  border-left: 1px solid #e4e9ed;
+}
+.methodDetailHeader {
+  gap: 5px;
+}
+.methodDetailHeader > span {
+  color: var(--accent-calm);
+  font-size: 10px;
+}
+.evidencePane h2 {
+  font-size: 28px;
+  line-height: 1;
+}
+.methodDetailHeader p,
+.methodPlainText,
+.inspectorFacts strong {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+}
+.methodDetailHeader p {
+  -webkit-line-clamp: 2;
+  color: #5e6b77;
+}
+.inspectorFacts {
+  border-top: 1px solid #e7ecef;
+  border-bottom: 1px solid #e7ecef;
+}
+.inspectorFacts div {
+  grid-template-columns: 58px minmax(0, 1fr);
+  padding: 7px 0;
+}
+.inspectorFacts span {
+  font-size: 10px;
+}
+.inspectorFacts strong {
+  -webkit-line-clamp: 2;
+  font-size: 12px;
+  line-height: 1.35;
+}
+.evidencePane .compactEvidence {
+  border-bottom: 0;
+  padding-bottom: 2px;
+}
+.evidencePane .compactEvidence strong {
+  font-size: 12px;
+}
+.evidencePane .compactEvidence span {
+  color: #66737e;
+  font-size: 11px;
+}
+.evidenceLinks a {
+  border-radius: 4px;
+  font-size: 10px;
+  padding: 4px 6px;
+}
+.methodPath {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  margin-top: 2px;
+  padding: 16px 0 10px;
+  border-top: 1px solid #e5eaee;
+  border-bottom: 1px solid #e5eaee;
+}
+.methodPath::before {
+  left: 12.5%;
+  right: 12.5%;
+  top: 25px;
+  bottom: auto;
+  width: auto;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent-calm), #c6d2d8);
+}
+.methodPath div {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3px;
+  min-height: 58px;
+  padding: 22px 5px 0;
+  text-align: center;
+}
+.methodPath div::before {
+  top: 4px;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  transform: translateX(-50%);
+  border-color: var(--accent-calm);
+  background: #fff;
+  box-shadow: inset 0 0 0 3px #fff, 0 0 0 4px #e8f5f3;
+}
+.methodPath span,
+.methodPath strong,
+.methodPath em {
+  grid-column: auto;
+  grid-row: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.methodPath span {
+  display: none;
+}
+.methodPath strong {
+  color: #1c2a33;
+  font-size: 11px;
+}
+.methodPath em {
+  color: #697681;
+  font-size: 10px;
+  align-self: auto;
+}
+.methodPrimaryActions {
+  gap: 7px;
+}
+.methodPrimaryActions .methodContinue {
+  height: 38px;
+}
+.methodPrimaryActions .methodGuideAction {
+  height: 32px;
+  padding-inline: 0;
+}
+.templateHero {
+  gap: 9px;
+  padding: 18px 0 12px;
+}
+.templateHero h1,
+.resultsHeader h1,
+.sectionTitle h1 {
+  color: var(--ink-strong);
+}
+.templateHero p,
+.resultsHeader p,
+.sectionTitle p,
+.sampleNote {
+  color: #66737e;
+  font-size: 12px;
+}
+.configurationSummary,
+.capabilityStrip,
+.templateSpecs,
+.summaryGrid,
+.diagnostics {
+  border-radius: 0;
+  box-shadow: none;
+}
+.guideHero {
+  padding: 20px 22px 18px;
+  border-bottom: 1px solid #e3e9ee;
+  background: #fff;
+}
+.guideHero h1 {
+  font-size: 28px;
+  line-height: 1;
+}
+.guideHero p,
+.guideSection p {
+  color: #5f6d78;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.guideBrief {
+  margin: 0;
+  border-radius: 0;
+  border-left: 0;
+  border-right: 0;
+}
+.guideGrid {
+  gap: 0;
+  border-top: 1px solid #e5eaee;
+}
+.guideSection {
+  border-radius: 0;
+  border: 0;
+  border-right: 1px solid #e5eaee;
+  border-bottom: 1px solid #e5eaee;
+  box-shadow: none;
+}
+.guideSection h2 {
+  font-size: 13px;
+}
+.guideMath article {
+  grid-template-columns: minmax(120px, .3fr) minmax(180px, .38fr) minmax(0, 1fr);
+  gap: 12px;
+  padding-block: 10px;
+}
+.guideMath code {
+  font-size: 11px;
+  line-height: 1.35;
+}
+.studioFooter {
+  min-height: 50px;
+  color: #697681;
+  font-size: 11px;
+}
+@media (max-width: 1120px) {
+  .studioHeader {
+    grid-template-columns: 1fr auto;
+  }
+  .appWorkspace,
+  .methodChooser.proChooser {
+    grid-template-columns: 1fr;
+  }
+  .wizardStepper {
+    top: 56px;
+  }
+  .methodIndexPanel,
+  .evidencePane {
+    border-left: 0;
+    border-right: 0;
+  }
+}
+@media (max-width: 760px) {
+  .studioHeader {
+    grid-template-columns: 1fr;
+    padding: 10px 12px;
+  }
+  .headerActions {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .workflowCanvas {
+    padding: 10px;
+  }
+  .methodWorkbench .compactTitle {
+    min-height: 0;
+    padding: 16px 14px 12px;
+  }
+  .titleEvidence span {
+    padding: 4px 6px;
+    text-align: left;
+  }
+  .methodFilters {
+    grid-template-columns: 1fr;
+  }
+  .methodList button {
+    grid-template-columns: minmax(0, 1fr) 76px;
+  }
+  .methodListFamily {
+    display: none;
+  }
+  .methodPath {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 8px;
+  }
+  .methodPath::before {
+    display: none;
+  }
+  .methodPath div {
+    min-height: 44px;
+    padding-top: 20px;
+  }
+  .guideMath article {
+    grid-template-columns: 1fr;
+  }
+  .studioFooter {
+    display: grid;
+    gap: 5px;
+  }
+}
+
+/* Workflow refinement: compact forms, lighter previews, calmer results. */
+.methodWorkbench > .sectionTitle:not(.compactTitle) {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px 20px 12px;
+  border-bottom: 1px solid #e5eaee;
+  background: #fff;
+}
+.methodWorkbench > .sectionTitle:not(.compactTitle) h1 {
+  font-size: 20px;
+  font-weight: 800;
+}
+.methodWorkbench > .sectionTitle:not(.compactTitle) p {
+  max-width: 360px;
+  margin: 0;
+  text-align: right;
+}
+.setupReadiness {
+  margin: 0;
+  padding: 0 20px;
+  border: 0;
+  border-bottom: 1px solid #e8edf1;
+  border-radius: 0;
+  background: #fbfcfd;
+  box-shadow: none;
+}
+.setupReadiness div {
+  min-height: 50px;
+  padding: 8px 14px 8px 0;
+}
+.setupReadiness span {
+  font-size: 9px;
+  letter-spacing: .045em;
+}
+.setupReadiness strong {
+  font-size: 12px;
+  line-height: 1.3;
+}
+.capabilityStrip {
+  margin: 0;
+  padding: 0 20px;
+  border: 0;
+  border-bottom: 1px solid #e8edf1;
+  background: #fff;
+}
+.capabilityStrip div {
+  padding: 10px 12px 10px 0;
+  border-right-color: #edf1f4;
+}
+.capabilityStrip span,
+.configurationSummary span,
+.templateSpecs span {
+  color: #6a7680;
+  font-size: 9px;
+  letter-spacing: .045em;
+}
+.capabilityStrip strong,
+.configurationSummary strong,
+.templateSpecs strong {
+  font-size: 12px;
+  line-height: 1.35;
+}
+.capabilityStrip em {
+  font-size: 10px;
+  line-height: 1.25;
+}
+.specSection {
+  margin: 14px 20px 0;
+  padding: 0 0 12px;
+  display: grid;
+  grid-template-columns: minmax(150px, .25fr) minmax(0, .75fr);
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1px solid #edf1f4;
+}
+.specSection h2 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 790;
+}
+.segmentedControl {
+  justify-self: end;
+  min-height: 34px;
+}
+.segmentedControl button {
+  min-height: 32px;
+  padding-inline: 12px;
+  font-size: 12px;
+}
+.configurationSummary {
+  margin: 0 20px;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid #edf1f4;
+  background: #fff;
+}
+.configurationSummary div {
+  padding: 10px 12px 10px 0;
+}
+.configGrid {
+  margin: 14px 20px 16px;
+  grid-template-columns: repeat(4, minmax(150px, 1fr));
+  gap: 10px;
+}
+.configGrid label,
+.vectorEditor,
+.orderEditor {
+  min-height: 58px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.configGrid label span,
+.vectorEditor > span,
+.orderEditor > span {
+  color: #5f6c76;
+  font-size: 10px;
+  font-weight: 790;
+}
+.configGrid input,
+.configGrid select,
+.vectorEditor input,
+.vectorEditor select,
+.orderEditor select {
+  height: 34px;
+  border-radius: 4px;
+  border-color: #d5dde3;
+  background: #fff;
+  font-size: 12px;
+}
+.workflowNote {
+  margin: 0 20px 10px;
+  min-height: 36px;
+  padding: 7px 10px;
+  border-radius: 4px;
+  background: #f7faf9;
+}
+.workflowNote strong {
+  font-size: 12px;
+}
+.workflowNote span {
+  font-size: 11px;
+}
+.cleanTableWrap {
+  margin: 14px 20px;
+  border-radius: 0;
+  border-color: #e3e9ee;
+  box-shadow: none;
+}
+.tableToolbar {
+  min-height: 38px;
+  padding: 8px 10px;
+}
+.tableToolbar h2 {
+  font-size: 13px;
+}
+.tableToolbar span {
+  font-size: 10px;
+}
+.cleanTableWrap th,
+.cleanTableWrap td {
+  padding: 7px 9px;
+  font-size: 12px;
+}
+.advancedSeedData {
+  margin: 16px 20px 0;
+  border-radius: 0;
+  border-color: #e3e9ee;
+  background: #fff;
+}
+.advancedSeedData summary {
+  padding: 10px 12px;
+  font-size: 12px;
+}
+.advancedSeedData > p {
+  margin: 0;
+  padding: 0 12px 10px;
+  font-size: 11px;
+}
+.samplePanel {
+  margin: 12px 20px 0;
+  padding: 14px 0 0;
+  border-radius: 0;
+  border-color: #e3e9ee;
+  box-shadow: none;
+}
+.samplePanel > h2,
+.samplePanel > .sampleNote,
+.samplePanel > .templatePreviewMeta,
+.samplePanel > p,
+.samplePanel > details {
+  margin-left: 14px;
+  margin-right: 14px;
+}
+.samplePanel > h2 {
+  font-size: 14px;
+}
+.templatePreviewMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  margin-top: 9px;
+  border-top: 1px solid #edf1f4;
+  border-bottom: 1px solid #edf1f4;
+}
+.templatePreviewMeta span {
+  padding: 6px 10px 6px 0;
+  margin-right: 10px;
+  border-right: 1px solid #edf1f4;
+  color: #41515d;
+  font-size: 11px;
+  font-weight: 720;
+}
+.templatePreviewMeta span:last-child {
+  border-right: 0;
+}
+.workbookPreviewDetails {
+  margin-top: 10px;
+  padding-top: 0;
+  border-top: 0;
+}
+.workbookPreviewDetails summary {
+  padding: 8px 0;
+  color: #253541;
+  font-size: 12px;
+}
+.templateSheetGrid {
+  gap: 10px;
+}
+.templateSheetCard {
+  border-radius: 0;
+  box-shadow: none;
+}
+.uploadZone {
+  margin: 14px 20px;
+  min-height: 150px;
+  border-radius: 0;
+  border-color: #d8e2e6;
+  background: linear-gradient(180deg, #fff, #f7fbfa);
+}
+.validationItem,
+.readyNote {
+  margin: 10px 20px 0;
+  border-radius: 4px;
+  font-size: 12px;
+}
+.flowActions {
+  margin: 16px 20px 18px;
+}
+.resultsHeader {
+  margin: 0 0 12px;
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid #e5eaee;
+}
+.resultsGridSimple,
+.resultCards,
+.visualPanel,
+.externalEvidencePanel {
+  margin-left: 18px;
+  margin-right: 18px;
+}
+.resultCards > div,
+.metric,
+.externalEvidencePanel,
+.visualPanel,
+.cleanTableWrap {
+  border-radius: 0;
+}
+@media (max-width: 980px) {
+  .configGrid {
+    grid-template-columns: repeat(2, minmax(150px, 1fr));
+  }
+  .methodWorkbench > .sectionTitle:not(.compactTitle) {
+    align-items: start;
+  }
+  .methodWorkbench > .sectionTitle:not(.compactTitle) p {
+    text-align: left;
+  }
+}
+@media (max-width: 760px) {
+  .methodWorkbench > .sectionTitle:not(.compactTitle),
+  .specSection {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+  .setupReadiness,
+  .capabilityStrip,
+  .configurationSummary {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+  .configGrid,
+  .cleanTableWrap,
+  .advancedSeedData,
+  .samplePanel,
+  .uploadZone,
+  .flowActions,
+  .validationItem,
+  .readyNote,
+  .specSection,
+  .configurationSummary,
+  .workflowNote {
+    margin-left: 14px;
+    margin-right: 14px;
+  }
+  .configGrid {
+    grid-template-columns: 1fr;
+  }
+  .segmentedControl {
+    justify-self: stretch;
+    width: 100%;
+  }
+}
+
+/* Motion and method-flow signature: subtle, professional, reduced-motion aware. */
+.methodSignal {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.86), rgba(247,251,250,.96)),
+    repeating-linear-gradient(90deg, rgba(0,122,120,.08) 0 1px, transparent 1px 56px);
+}
+.methodSignal::after {
+  content: "";
+  position: absolute;
+  top: 24px;
+  left: 10%;
+  width: 26%;
+  height: 1px;
+  z-index: 0;
+  background: linear-gradient(90deg, transparent, rgba(0,122,120,.82), transparent);
+  animation: signalTrace 3.8s cubic-bezier(.42, 0, .2, 1) infinite;
+}
+.methodSignal div {
+  z-index: 1;
+}
+.methodSignal div::before {
+  display: none;
+}
+.signalGlyph {
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  transform: translateX(-50%);
+  border: 1px solid #bcd7d6;
+  border-radius: 50%;
+  background: #fff;
+  color: #006f69;
+  font-size: 9px;
+  font-style: normal;
+  font-weight: 850;
+  line-height: 1;
+  box-shadow: 0 0 0 5px rgba(0,122,120,.07);
+}
+.methodSignal strong {
+  margin-top: 12px;
+}
+.methodSignal .signalGlyph + strong {
+  display: block;
+}
+.methodSignal div:nth-child(3) .signalGlyph {
+  width: 46px;
+  border-radius: 999px;
+  letter-spacing: 0;
+}
+.methodList button,
+.evidencePane,
+.setupReadiness,
+.capabilityStrip,
+.configurationSummary,
+.specSection,
+.cleanTableWrap,
+.samplePanel,
+.uploadZone,
+.resultsPanel {
+  animation: surfaceSettle .28s ease both;
+}
+.methodList button:nth-child(2n) {
+  animation-delay: .015s;
+}
+.methodList button:nth-child(3n) {
+  animation-delay: .03s;
+}
+.resultTabs button {
+  transition: color .16s ease, border-color .16s ease, background .16s ease;
+}
+.resultTabs button:hover {
+  background: #f3f8f7;
+}
+.simpleBar i {
+  transform-origin: left center;
+  animation: barReveal .42s cubic-bezier(.2, .75, .25, 1) both;
+}
+.simpleBar:nth-child(2) i { animation-delay: .02s; }
+.simpleBar:nth-child(3) i { animation-delay: .06s; }
+.simpleBar:nth-child(4) i { animation-delay: .1s; }
+.simpleBar:nth-child(5) i { animation-delay: .14s; }
+.simpleBar:nth-child(6) i { animation-delay: .18s; }
+.primaryAction,
+.secondaryAction,
+.textAction,
+.ghostButton,
+.methodList button,
+.segmentedControl button {
+  transition: background .16s ease, border-color .16s ease, color .16s ease, transform .16s ease, box-shadow .16s ease;
+}
+.primaryAction:hover,
+.secondaryAction:hover,
+.methodList button:hover,
+.segmentedControl button:hover {
+  transform: translateY(-1px);
+}
+.primaryAction:active,
+.secondaryAction:active,
+.textAction:active,
+.ghostButton:active,
+.methodList button:active,
+.segmentedControl button:active {
+  transform: translateY(0);
+}
+@keyframes signalTrace {
+  0% { transform: translateX(-60%); opacity: 0; }
+  18% { opacity: 1; }
+  72% { opacity: 1; }
+  100% { transform: translateX(260%); opacity: 0; }
+}
+@keyframes surfaceSettle {
+  from { opacity: .92; transform: translateY(3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes barReveal {
+  from { transform: scaleX(.06); opacity: .7; }
+  to { transform: scaleX(1); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .methodSignal::after,
+  .methodList button,
+  .evidencePane,
+  .setupReadiness,
+  .capabilityStrip,
+  .configurationSummary,
+  .specSection,
+  .cleanTableWrap,
+  .samplePanel,
+  .uploadZone,
+  .resultsPanel,
+  .simpleBar i {
+    animation: none !important;
+  }
+  .primaryAction,
+  .secondaryAction,
+  .textAction,
+  .ghostButton,
+  .methodList button,
+  .segmentedControl button,
+  .resultTabs button {
+    transition: none !important;
+  }
+  .primaryAction:hover,
+  .secondaryAction:hover,
+  .methodList button:hover,
+  .segmentedControl button:hover {
+    transform: none !important;
+  }
+}
+@media (max-width: 760px) {
+  .methodSignal {
+    padding-top: 10px;
+  }
+  .methodSignal::after {
+    display: none;
+  }
+  .signalGlyph {
+    width: 28px;
+    height: 28px;
+    font-size: 8px;
+  }
+  .methodSignal div:nth-child(3) .signalGlyph {
+    width: 38px;
+  }
+}
+
+/* Process glyph fit: keep long academic abbreviations polished. */
+.methodSignal div:nth-child(3) .signalGlyph {
+  width: auto;
+  min-width: 46px;
+  max-width: 76px;
+  padding: 0 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@media (max-width: 760px) {
+  .methodSignal div:nth-child(3) .signalGlyph {
+    min-width: 38px;
+    max-width: 68px;
+    padding: 0 7px;
+  }
+}
+
+/* Trust-flow refinement: method guide and results review. */
+.guideReproLine {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 28px minmax(0, 1fr) 28px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 22px;
+  border-bottom: 1px solid #e5eaee;
+  background: #fbfcfd;
+  color: #293943;
+  font-size: 11px;
+  font-weight: 780;
+  text-align: center;
+}
+.guideReproLine i {
+  display: block;
+  height: 1px;
+  min-width: 0;
+  background: linear-gradient(90deg, transparent, #007a78, transparent);
+  position: relative;
+}
+.guideReproLine i::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  border-top: 1px solid #007a78;
+  border-right: 1px solid #007a78;
+  transform: translateY(-50%) rotate(45deg);
+}
+.guideEvidence a {
+  border-radius: 0;
+  background: #fff;
+}
+.guideEvidence .validationBadge {
+  margin-bottom: 10px;
+}
+.guideRunPreview,
+.sampleDataSection {
+  background: #fcfdfd;
+}
+.resultTabs {
+  margin: 10px 18px 14px;
+  padding: 0;
+  border-bottom-color: #dfe7eb;
+}
+.resultTabs button {
+  height: 36px;
+  padding: 0 12px;
+  color: #53616c;
+  font-size: 11px;
+  font-weight: 790;
+}
+.resultTabs button.active {
+  color: #006f69;
+  border-bottom-color: #006f69;
+  background: linear-gradient(180deg, transparent, rgba(0,122,120,.05));
+}
+.resultsQaStrip div:nth-child(3),
+.resultsQaStrip div:nth-child(4) {
+  background: #f8fbfa;
+}
+.outcomeLine {
+  margin: 12px 18px;
+  border-radius: 0;
+}
+.outcomeNode strong {
+  font-size: 12px;
+}
+@media (max-width: 760px) {
+  .guideReproLine {
+    grid-template-columns: 1fr;
+    gap: 4px;
+    padding: 10px 14px;
+    text-align: left;
+  }
+  .guideReproLine i {
+    width: 30px;
+    margin-left: 6px;
+    transform: rotate(90deg);
+  }
+  .resultTabs {
+    margin-left: 14px;
+    margin-right: 14px;
+  }
+}
+
+/* 9/10 pass: open, compact method workstation with a stronger evidence spine. */
+.singlePanel.methodWorkbench {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+}
+.methodWorkbench .compactTitle {
+  padding: 10px 0 18px;
+  border-bottom: 1px solid #dce5e8;
+  align-items: end;
+}
+.methodWorkbench .compactTitle h1 {
+  font-size: 29px;
+  font-weight: 820;
+  letter-spacing: 0;
+}
+.methodWorkbench .compactTitle p {
+  max-width: none;
+  font-size: 13px;
+  color: #4d5d68;
+}
+.methodWorkbench .titleEvidence {
+  min-width: min(460px, 100%);
+  border: 1px solid #dce5e8;
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0 10px 28px rgba(21, 38, 45, .05);
+}
+.methodWorkbench .titleEvidence span {
+  min-width: 0;
+  padding: 10px 12px;
+}
+.methodChooser.proChooser {
+  margin-top: 0;
+  min-height: calc(100vh - 190px);
+  grid-template-columns: minmax(570px, 1fr) minmax(360px, 410px);
+  border-bottom: 1px solid #dce5e8;
+  background: #fff;
+}
+.methodIndexPanel,
+.evidencePane {
+  background: #fff;
+}
+.methodIndexPanel {
+  padding: 16px 18px 18px 0;
+  border-right: 1px solid #dce5e8;
+}
+.methodFilters {
+  grid-template-columns: minmax(240px, 1fr) 150px 150px;
+  gap: 9px;
+  margin-bottom: 12px;
+}
+.methodFilters .searchBox,
+.methodFilters select {
+  height: 36px;
+  border-color: #ccd8dd;
+  background: #fff;
+}
+.methodListHeader {
+  padding: 0 8px 8px 12px;
+  border-bottom-color: #dce5e8;
+}
+.methodList button {
+  min-height: 46px;
+  border-bottom-color: #edf2f4;
+  background: linear-gradient(90deg, transparent, transparent);
+}
+.methodList button:hover,
+.methodList button.active {
+  background: linear-gradient(90deg, rgba(0, 112, 108, .075), rgba(255,255,255,0));
+}
+.methodList button.active {
+  box-shadow: inset 2px 0 0 #00766f;
+}
+.methodListName strong {
+  font-size: 14px;
+  letter-spacing: 0;
+}
+.methodList .catalogValidation {
+  min-width: 76px;
+  border-radius: 999px;
+  font-size: 9px;
+  letter-spacing: .02em;
+}
+.evidencePane {
+  position: relative;
+  padding: 28px 0 22px 28px;
+  border-left: 0;
+  gap: 18px;
+  overflow: hidden;
+}
+.evidencePane::before {
+  content: "";
+  position: absolute;
+  top: 26px;
+  bottom: 24px;
+  left: 0;
+  width: 1px;
+  background: linear-gradient(180deg, #00766f, #d9e4e7 46%, transparent);
+}
+.methodDetailHeader > span {
+  color: #00766f;
+  font-size: 10px;
+  font-weight: 820;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+}
+.evidencePane h2 {
+  font-size: clamp(32px, 4vw, 46px);
+  line-height: .92;
+  font-weight: 840;
+}
+.methodDetailHeader p {
+  max-width: 34ch;
+  color: #3e4e59;
+  font-size: 13px;
+  line-height: 1.42;
+}
+.inspectorFacts {
+  border-top: 1px solid #e3eaee;
+  border-bottom: 1px solid #e3eaee;
+}
+.inspectorFacts div {
+  grid-template-columns: 72px minmax(0, 1fr);
+  padding: 8px 0;
+}
+.inspectorFacts span {
+  color: #7a8791;
+  font-size: 9px;
+  letter-spacing: .08em;
+}
+.inspectorFacts strong {
+  color: #1b2a34;
+  font-size: 12px;
+  font-weight: 700;
+}
+.evidencePane .compactEvidence {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 5px 10px;
+  padding: 0 0 13px;
+  border: 0;
+  border-bottom: 1px solid #e3eaee;
+  border-radius: 0;
+  background: transparent;
+}
+.evidencePane .compactEvidence strong {
+  color: #102b2a;
+  font-size: 13px;
+}
+.evidencePane .compactEvidence span {
+  color: #687783;
+  font-size: 11px;
+  white-space: normal;
+}
+.evidencePane .compactEvidence .evidenceLinks {
+  grid-column: 1 / -1;
+  justify-content: flex-start;
+}
+.methodPath.methodSignal {
+  margin-top: 0;
+  padding: 18px 0 12px;
+  border-top: 0;
+  border-bottom: 1px solid #e3eaee;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.96), rgba(248,251,251,.98)),
+    linear-gradient(90deg, rgba(0,118,111,.06), transparent 60%);
+}
+.methodPath.methodSignal::before {
+  background: linear-gradient(90deg, #00766f, #d6e2e5);
+}
+.methodSignal::after {
+  top: 18px;
+  left: 6%;
+  width: 32%;
+}
+.signalGlyph {
+  top: -4px;
+  box-shadow: 0 0 0 4px #edf7f6;
+}
+.methodPrimaryActions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+.methodPrimaryActions .methodContinue {
+  width: auto;
+  min-width: 180px;
+  justify-self: start;
+}
+.methodPrimaryActions .methodGuideAction {
+  justify-self: end;
+  white-space: nowrap;
+}
+@media (max-width: 980px) {
+  .methodWorkbench .compactTitle {
+    align-items: start;
+  }
+  .methodWorkbench .titleEvidence {
+    min-width: 0;
+    width: 100%;
+  }
+  .methodChooser.proChooser {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+  .methodIndexPanel {
+    padding-right: 0;
+    border-right: 0;
+  }
+  .evidencePane {
+    padding-left: 0;
+    border-top: 1px solid #dce5e8;
+  }
+  .evidencePane::before {
+    display: none;
+  }
+}
+@media (max-width: 680px) {
+  .methodWorkbench .compactTitle h1 {
+    font-size: 25px;
+  }
+  .methodFilters {
+    grid-template-columns: 1fr;
+  }
+  .methodListHeader {
+    grid-template-columns: minmax(0, 1fr) 78px;
+  }
+  .methodListHeader span:nth-child(2),
+  .methodListFamily {
+    display: none;
+  }
+  .methodList button {
+    grid-template-columns: minmax(0, 1fr) 78px;
+  }
+  .methodPrimaryActions {
+    grid-template-columns: 1fr;
+  }
+  .methodPrimaryActions .methodContinue,
+  .methodPrimaryActions .methodGuideAction {
+    width: 100%;
+    justify-self: stretch;
+  }
+}
+
+.weightingControl em {
+  display: block;
+  margin-top: 1px;
+  color: #72808a;
+  font-size: 10px;
+  line-height: 1.2;
+  font-style: normal;
+  font-weight: 650;
+}
+.weightingControl select {
+  margin-bottom: 0;
+}
+@media (max-width: 760px) {
+  .weightingControl em {
+    font-size: 10px;
+  }
+}
+
+/* Launch-readiness pass: clearer header, trust language, and compact first screen. */
+.studioHeader {
+  height: 58px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding: 0 22px;
+  backdrop-filter: blur(10px);
+}
+.headerActions {
+  gap: 6px;
+}
+.headerActions .ghostButton {
+  height: 32px;
+  padding-inline: 10px;
+  border-color: transparent;
+  color: #33424d;
+  background: transparent;
+  font-size: 12px;
+  font-weight: 720;
+}
+.headerActions .ghostButton:hover {
+  border-color: #d4e3e2;
+  background: #f4faf9;
+  color: #006f69;
+}
+.methodWorkbench .compactTitle {
+  padding: 6px 0 14px;
+  gap: 18px;
+}
+.methodWorkbench .compactTitle h1 {
+  font-size: 22px;
+  line-height: 1.12;
+  font-weight: 800;
+}
+.methodWorkbench .compactTitle p {
+  max-width: 46ch;
+  margin-top: 5px;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.methodWorkbench .titleEvidence {
+  min-width: min(540px, 100%);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  box-shadow: none;
+}
+.methodWorkbench .titleEvidence span {
+  padding: 8px 12px;
+  color: #4f5f69;
+  font-size: 11px;
+  line-height: 1.3;
+}
+.methodWorkbench .titleEvidence strong {
+  color: #006f69;
+  font-size: 14px;
+}
+.methodChooser.proChooser {
+  min-height: calc(100vh - 174px);
+}
+.studioFooter {
+  align-items: center;
+  color: #5d6973;
+  font-size: 11px;
+  line-height: 1.45;
+}
+.studioFooter em {
+  color: #2b3944;
+}
+@media (max-width: 760px) {
+  .studioHeader {
+    height: auto;
+    padding: 10px 12px;
+    gap: 8px;
+  }
+  .headerActions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .headerActions .ghostButton {
+    padding-inline: 8px;
+    font-size: 11px;
+  }
+  .methodWorkbench .compactTitle h1 {
+    font-size: 20px;
+  }
+  .methodWorkbench .titleEvidence {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Launch shell: compact progress, open workspace, and readable trust proof. */
+.wizardShell {
+  max-width: 1280px;
+  padding: 14px 22px 30px;
+}
+.appWorkspace {
+  display: block;
+  min-height: 0;
+}
+.wizardStepper {
+  position: relative;
+  top: auto;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0;
+  width: 100%;
+  max-width: none;
+  margin: 0 0 12px;
+  padding: 0 4px 10px;
+  border-right: 0;
+  border-bottom: 1px solid #e4eaee;
+  background: transparent;
+}
+.wizardStepper button {
+  min-height: 34px;
+  display: grid;
+  grid-template-columns: 24px auto;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  padding: 0 8px;
+  color: #75818c;
+  font-size: 11px;
+}
+.wizardStepper button::before {
+  top: 16px;
+  left: -50%;
+  width: 100%;
+  height: 1px;
+  background: #dde5e9;
+}
+.wizardStepper span {
+  width: 24px;
+  height: 24px;
+  font-size: 10px;
+}
+.wizardStepper em {
+  padding: 0;
+  font-size: 11px;
+  font-weight: 720;
+}
+.workflowCanvas {
+  padding: 0;
+  background: transparent;
+}
+.singlePanel.methodWorkbench {
+  min-height: calc(100vh - 150px);
+  border: 0;
+  background: #fff;
+  box-shadow: none;
+}
+.methodWorkbench .compactTitle {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 18px;
+  padding: 12px 0 14px;
+  border-bottom: 1px solid #dce5e8;
+}
+.methodWorkbench .compactTitle::after {
+  left: 0;
+  right: 0;
+}
+.methodWorkbench .compactTitle h1 {
+  font-size: 21px;
+  line-height: 1.15;
+}
+.methodWorkbench .compactTitle p {
+  max-width: 48ch;
+  margin-top: 5px;
+  color: #53616c;
+  font-size: 12px;
+}
+.methodWorkbench .titleEvidence {
+  min-width: min(520px, 100%);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.methodWorkbench .titleEvidence span {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: baseline;
+  gap: 6px;
+  padding: 0 14px;
+  border-right: 1px solid #dde6ea;
+  color: #53616c;
+  font-size: 11px;
+  line-height: 1.25;
+  text-align: left;
+}
+.methodWorkbench .titleEvidence span:last-child {
+  border-right: 0;
+  padding-right: 0;
+}
+.methodWorkbench .titleEvidence strong {
+  color: #006f69;
+  font-size: 16px;
+  line-height: 1;
+  font-weight: 820;
+}
+.methodChooser.proChooser {
+  min-height: calc(100vh - 218px);
+  border-bottom: 0;
+}
+@media (max-width: 900px) {
+  .methodWorkbench .compactTitle {
+    grid-template-columns: 1fr;
+    align-items: start;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .methodWorkbench .titleEvidence {
+    min-width: 0;
+  }
+}
+@media (max-width: 680px) {
+  .wizardShell {
+    padding: 10px 12px 24px;
+  }
+  .wizardStepper {
+    overflow-x: auto;
+    grid-template-columns: repeat(5, minmax(82px, 1fr));
+  }
+  .wizardStepper button {
+    min-width: 82px;
+  }
+  .methodWorkbench .titleEvidence {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+  .methodWorkbench .titleEvidence span {
+    padding: 0;
+    border-right: 0;
+  }
+}
+
+/* Final launch polish: minimal evidence strip and source-to-result flow. */
+.methodWorkbench .titleEvidence {
+  min-width: min(360px, 100%);
+}
+.methodWorkbench .titleEvidence span {
+  padding: 0 12px;
+  font-size: 10.5px;
+}
+.methodWorkbench .titleEvidence strong {
+  font-size: 15px;
+}
+.methodPath.methodSignal {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  margin-top: 4px;
+  padding: 18px 0 12px;
+  border-top: 1px solid #e2e9ec;
+  border-bottom: 1px solid #e2e9ec;
+  background: linear-gradient(180deg, #fff 0%, #fbfdfd 100%);
+}
+.methodPath.methodSignal::before,
+.methodSignal::after {
+  content: '';
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  top: 31px;
+  width: auto;
+  height: 1px;
+  background: linear-gradient(90deg, #008c86, #9eb2bd);
+  opacity: .8;
+}
+.methodPath.methodSignal div {
+  position: relative;
+  z-index: 1;
+  min-height: 68px;
+  display: grid;
+  grid-template-rows: 28px auto auto;
+  justify-items: center;
+  gap: 3px;
+  padding: 0 7px;
+  text-align: center;
+}
+.methodPath.methodSignal div::before {
+  display: none;
+}
+.methodPath.methodSignal .signalGlyph {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #b8d9d6;
+  border-radius: 50%;
+  background: #fff;
+  color: #007c76;
+  box-shadow: 0 0 0 5px #f3faf9;
+  font-size: 9px;
+  font-weight: 850;
+  font-style: normal;
+}
+.methodPath.methodSignal strong {
+  max-width: 100%;
+  color: #1e2b34;
+  font-size: 11px;
+  line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.methodPath.methodSignal em {
+  max-width: 100%;
+  color: #6c7982;
+  font-size: 10px;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.catalogValidation.candidate {
+  color: #685000;
+  background: #fff5cc;
+}
+@media (max-width: 760px) {
+  .methodPath.methodSignal {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 12px;
+  }
+  .methodPath.methodSignal::before,
+  .methodSignal::after {
+    display: none;
+  }
+  .methodPath.methodSignal div {
+    min-height: 62px;
+  }
 }

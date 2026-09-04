@@ -938,7 +938,7 @@ await assertCorruptWorkbookRejected('dematel', (workbook) => {
   setSheetValue(workbook, 'Threshold Settings', 'Fuzzy DEMATEL calculation', 'Unpublished shortcut');
 }, 'Threshold Settings', 'DEMATEL fuzzy calculation', workflowOverrides(getMethod('dematel')));
 await assertCorruptWorkbookRejected('grp', (workbook) => {
-  setSheetValue(workbook, 'Method Parameters', 'graZeta', 2);
+  setSheetValue(workbook, 'GRP Settings', 'Distinguishing coefficient zeta', 2);
 }, 'Method Parameters', 'Grey distinguishing coefficient zeta', workflowOverrides(getMethod('grp')));
 await assertCorruptWorkbookRejected('spotis', (workbook) => {
   setTableCell(workbook, 'SPOTIS Bounds', 'Criterion ID', 'C1', 'Mode', 'Outside observed range');
@@ -970,7 +970,7 @@ await assertCorruptWorkbookRejected('comet', (workbook) => {
   setSheetValue(workbook, 'COMET Settings', 'Characteristic values', 'deciles');
 }, 'COMET Settings', 'COMET characteristic values', workflowOverrides(getMethod('comet')));
 await assertCorruptWorkbookRejected('smarter', (workbook) => {
-  setSheetValue(workbook, 'Method Parameters', 'smarterUtilityMode', 'Ordinal vibes');
+  setSheetValue(workbook, 'Method Parameters', 'smarterUtilityMode', 'Ordinal utility ranks');
 }, 'SMARTER Settings', 'SMARTER utility input', workflowOverrides(getMethod('smarter')));
 await assertCorruptWorkbookRejected('pugh', (workbook) => {
   setSheetValue(workbook, 'Method Parameters', 'pughScoringMode', 'Unsupported Pugh scoring');
@@ -1197,7 +1197,7 @@ if (!evidenceText.includes('10.3390/en19092214') || !evidenceText.includes('http
 if (!evidenceText.includes('Certification status') || !evidenceText.includes('Not publication-certified for every variant')) {
   throw new Error('Exported workbook Validation Evidence sheet is missing certification boundary text.');
 }
-if (!evidenceText.includes('Selected method validation status') || !evidenceText.includes('Externally validated') || !evidenceText.includes('passing published-example fixture')) {
+if (!evidenceText.includes('Selected method validation status') || !evidenceText.includes('Matched DOI example') || !evidenceText.includes('reproduced source')) {
   throw new Error('Exported workbook Validation Evidence sheet is missing selected-method validation status.');
 }
 ['Input type', 'Respondent/group aggregation', 'Expert aggregation', 'Fuzzy calculation convention'].forEach((label) => {
@@ -1219,3 +1219,4 @@ if (!existsSync(expectedPdf)) {
 }
 
 console.log(`Workflow smoke OK: ${workflowResults.length}/${methodRegistry.length} method templates parsed and analyzed; criteria/factor structure edits stay canonical across all methods; wrong-method templates, malformed project imports, corrupted metadata/AHP/VIKOR/SRF uploads, invalid method settings, and invalid matrix cells rejected; automatic weights ignore edited workbook weight cells; Pugh uploaded-score templates round-trip and rescale correctly; multiple-respondent workbook sheets aggregate and report correctly; DEMATEL expert workbook sheets aggregate and report correctly; DEMATEL fuzzy calculation convention round-trips and records reproducibility metadata; TOPSIS normalization settings are covered; AHP group pairwise workbook aggregation/settings are covered; PROMETHEE and COMET settings are covered; fuzzy workbook tuples reach native and defuzzified paths; uploaded method, MAUT/SMARTER utility-input modes, editable method settings sheets, sheet-shaped reference modes/vectors, and SRF parameters round-tripped; ${workflowResults.length}/${methodRegistry.length} Excel packages written; validation evidence is included in Excel/DOCX/PDF paths; ${analysis.methodName} DOCX/PDF export paths and project JSON package download completed.`);
+

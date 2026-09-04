@@ -1,0 +1,412 @@
+{
+  "methodId": "rawec",
+  "variant": "crisp-double-normalization-lmaw-weights-agricultural-distribution-center",
+  "source": "Introducing a Novel multi-criteria Ranking of Alternatives with Weights of Criterion (RAWEC) model, MethodsX, 2024, DOI: 10.1016/j.mex.2024.102628, Tables 5-7",
+  "sourceUrl": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11636910/",
+  "doi": "10.1016/j.mex.2024.102628",
+  "config": {
+    "title": "RAWEC validation: agricultural distribution-center location selection",
+    "weightingId": "manual",
+    "methodParams": {
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload"
+    }
+  },
+  "input": {
+    "alternatives": [
+      {
+        "id": "A1",
+        "name": "A1"
+      },
+      {
+        "id": "A2",
+        "name": "A2"
+      },
+      {
+        "id": "A3",
+        "name": "A3"
+      },
+      {
+        "id": "A4",
+        "name": "A4"
+      },
+      {
+        "id": "A5",
+        "name": "A5"
+      },
+      {
+        "id": "A6",
+        "name": "A6"
+      },
+      {
+        "id": "A7",
+        "name": "A7"
+      },
+      {
+        "id": "A8",
+        "name": "A8"
+      },
+      {
+        "id": "A9",
+        "name": "A9"
+      },
+      {
+        "id": "A10",
+        "name": "A10"
+      }
+    ],
+    "criteria": [
+      {
+        "id": "C1",
+        "name": "C1",
+        "direction": "benefit",
+        "weight": 0.112221
+      },
+      {
+        "id": "C2",
+        "name": "C2",
+        "direction": "benefit",
+        "weight": 0.102772
+      },
+      {
+        "id": "C3",
+        "name": "C3",
+        "direction": "cost",
+        "weight": 0.112209
+      },
+      {
+        "id": "C4",
+        "name": "C4",
+        "direction": "cost",
+        "weight": 0.104884
+      },
+      {
+        "id": "C5",
+        "name": "C5",
+        "direction": "cost",
+        "weight": 0.110744
+      },
+      {
+        "id": "C6",
+        "name": "C6",
+        "direction": "cost",
+        "weight": 0.042561
+      },
+      {
+        "id": "C7",
+        "name": "C7",
+        "direction": "cost",
+        "weight": 0.102662
+      },
+      {
+        "id": "C8",
+        "name": "C8",
+        "direction": "cost",
+        "weight": 0.089373
+      },
+      {
+        "id": "C9",
+        "name": "C9",
+        "direction": "benefit",
+        "weight": 0.110356
+      },
+      {
+        "id": "C10",
+        "name": "C10",
+        "direction": "cost",
+        "weight": 0.112216
+      }
+    ],
+    "values": [
+      [
+        5.8,
+        35.9,
+        2.6,
+        10,
+        3.2,
+        75,
+        35,
+        8,
+        6.6,
+        3.4
+      ],
+      [
+        6.6,
+        36,
+        2.6,
+        25,
+        3,
+        70,
+        25,
+        5,
+        6.4,
+        4.2
+      ],
+      [
+        3.6,
+        20.8,
+        4.8,
+        5,
+        4.8,
+        70,
+        35,
+        10,
+        3.4,
+        4.6
+      ],
+      [
+        5.4,
+        37,
+        4.6,
+        6,
+        4,
+        90,
+        35,
+        10,
+        3.2,
+        4.2
+      ],
+      [
+        5.8,
+        105,
+        4.4,
+        6,
+        3.6,
+        70,
+        40,
+        15,
+        5.8,
+        3.8
+      ],
+      [
+        4.6,
+        88,
+        4.2,
+        6,
+        3.8,
+        70,
+        30,
+        15,
+        4.4,
+        4.6
+      ],
+      [
+        7.2,
+        170,
+        2.6,
+        15,
+        2.6,
+        80,
+        40,
+        5,
+        7,
+        4.2
+      ],
+      [
+        7.4,
+        21,
+        1.6,
+        120,
+        2.4,
+        80,
+        20,
+        3,
+        7.4,
+        4.8
+      ],
+      [
+        6,
+        36,
+        3.6,
+        6,
+        3.4,
+        70,
+        40,
+        15,
+        6,
+        4.4
+      ],
+      [
+        5,
+        44,
+        4.6,
+        6,
+        4,
+        70,
+        25,
+        11,
+        3.4,
+        4.2
+      ]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      {
+        "alternative": "A7",
+        "score": 0.3238
+      },
+      {
+        "alternative": "A8",
+        "score": 0.2474
+      },
+      {
+        "alternative": "A2",
+        "score": 0.1435
+      },
+      {
+        "alternative": "A1",
+        "score": 0.1023
+      },
+      {
+        "alternative": "A5",
+        "score": -0.0056
+      },
+      {
+        "alternative": "A9",
+        "score": -0.0929
+      },
+      {
+        "alternative": "A6",
+        "score": -0.1269
+      },
+      {
+        "alternative": "A10",
+        "score": -0.1587
+      },
+      {
+        "alternative": "A4",
+        "score": -0.2599
+      },
+      {
+        "alternative": "A3",
+        "score": -0.4861
+      }
+    ],
+    "scores": [
+      {
+        "alternative": "A1",
+        "score": 0.1023
+      },
+      {
+        "alternative": "A2",
+        "score": 0.1435
+      },
+      {
+        "alternative": "A3",
+        "score": -0.4861
+      },
+      {
+        "alternative": "A4",
+        "score": -0.2599
+      },
+      {
+        "alternative": "A5",
+        "score": -0.0056
+      },
+      {
+        "alternative": "A6",
+        "score": -0.1269
+      },
+      {
+        "alternative": "A7",
+        "score": 0.3238
+      },
+      {
+        "alternative": "A8",
+        "score": 0.2474
+      },
+      {
+        "alternative": "A9",
+        "score": -0.0929
+      },
+      {
+        "alternative": "A10",
+        "score": -0.1587
+      }
+    ],
+    "tables": [
+      {
+        "id": "rawec-first-normalized",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": 0.7838
+          },
+          {
+            "row": 7,
+            "column": 2,
+            "value": 0.1235
+          },
+          {
+            "row": 9,
+            "column": 10,
+            "value": 0.8095
+          }
+        ]
+      },
+      {
+        "id": "rawec-second-normalized",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": 0.6207
+          },
+          {
+            "row": 7,
+            "column": 4,
+            "value": 1
+          },
+          {
+            "row": 9,
+            "column": 9,
+            "value": 0.9412
+          }
+        ]
+      },
+      {
+        "id": "rawec-first-deviation",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": 0.0243
+          },
+          {
+            "row": 0,
+            "column": 4,
+            "value": 0.0524
+          },
+          {
+            "row": 6,
+            "column": 2,
+            "value": 0
+          }
+        ]
+      },
+      {
+        "id": "rawec-index",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": 0.3432
+          },
+          {
+            "row": 0,
+            "column": 2,
+            "value": 0.4215
+          },
+          {
+            "row": 6,
+            "column": 3,
+            "value": 0.3238
+          }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.0007
+}

@@ -457,7 +457,7 @@ export function createMethodTemplate(methodId: MethodId, methodName: string, con
     return [...base, { name: 'MOOSRA Settings', rows: [['Parameter', 'Value'], ['Normalization', String(config.methodParams.normalization ?? 'Vector normalization')], ['Scoring', 'Weighted benefit objective sum divided by weighted cost objective sum'], ['Ranking', 'Higher MOOSRA ratio ranks higher']] }];
   }
   if (methodId === 'arlon') {
-    return [...base, { name: 'ARLON Settings', rows: [['Parameter', 'Value'], ['Gamma', String(config.methodParams.arlonGamma ?? 0.5)], ['Normalization', 'Two-step logarithmic normalization with zero/negative protection through absolute safe values'], ['Kappa', 'Benefit criteria count divided by total criteria count'], ['Scoring', 'R = (G - min G)/(max G - min G); higher values rank higher']] }];
+    return [...base, { name: 'ARLON Settings', rows: [['Parameter', 'Value'], ['Gamma', String(config.methodParams.arlonGamma ?? 0.5)], ['Normalization', 'Two-step product-log normalization with zero/negative protection through absolute safe values'], ['Kappa', 'Benefit criteria count divided by total criteria count'], ['Scoring', 'R = B^kappa + C^(1-kappa), with all-benefit or all-cost studies using the available component directly; higher values rank higher']] }];
   }
   if (methodId === 'macont') {
     return [...base, { name: 'MACONT Settings', rows: [['Parameter', 'Value'], ['lambda', String(config.methodParams.macontLambda ?? 0.3333)], ['mu', String(config.methodParams.macontMu ?? 0.3333)], ['delta', String(config.methodParams.macontDelta ?? 0.5)], ['theta', String(config.methodParams.macontTheta ?? 0.5)], ['Normalization', 'Sum-based, ratio-based, and range-based matrices are blended by lambda, mu, and 1-lambda-mu'], ['Reference alternative', 'Average comprehensive normalized value by criterion'], ['Scoring', 'Mixed aggregation score S; higher values rank higher']] }];
@@ -490,10 +490,10 @@ export function createMethodTemplate(methodId: MethodId, methodName: string, con
     return [...base, { name: 'REGIME Settings', rows: [['Parameter', 'Value'], ['Preference model', String(config.methodParams.regimePreferenceModel ?? 'Weighted sign dominance')], ['Pairwise evidence', 'Positive, neutral, or negative criterion dominance by benefit/cost direction'], ['Scoring', 'Net dominance flow; higher values rank higher']] }];
   }
   if (methodId === 'grp') {
-    return [...base, { name: 'GRP Settings', rows: [['Parameter', 'Value'], ['Distinguishing coefficient zeta', String(config.methodParams.graZeta ?? 0.5)], ['Reference sequences', 'Positive ideal = 1, negative ideal = 0 after normalization'], ['Scoring', 'Relative closeness from positive and negative grey relational projections']] }];
+    return [...base, { name: 'GRP Settings', rows: [['Parameter', 'Value'], ['Distinguishing coefficient zeta', String(config.methodParams.graZeta ?? 0.5)], ['Input scale', String(config.methodParams.grpInputScale ?? 'Normalize raw values')], ['Reference sequences', 'Positive and negative ideals come from the comparable matrix'], ['Scoring', 'Relative closeness from squared-weight grey relational projections']] }];
   }
   if (methodId === 'evamix') {
-    return [...base, { name: 'EVAMIX Settings', rows: [['Parameter', 'Value'], ['Data mode', String(config.methodParams.evamixDataMode ?? 'Cardinal numeric criteria')], ['Normalization', 'Benefit/cost-aware linear normalization'], ['Dominance', 'Weighted pairwise cardinal dominance, standardized before appraisal'], ['Ordinal criteria', 'Richer ordinal mapping is planned; current template expects numeric criterion values']] }];
+    return [...base, { name: 'EVAMIX Settings', rows: [['Parameter', 'Value'], ['Data mode', String(config.methodParams.evamixDataMode ?? 'Cardinal numeric criteria')], ['Ordinal criterion IDs', String(config.methodParams.evamixOrdinalCriteria ?? 'none')], ['Normalization', 'Benefit/cost-aware range normalization'], ['Dominance', 'Separate ordinal and cardinal pairwise dominance, then additive-interval standardization'], ['Appraisal', 'Inverse incoming/outgoing dominance-ratio score; higher score is better']] }];
   }
   if (methodId === 'ervd') {
     return [
@@ -668,7 +668,10 @@ export function createMethodTemplate(methodId: MethodId, methodName: string, con
       ],
     }];
   }
-  if (['copras', 'saw', 'wpm', 'moora', 'arlon', 'macont', 'aras', 'edas', 'mabac', 'codas', 'cocoso', 'marcos', 'mairca', 'promethee', 'electre', 'smart', 'maut', 'ocra', 'multimoora', 'psi', 'piv', 'rov', 'wisp', 'todim', 'ram', 'gra', 'spotis', 'espSpotis', 'balancedSpotis', 'wedba', 'lmaw', 'dnma', 'probid', 'sprobid', 'rim', 'rafsi', 'lopm', 'aroman', 'cobra', 'ervd'].includes(methodId)) {
+  if (methodId === 'dnma') {
+    return [...base, { name: 'DNMA Settings', rows: [['Parameter', 'Value'], ['Integration', String(config.methodParams.dnmaIntegration ?? 'Utility and rank integration')], ['CCM/UCM/ICM weights', String(config.methodParams.dnmaModelWeights ?? '0.6,0.1,0.3')], ['Utility-rank balance phi', String(config.methodParams.dnmaPhi ?? 0.5)], ['Scoring', 'Adjusted weights, CCM minus UCM plus ICM utility-rank integration']] }];
+  }
+  if (['copras', 'saw', 'wpm', 'moora', 'arlon', 'macont', 'aras', 'edas', 'mabac', 'codas', 'cocoso', 'marcos', 'mairca', 'promethee', 'electre', 'smart', 'maut', 'ocra', 'multimoora', 'psi', 'piv', 'rov', 'wisp', 'todim', 'ram', 'gra', 'spotis', 'espSpotis', 'balancedSpotis', 'wedba', 'lmaw', 'probid', 'sprobid', 'rim', 'rafsi', 'lopm', 'aroman', 'cobra', 'ervd'].includes(methodId)) {
     return [
       ...base,
       { name: excelSafeSheetName(`${methodName} Settings`), rows: [['Setting', 'Value'], ['Normalization/reference', String(config.methodParams.normalization ?? config.methodParams.reference ?? 'Method default')], ['Weighting', config.weightingId]] },

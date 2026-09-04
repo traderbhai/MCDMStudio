@@ -1,26 +1,19 @@
 {
   "generatedFrom": "docs/EXTERNAL_VALIDATION_MATRIX.md and docs/external-fixtures/*.json",
   "methodsTracked": 65,
-  "passingExternalFixtures": 50,
+  "passingExternalFixtures": 61,
   "validationCandidateMethods": [
     "SECA",
     "CRADIS",
     "RAPS",
-    "WEDBA"
-  ],
-  "candidateRecordsNeedingReconciliation": 5,
-  "internalOnlyMethods": [
-    "DEAR",
-    "EAMR",
-    "RAWEC",
-    "ARLON",
-    "MACONT",
-    "QUALIFLEX",
-    "EVAMIX",
-    "GRP",
-    "ESP-SPOTIS",
-    "DNMA",
+    "WEDBA",
     "COBRA"
   ],
+  "candidateRecordsNeedingReconciliation": 5,
+  "internalOnlyMethods": [],
+  "methodsWithMatchedFixtures": 60,
+  "reviewDoiCandidates": 5,
+  "documentedSourceDiscrepancies": 5,
+  "launchReadyWithEvidenceBoundary": true,
   "strictPublicationCertificationComplete": false
 }

@@ -1,0 +1,165 @@
+{
+  "methodId": "arlon",
+  "variant": "crisp-product-log-job-candidate-dergipark-2025",
+  "source": "Development of Multi Criteria Decision Making Method with the Help of Laguerre Polynomials, Dokuz Eylul University Faculty of Business Journal, 2025, DOI: 10.24889/ifede.1645218, Tables 1, 13-15",
+  "sourceUrl": "https://dergipark.org.tr/tr/pub/ifede/article/1645218",
+  "doi": "10.24889/ifede.1645218",
+  "config": {
+    "title": "ARLON validation: job candidate ranking",
+    "weightingId": "manual",
+    "methodParams": {
+      "dataInputMode": "Single aggregated dataset",
+      "fuzzyInputMode": "Defuzzify on upload",
+      "arlonGamma": 0.5
+    }
+  },
+  "input": {
+    "alternatives": [
+      {
+        "id": "A1",
+        "name": "Alp"
+      },
+      {
+        "id": "A2",
+        "name": "Mehmet"
+      },
+      {
+        "id": "A3",
+        "name": "Gulsen"
+      },
+      {
+        "id": "A4",
+        "name": "Nihal"
+      },
+      {
+        "id": "A5",
+        "name": "Yasemin"
+      }
+    ],
+    "criteria": [
+      {
+        "id": "K1",
+        "name": "Communication",
+        "direction": "benefit",
+        "weight": 0.247
+      },
+      {
+        "id": "K2",
+        "name": "Work experience",
+        "direction": "benefit",
+        "weight": 0.182
+      },
+      {
+        "id": "K3",
+        "name": "Exam",
+        "direction": "benefit",
+        "weight": 0.474
+      },
+      {
+        "id": "K4",
+        "name": "Appearance",
+        "direction": "benefit",
+        "weight": 0.097
+      }
+    ],
+    "values": [
+      [
+        5,
+        9,
+        5,
+        8
+      ],
+      [
+        8,
+        7,
+        6,
+        6
+      ],
+      [
+        6,
+        5,
+        6,
+        7
+      ],
+      [
+        7,
+        8,
+        5,
+        7
+      ],
+      [
+        3,
+        2,
+        1,
+        4
+      ]
+    ]
+  },
+  "expected": {
+    "ranking": [
+      {
+        "alternative": "Mehmet",
+        "score": 0.246
+      },
+      {
+        "alternative": "Nihal",
+        "score": 0.234
+      },
+      {
+        "alternative": "Gulsen",
+        "score": 0.232
+      },
+      {
+        "alternative": "Alp",
+        "score": 0.228
+      },
+      {
+        "alternative": "Yasemin",
+        "score": 0.061
+      }
+    ],
+    "tables": [
+      {
+        "id": "arlon-first-log-normalized",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": 0.189
+          },
+          {
+            "row": 1,
+            "column": 3,
+            "value": 0.263
+          },
+          {
+            "row": 4,
+            "column": 3,
+            "value": 0
+          }
+        ]
+      },
+      {
+        "id": "arlon-weighted",
+        "cells": [
+          {
+            "row": 0,
+            "column": 1,
+            "value": 0.047
+          },
+          {
+            "row": 1,
+            "column": 3,
+            "value": 0.125
+          },
+          {
+            "row": 3,
+            "column": 4,
+            "value": 0.021
+          }
+        ]
+      }
+    ]
+  },
+  "tolerance": 0.0015
+}

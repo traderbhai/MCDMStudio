@@ -44,8 +44,9 @@ if (rows.length !== 65) {
   fail(`External validation matrix should list 65 methods; found ${rows.length}.`);
 }
 
-if (passingRows.length !== activeFixtures.length) {
-  fail(`Passing fixture mismatch: matrix has ${passingRows.length}, fixture folder has ${activeFixtures.length}.`);
+const activeFixtureMethodCount = new Set(activeFixtures.map((fixture) => fixture.methodId)).size;
+if (passingRows.length !== activeFixtureMethodCount) {
+  fail(`Passing method mismatch: matrix has ${passingRows.length}, fixture folder covers ${activeFixtureMethodCount} methods.`);
 }
 
 if (!audit.includes(`Passing external fixtures: ${activeFixtures.length}`)) {
@@ -67,7 +68,11 @@ const status = {
   validationCandidateMethods: candidateRows.map((row) => row.method),
   candidateRecordsNeedingReconciliation: candidateFixtures.length,
   internalOnlyMethods: internalRows.map((row) => row.method),
-  strictPublicationCertificationComplete: internalRows.length === 0 && candidateFixtures.length === 0,
+  methodsWithMatchedFixtures: activeFixtureMethodCount,
+  reviewDoiCandidates: candidateRows.length,
+  documentedSourceDiscrepancies: candidateFixtures.length,
+  launchReadyWithEvidenceBoundary: internalRows.length === 0 && passingRows.length === activeFixtureMethodCount && candidateRows.length + passingRows.length === rows.length,
+  strictPublicationCertificationComplete: internalRows.length === 0 && candidateRows.length === 0 && candidateFixtures.length === 0,
 };
 
 const nextStatus = `${JSON.stringify(status, null, 2)}\n`;
@@ -80,8 +85,14 @@ console.log(
     'Publication readiness status OK',
     `Methods tracked: ${status.methodsTracked}`,
     `Passing external fixtures: ${status.passingExternalFixtures}`,
+    `Methods with matched fixtures: ${status.methodsWithMatchedFixtures}`,
+    `Methods needing first DOI match: ${status.reviewDoiCandidates}`,
     `Candidate records needing reconciliation: ${status.candidateRecordsNeedingReconciliation}`,
     `Internal-only methods: ${status.internalOnlyMethods.length}`,
+    `Launch-ready with evidence boundary: ${status.launchReadyWithEvidenceBoundary ? 'yes' : 'no'}`,
     `Strict publication certification complete: ${status.strictPublicationCertificationComplete ? 'yes' : 'no'}`,
   ].join('\n'),
 );
+
+
+
